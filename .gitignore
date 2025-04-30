@@ -1,0 +1,12 @@
+*.code-workspace
+*.db
+*.env
+.vscode/
+.idea
+/backend/tmp/
+/backend/urdr
+/backend/vendor/
+/frontend/node_modules/
+ops-redmine/
+frontend/public/assets
+frontend/public/js
