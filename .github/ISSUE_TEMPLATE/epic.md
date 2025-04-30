@@ -1,3 +1,11 @@
+---
+name: Epic
+about: Track a larger initiative that consists of smaller tasks/features
+title: ''
+labels: ''
+assignees: ''
+
+---
 <!-- Remove sections from this template that are not used -->
 ## Summary
 <!-- A high-level summary of the initiative and its goals. -->

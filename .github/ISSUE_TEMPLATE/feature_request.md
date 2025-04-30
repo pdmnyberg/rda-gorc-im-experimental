@@ -1,3 +1,11 @@
+---
+name: Feature Request
+about: Suggest a new feature or enhancement
+title: ''
+labels: ''
+assignees: ''
+
+---
 <!-- Remove sections from this template that are not used -->
 ## Feature description
 <!-- A clear and concise description of the feature or improvement. -->
