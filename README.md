@@ -6,49 +6,32 @@ RDA GORC International Model(IM)
 
 A visualisation application for the RDA GORC International Model.
 
-<!--## Getting Started
+## Getting Started
+The project is meant to be run locally in a docker environment, visit the [Docker documentation](https://docs.docker.com/get-started/) to learn more.
 
 ### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+- [Docker](https://www.docker.com/) installed
+- [Docker Compose](https://docs.docker.com/compose/) installed
 
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
+After cloning the repository you can run the project with:
 ```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
+docker-compose up
 ```
 
-## Authors
+Rebuild the container:
+```
+docker-compose build
+```
+Stopping the app:
+```
+docker-compose stop
+```
 
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
+<!-- ## License
 
 This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
 
