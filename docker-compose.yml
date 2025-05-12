@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   vite:
@@ -7,6 +7,7 @@ services:
       - "5173:5173"
     volumes:
       - .:/app
+      - /app/node_modules
     working_dir: /app
     command: sh -c "npm ci && npm run dev"
     environment:
