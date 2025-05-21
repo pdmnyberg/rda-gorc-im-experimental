@@ -5,9 +5,10 @@ import {
   useEdgesState,
   MiniMap,
   Controls,
+  Node,
+  Edge
 } from "@xyflow/react";
 
-import { Node, Edge } from "../types.ts";
 import "@xyflow/react/dist/style.css";
 
 const initialBaseNodes: Node[] = [
@@ -108,7 +109,7 @@ export const Tree = () => {
     setEdges(newEdges);
   }, [showChildren, setNodes, setEdges]);
 
-  const onNodeClick = useCallback((event, node: Node) => {
+  const onNodeClick = useCallback((_event: unknown, node: Node) => {
     if (node.id === "two") {
       setShowChildren((prev) => !prev);
     }
