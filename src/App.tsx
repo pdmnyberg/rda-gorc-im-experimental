@@ -1,12 +1,13 @@
-import './App.css'
+import { Tree } from "./components/Tree.tsx";
+import "@xyflow/react/dist/style.css";
+import "./App.css";
 
-function App() {
-
+const App = () => {
   return (
     <>
-      <p> RDA visualisation app</p>
+      <Tree />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
