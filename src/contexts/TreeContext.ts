@@ -49,23 +49,30 @@ export function getLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
     return acc;
   }, {});
 
+  const getNodeSize = (n: HierarchyNode): number => {
+    return Math.pow(2, nodeSizeMap[n.id]) * nodeSize;
+  }
   const levels = Array.from(new Set(Object.values(nodeDepthMap))).sort();
+  const nodeRadialPosition: {[x: string]: number} = {}
   const positions = levels.reduce<{[x: string]: XYPosition}>((acc, level) => {
     const levelNodes = nodes.filter(node => nodeDepthMap[node.id] === level);
-    const groups = Array.from(new Set(levelNodes.map(n => "parentId" in n ? n.parentId : null)))
+    const groups = Array.from(new Set(levelNodes.map(n => "parentId" in n ? n.parentId : null)));
     for (const group of groups) {
       const groupNodes = levelNodes.filter(n => "parentId" in n ? n.parentId === group : true)
-      const levelSize = groupNodes.map(n => Math.pow(2, nodeSizeMap[n.id]) * nodeSize).reduce((a, b) => a + b);
+      const levelSize = groupNodes.map(getNodeSize).reduce((a, b) => a + b);
       const levelRadius = levelSize / (2 * Math.PI);
+      const useRadians = level < 2 ? 2 * Math.PI : 2 * Math.PI;
+      const parentRadialPosition = (group ? nodeRadialPosition[group] : 0) - useRadians * 0.5;
       let lastPosition = 0;
       for (const node of groupNodes) {
         const parentPosition: XYPosition = "parentId" in node ? acc[node.parentId] : {x: 0, y: 0};
-        const currentNodeSize = Math.pow(2, nodeSizeMap[node.id]) * nodeSize;
-        const radialPosition = (lastPosition + 0.5 * currentNodeSize) / levelSize;
+        const currentNodeSize = getNodeSize(node);
+        const radialPosition = parentRadialPosition + useRadians * (lastPosition + 0.5 * currentNodeSize) / levelSize;
         const nodeRadius = (levelRadius + currentNodeSize * 0.5);
+        nodeRadialPosition[node.id] = radialPosition;
         acc[node.id] = {
-          x: parentPosition.x + nodeRadius * Math.sin(2 * Math.PI * radialPosition),
-          y: parentPosition.y + nodeRadius * Math.cos(2 * Math.PI * radialPosition),
+          x: parentPosition.x + nodeRadius * Math.sin(radialPosition),
+          y: parentPosition.y + nodeRadius * Math.cos(radialPosition),
         }
         lastPosition += currentNodeSize;
       }
