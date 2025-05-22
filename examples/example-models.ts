@@ -91,6 +91,161 @@ export const baseModel: BaseModel = {
         },
 
         /**
+         * Commons Strategic Planning
+         */
+
+        "community-relations": {
+            type: "attribute",
+            parentId: "commons-strategic-planning",
+            name: {
+                longName: "Development and implementation of community* relations",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: "i.e. Engagement* with stakeholders on matters that affect them and Shareholder relations (if applicable)"
+        },
+        "development-strategy": {
+            type: "attribute",
+            parentId: "commons-strategic-planning",
+            name: {
+                longName: "Development of strategy",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "risk-management": {
+            type: "category",
+            parentId: "commons-strategic-planning",
+            name: {
+                longName: "Risk Management Frameworks",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "policy-advocacy": {
+            type: "category",
+            parentId: "commons-strategic-planning",
+            name: {
+                longName: "Policy advocacy, and recommendations",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "funding-and-resourcing": {
+            type: "category",
+            parentId: "commons-strategic-planning",
+            name: {
+                longName: "Funding and Resourcing Frameworks",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "relevant-roadmaps": {
+            type: "feature",
+            parentId: "development-strategy",
+            name: {
+                longName: "Development of relevant roadmaps",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "strategic-review": {
+            type: "feature",
+            parentId: "development-strategy",
+            name: {
+                longName: "Regular strategic review and alignment exercises",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "strategic-planning": {
+            type: "feature",
+            parentId: "development-strategy",
+            name: {
+                longName: "Strategic planning influences and approaches",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "performance-metrics": {
+            type: "feature",
+            parentId: "development-strategy",
+            name: {
+                longName: "Development of organizational performance and capability metrics*",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "organizational-monitoring": {
+            type: "feature",
+            parentId: "development-strategy",
+            name: {
+                longName: "A monitoring organizational design or organizational performance system to gather qualitative and quantitative metrics*",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "develop-risk-management": {
+            type: "attribute",
+            parentId: "risk-management",
+            name: {
+                longName: "Development of risk management frameworks",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "implement-risk-management": {
+            type: "attribute",
+            parentId: "risk-management",
+            name: {
+                longName: "Implementation and operationalization of risk management frameworks",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "risk-identification": {
+            type: "attribute",
+            parentId: "risk-management",
+            name: {
+                longName: "Identification of risks and issues",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "financial-requirements": {
+            type: "attribute",
+            parentId: "funding-and-resourcing",
+            name: {
+                longName: "Identification of the financial and resource requirements for commons* activities",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "added-value": {
+            type: "attribute",
+            parentId: "funding-and-resourcing",
+            name: {
+                longName: "Demonstration of added value",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+
+        /**
          * These are categories of Rules of Participation and Access
          */
         "minimal-set-of-rights-and-obligations": {
