@@ -53,11 +53,11 @@ export function getLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
   const positions = levels.reduce<{[x: string]: XYPosition}>((acc, level) => {
     const levelNodes = nodes.filter(node => nodeDepthMap[node.id] === level);
     const groups = Array.from(new Set(levelNodes.map(n => "parentId" in n ? n.parentId : null)))
-    let lastPosition = 0;
     for (const group of groups) {
       const groupNodes = levelNodes.filter(n => "parentId" in n ? n.parentId === group : true)
       const levelSize = groupNodes.map(n => Math.pow(2, nodeSizeMap[n.id]) * nodeSize).reduce((a, b) => a + b);
       const levelRadius = levelSize / (2 * Math.PI);
+      let lastPosition = 0;
       for (const node of groupNodes) {
         const parentPosition: XYPosition = "parentId" in node ? acc[node.parentId] : {x: 0, y: 0};
         const currentNodeSize = Math.pow(2, nodeSizeMap[node.id]) * nodeSize;

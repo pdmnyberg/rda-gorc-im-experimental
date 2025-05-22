@@ -244,6 +244,88 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
+        "business-continuity": {
+            type: "feature",
+            parentId: "develop-risk-management",
+            name: {
+                longName: "Business continuity planning",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "human-rights": {
+            type: "feature",
+            parentId: "develop-risk-management",
+            name: {
+                longName: "Human rights risk identification and management",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "technology-planning": {
+            type: "feature",
+            parentId: "develop-risk-management",
+            name: {
+                longName: "Technology and information governance* planning",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "health-planning": {
+            type: "feature",
+            parentId: "develop-risk-management",
+            name: {
+                longName: "Health and safety governance* planning",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "environmental-considerations": {
+            type: "feature",
+            parentId: "financial-requirements",
+            name: {
+                longName: "Environmental considerations",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "governance-considerations": {
+            type: "feature",
+            parentId: "financial-requirements",
+            name: {
+                longName: "Governance* considerations",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        "social-considerations": {
+            type: "feature",
+            parentId: "financial-requirements",
+            name: {
+                longName: "Social considerations",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        /*
+        "": {
+            type: "feature",
+            parentId: "",
+            name: {
+                longName: "",
+                shortName: ""
+            },
+            considerationLevel: "core",
+            description: ""
+        },
+        */
 
         /**
          * These are categories of Rules of Participation and Access
