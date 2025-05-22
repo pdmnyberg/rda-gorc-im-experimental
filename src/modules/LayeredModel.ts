@@ -32,7 +32,7 @@ export type ThematicSlice = Package & {
     }[];
 }
 
-type Package = {
+export type Package = {
     id: PackageId;
     label: string;
     version: SemanticVersionString;

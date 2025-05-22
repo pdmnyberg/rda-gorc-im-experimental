@@ -116,6 +116,25 @@ export const baseModel: BaseModel = {
     }
 }
 
+export const onlyGoLProfile: ModelProfile = {
+    version: "0.1.0",
+    id: "gorc-im-only-gol",
+    label: "GORC Only Governance & Leadership",
+    nodes: {
+        /**
+         * This is an example of removing nodes using a profile
+         */
+        "rules-of-participation-and-access": {type: "nothing"},
+        "sustainability": {type: "nothing"},
+        "minimal-set-of-rights-and-obligations": {type: "nothing"},
+        "minimal-accountability": {type: "nothing"},
+    }
+}
+
 export const models = {
-    baseModel
+    baseModel,
+}
+
+export const profiles = {
+    onlyGoLProfile,
 }

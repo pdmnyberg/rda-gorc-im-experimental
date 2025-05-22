@@ -1,16 +1,20 @@
-import {models} from "./example-models";
+import {models, profiles} from "./example-models";
+import {Package} from "../src/modules/LayeredModel";
 import fs from "node:fs";
 
-
 function main() {
-    const outputRoot = "dist-examples";
-    fs.mkdirSync(outputRoot, {recursive: true});
+    const rootPath = "dist-examples";
+    exportPackages(`${rootPath}/models`, models);
+    exportPackages(`${rootPath}/profiles`, profiles);
+}
 
-    for (const modelKey of Object.keys(models)) {
-        const model = models[modelKey];
-        const data = JSON.stringify(model, undefined, "  ");
-        const outputFile = `${outputRoot}/${model.id}.json`
-        console.log(model.id, outputFile);
+function exportPackages<T extends Package>(rootPath: string, packages: {[x: string]: T}) {
+    fs.mkdirSync(rootPath, {recursive: true});
+    for (const packageKey of Object.keys(packages)) {
+        const pkg = packages[packageKey];
+        const data = JSON.stringify(pkg, undefined, "  ");
+        const outputFile = `${rootPath}/${pkg.id}.json`
+        console.log(pkg.id, outputFile);
         fs.writeFileSync(outputFile, data);
     }
 }
