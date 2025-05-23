@@ -4,11 +4,12 @@ export const baseModel: BaseModel = {
     version: "0.1.0",
     id: "gorc-im-base",
     label: "GORC Base Model",
-    nodes: {
+    nodes: [
         /**
          * These are the essential elements of the base GORC model
          */
-        "governance-and-leadership": {
+        {
+            id: "governance-and-leadership",
             type: "essential-element",
             name: {
                 longName: "Governance & Leadership",
@@ -17,7 +18,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "Stakeholders that define the commons purpose and the development of the strategies, objectives, values, and policies that frame how that purpose will be pursued."
         },
-        "rules-of-participation-and-access": {
+        {
+            id: "rules-of-participation-and-access",
             type: "essential-element",
             name: {
                 longName: "Rules of Participation & Access",
@@ -26,7 +28,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "A set of policies defining a minimal set of rights, obligations, and accountability governing the activities of those participating in the commons."
         },
-        "sustainability": {
+        {
+            id: "sustainability",
             type: "essential-element",
             name: {
                 longName: "Sustainability",
@@ -39,7 +42,8 @@ export const baseModel: BaseModel = {
         /**
          * These are categories of Governance & Leadership
          */
-        "commons-strategic-planning": {
+        {
+            id: "commons-strategic-planning",
             type: "category",
             parentId: "governance-and-leadership",
             name: {
@@ -49,7 +53,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "i.e. including governance structure, stakeholder strategy, sustainable operational strategy, and a strategy for the future"
         },
-        "commons-intent-and-definition": {
+        {
+            id: "commons-intent-and-definition",
             type: "category",
             parentId: "governance-and-leadership",
             name: {
@@ -59,7 +64,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "governance-of-quality-research": {
+        {
+            id: "governance-of-quality-research",
             type: "category",
             parentId: "governance-and-leadership",
             name: {
@@ -69,7 +75,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "i.e. Research Object* ethics, including data ethics"
         },
-        "internal-commons-policy": {
+        {
+            id: "internal-commons-policy",
             type: "category",
             parentId: "governance-and-leadership",
             name: {
@@ -79,7 +86,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "May be in the form of policies, guidelines, and/or standard operating procedures (SOP)"
         },
-        "organizational-structure": {
+        {
+            id: "organizational-structure",
             type: "category",
             parentId: "governance-and-leadership",
             name: {
@@ -94,7 +102,8 @@ export const baseModel: BaseModel = {
          * Commons Strategic Planning
          */
 
-        "community-relations": {
+        {
+            id: "community-relations",
             type: "attribute",
             parentId: "commons-strategic-planning",
             name: {
@@ -104,7 +113,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "i.e. Engagement* with stakeholders on matters that affect them and Shareholder relations (if applicable)"
         },
-        "development-strategy": {
+        {
+            id: "development-strategy",
             type: "attribute",
             parentId: "commons-strategic-planning",
             name: {
@@ -114,7 +124,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "risk-management": {
+        {
+            id: "risk-management",
             type: "category",
             parentId: "commons-strategic-planning",
             name: {
@@ -124,7 +135,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "policy-advocacy": {
+        {
+            id: "policy-advocacy",
             type: "category",
             parentId: "commons-strategic-planning",
             name: {
@@ -134,7 +146,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "funding-and-resourcing": {
+        {
+            id: "funding-and-resourcing",
             type: "category",
             parentId: "commons-strategic-planning",
             name: {
@@ -144,7 +157,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "relevant-roadmaps": {
+        {
+            id: "relevant-roadmaps",
             type: "feature",
             parentId: "development-strategy",
             name: {
@@ -154,7 +168,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "strategic-review": {
+        {
+            id: "strategic-review",
             type: "feature",
             parentId: "development-strategy",
             name: {
@@ -164,7 +179,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "strategic-planning": {
+        {
+            id: "strategic-planning",
             type: "feature",
             parentId: "development-strategy",
             name: {
@@ -174,7 +190,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "performance-metrics": {
+        {
+            id: "performance-metrics",
             type: "feature",
             parentId: "development-strategy",
             name: {
@@ -184,7 +201,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "organizational-monitoring": {
+        {
+            id: "organizational-monitoring",
             type: "feature",
             parentId: "development-strategy",
             name: {
@@ -194,7 +212,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "develop-risk-management": {
+        {
+            id: "develop-risk-management",
             type: "attribute",
             parentId: "risk-management",
             name: {
@@ -204,7 +223,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "implement-risk-management": {
+        {
+            id: "implement-risk-management",
             type: "attribute",
             parentId: "risk-management",
             name: {
@@ -214,7 +234,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "risk-identification": {
+        {
+            id: "risk-identification",
             type: "attribute",
             parentId: "risk-management",
             name: {
@@ -224,7 +245,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "financial-requirements": {
+        {
+            id: "financial-requirements",
             type: "attribute",
             parentId: "funding-and-resourcing",
             name: {
@@ -234,7 +256,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "added-value": {
+        {
+            id: "added-value",
             type: "attribute",
             parentId: "funding-and-resourcing",
             name: {
@@ -244,7 +267,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "business-continuity": {
+        {
+            id: "business-continuity",
             type: "feature",
             parentId: "develop-risk-management",
             name: {
@@ -254,7 +278,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "human-rights": {
+        {
+            id: "human-rights",
             type: "feature",
             parentId: "develop-risk-management",
             name: {
@@ -264,7 +289,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "technology-planning": {
+        {
+            id: "technology-planning",
             type: "feature",
             parentId: "develop-risk-management",
             name: {
@@ -274,7 +300,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "health-planning": {
+        {
+            id: "health-planning",
             type: "feature",
             parentId: "develop-risk-management",
             name: {
@@ -284,7 +311,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "environmental-considerations": {
+        {
+            id: "environmental-considerations",
             type: "feature",
             parentId: "financial-requirements",
             name: {
@@ -294,7 +322,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "governance-considerations": {
+        {
+            id: "governance-considerations",
             type: "feature",
             parentId: "financial-requirements",
             name: {
@@ -304,7 +333,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: ""
         },
-        "social-considerations": {
+        {
+            id: "social-considerations",
             type: "feature",
             parentId: "financial-requirements",
             name: {
@@ -330,7 +360,8 @@ export const baseModel: BaseModel = {
         /**
          * These are categories of Rules of Participation and Access
          */
-        "minimal-set-of-rights-and-obligations": {
+        {
+            id: "minimal-set-of-rights-and-obligations",
             type: "category",
             parentId: "rules-of-participation-and-access",
             name: {
@@ -340,7 +371,8 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "May be a singular policy document with several sections addressing different aspects of rights and obligations, or several specific policies. May also be grouped with accountability in a larger rules of participation and access document for the commons."
         },
-        "minimal-accountability": {
+        {
+            id: "minimal-accountability",
             type: "category",
             parentId: "rules-of-participation-and-access",
             name: {
@@ -350,22 +382,22 @@ export const baseModel: BaseModel = {
             considerationLevel: "core",
             description: "May be a singular policy document with several sections addressing different aspects of accountability, or several specific policies. May also be grouped with rights and obligations in a larger rules of participation and access document for the commons."
         },
-    }
+    ]
 }
 
 export const onlyGoLProfile: ModelProfile = {
     version: "0.1.0",
     id: "gorc-im-only-gol",
     label: "GORC Only Governance & Leadership",
-    nodes: {
+    nodes: [
         /**
          * This is an example of removing nodes using a profile
          */
-        "rules-of-participation-and-access": {type: "nothing"},
-        "sustainability": {type: "nothing"},
-        "minimal-set-of-rights-and-obligations": {type: "nothing"},
-        "minimal-accountability": {type: "nothing"},
-    }
+        {type: "nothing", id: "rules-of-participation-and-access"},
+        {type: "nothing", id: "sustainability"},
+        {type: "nothing", id: "minimal-set-of-rights-and-obligations"},
+        {type: "nothing", id: "minimal-accountability"},
+    ]
 }
 
 export const models = {

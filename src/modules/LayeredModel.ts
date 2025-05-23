@@ -1,29 +1,17 @@
-import {GORCNode, QuestionNode, NodeId, EssentialElement, Category, Subcategory, Feature, Attribute, KPI} from "./GORCNodes";
+import {GORCNode, QuestionNode, NodeId} from "./GORCNodes";
 
-type ModelNode = (
-    Omit<EssentialElement, "id">
-    | Omit<Category, "id">
-    | Omit<Subcategory, "id">
-    | Omit<Feature, "id">
-    | Omit<Attribute, "id">
-    | Omit<KPI, "id">
-    | Omit<QuestionNode, "id">
-);
+type ModelNode = GORCNode | QuestionNode;
 
 export type BaseModel = Package & ModelDefinition;
 
 export type ModelProfile = Package & ModelLayerDefinition;
 
 export type ModelDefinition = {
-    nodes: {
-        [id: NodeId]: ModelNode;
-    };
+    nodes: ModelNode[];
 }
 
 export type ModelLayerDefinition = {
-    nodes: {
-        [id: NodeId]: ModelNode | Nothing;
-    };
+    nodes: (ModelNode | Nothing)[];
 }
 
 export type ThematicSlice = Package & {
@@ -38,7 +26,7 @@ export type Package = {
     version: SemanticVersionString;
 }
 
-type Nothing = {type: "nothing"}
+type Nothing = {type: "nothing", id: NodeId};
 
 type SemanticVersionString = string;
 
@@ -46,31 +34,31 @@ type PackageId = string;
 
 
 export function applyLayers(model: ModelDefinition, layers: ModelLayerDefinition[]): ModelDefinition {
-    const initialNodes: ModelLayerDefinition["nodes"] = {...model.nodes};
-    const allNodes = layers.reduce<ModelLayerDefinition["nodes"]>(
+    const initialNodes = mapNodes(model.nodes);
+    const allNodes = layers.reduce<{[x: NodeId]: ModelNode | Nothing}>(
         (acc, layer) => {
-            return {...acc, ...layer.nodes};
+            const layerNodes = mapNodes(layer.nodes);
+            return {...acc, ...layerNodes};
         },
         initialNodes
     );
-    const modelNodes: ModelDefinition["nodes"] = Object.keys(allNodes).reduce<ModelDefinition["nodes"]>((acc, key) => {
-        const node = allNodes[key];
-        if (node.type !== "nothing") {
-            acc[key] = node;
-        }
-        return acc;
-    }, {});
+    const modelNodes = (
+        Object.keys(allNodes)
+        .map(key => allNodes[key])
+        .filter((node): node is ModelNode => node.type !== "nothing")
+    );
     return {
         nodes: modelNodes
     }
 }
 
-export function getModelNodes(model: ModelDefinition): (GORCNode | QuestionNode)[] {
-    return Object.keys(model.nodes).map<GORCNode | QuestionNode>((key) => {
-        const node = model.nodes[key];
-        return {
-            ...node,
-            id: key
-        }
-    })
+export function getModelNodes(model: ModelDefinition): ModelNode[] {
+    return model.nodes;
+}
+
+function mapNodes<T extends {id: NodeId}>(nodes: T[]): {[x: NodeId]: T} {
+    return nodes.reduce<{[x: NodeId]: T}>((acc, node) => {
+        acc[node.id] = node;
+        return acc;
+    }, {})
 }
