@@ -31,6 +31,16 @@ Stopping the app:
 docker-compose stop
 ```
 
+
+### Unit testing
+
+This project uses `vitest` for unit testing. Additional information on how to get started with `vitest` can be found [here](https://vitest.dev/guide/).
+
+Run tests:
+```sh
+docker compose exec vite npm run test
+```
+
 <!-- ## License
 
 This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
