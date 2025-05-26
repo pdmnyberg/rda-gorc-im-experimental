@@ -30,6 +30,7 @@ export type QuestionNode = {
 type IdentifiableEntity = {
     id: NodeId;
     parentId: NodeId;
+    icon?: string;
     name: {
         shortName: string;
         longName: string;

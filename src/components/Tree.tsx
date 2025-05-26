@@ -6,8 +6,11 @@ import {
   Node,
 } from "@xyflow/react";
 import { useTreeContext } from "../contexts/TreeContext";
+import { GORCNodeView } from "./GORCNodeView/GORCNodeView";
 
 import "@xyflow/react/dist/style.css";
+
+const nodeTypes = { gorc: GORCNodeView };
 
 export const Tree = () => {
   const treeManager = useTreeContext();
@@ -26,7 +29,9 @@ export const Tree = () => {
           edges={edges}
           onNodeClick={onNodeClick}
           fitView
+          nodeTypes={nodeTypes}
           nodesDraggable={false}
+          minZoom={0.1}
         >
           <MiniMap />
           <Controls />

@@ -6,6 +6,7 @@ import {
 } from "@xyflow/react";
 import {GORCNode, QuestionNode, NodeId} from "../modules/GORCNodes"
 
+
 export interface TreeManager {
     getNodes(): Node[];
     getEdges(): Edge[];
@@ -101,8 +102,9 @@ function nodeFromGORCNode(node: GORCNode, layout: Layout): Node {
   const position = layout[node.id] || { x: Math.random() * 300, y: Math.random() * 300 }
   return {
     id: node.id,
+    type: "gorc",
     position: position,
-    data: { label: node.name.longName },
+    data: node,
   }
 }
 
@@ -111,5 +113,6 @@ function edgeFromGORCNode(node: GORCNode & {parentId: NodeId}): Edge {
     id: `${node.parentId}<->${node.id}`,
     source: node.parentId,
     target: node.id,
+    type: "straight",
   }
 }
