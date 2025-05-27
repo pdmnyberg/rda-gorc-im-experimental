@@ -1,0 +1,13 @@
+package.json
+package-lock.json
+.github
+
+# Project dev files
+dist-examples
+examples
+
+# Ignored by default
+**/.git
+**/.svn
+**/.hg
+**/node_modules
