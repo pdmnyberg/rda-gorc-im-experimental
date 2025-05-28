@@ -1,13 +1,12 @@
 import React from 'react';
 import './Layout.css';
+import Header from "../Header/Header";
 
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <div className="layout">
-            <header>
-                <h1>RDA Visualisation App</h1>
-            </header>
+            <Header/>
             <main>
                 {children}
             </main>

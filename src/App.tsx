@@ -19,7 +19,6 @@ const App = () => {
   const treeManager = createTreeManagerFromModelNodes(nodes, layout);
   return (  
     <>
-      <NavLink to="documentation">See Documentation</NavLink>
       <TreeContext.Provider value={treeManager}>
         <Layout>
           <div className="tree-container">
