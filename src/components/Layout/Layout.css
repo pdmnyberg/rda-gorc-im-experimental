@@ -34,12 +34,13 @@
 }
 
 .layout > main > .settings {
+    --setting-panel-size: 25rem;
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     background: #fff;
-    width: 25rem;
+    width: var(--setting-panel-size);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     overflow: hidden;
     transition: width 0.1s;
@@ -51,7 +52,9 @@
 
 .layout > main > .settings > .settings-container {
     padding: 1rem;
-    width: 25rem;
+    width: var(--setting-panel-size);
+    overflow: auto;
+    max-height: 100%;
 }
 
 .layout > header > .settings-button {
