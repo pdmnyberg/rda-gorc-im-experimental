@@ -403,10 +403,34 @@ export const onlyGoLProfile: ModelProfile = {
     ]
 }
 
+export const onlySustainabilityProfile: ModelProfile = {
+    version: "0.0.1",
+    id: "gorc-im-only-sustainability",
+    label: "GORC Only Sustainability",
+    nodes: [
+        /**
+         * This is an example of removing nodes using a profile
+         */
+    ]
+}
+
+export const onlyRoPaAProfile: ModelProfile = {
+    version: "0.0.1",
+    id: "gorc-im-only-ropaa",
+    label: "GORC Only Rules of Participation & Access",
+    nodes: [
+        /**
+         * This is an example of removing nodes using a profile
+         */
+    ]
+}
+
 export const models = {
     baseModel,
 }
 
 export const profiles = {
     onlyGoLProfile,
+    onlySustainabilityProfile,
+    onlyRoPaAProfile
 }
