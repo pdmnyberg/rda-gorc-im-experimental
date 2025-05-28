@@ -11,6 +11,7 @@ export const baseModel: BaseModel = {
         {
             id: "governance-and-leadership",
             type: "essential-element",
+            icon: "icons/groc-icon_governance-and-leadership.svg",
             name: {
                 longName: "Governance & Leadership",
                 shortName: "G & L"
@@ -21,6 +22,7 @@ export const baseModel: BaseModel = {
         {
             id: "rules-of-participation-and-access",
             type: "essential-element",
+            icon: "icons/groc-icon_rules-of-participation-and-access.svg",
             name: {
                 longName: "Rules of Participation & Access",
                 shortName: "RoP & A"
@@ -31,6 +33,7 @@ export const baseModel: BaseModel = {
         {
             id: "sustainability",
             type: "essential-element",
+            icon: "icons/groc-icon_sustainability.svg",
             name: {
                 longName: "Sustainability",
                 shortName: "S"
@@ -126,29 +129,29 @@ export const baseModel: BaseModel = {
         },
         {
             id: "risk-management",
-            type: "category",
+            type: "subcategory",
             parentId: "commons-strategic-planning",
             name: {
                 longName: "Risk Management Frameworks",
                 shortName: ""
             },
-            considerationLevel: "core",
+            considerationLevel: "optional",
             description: ""
         },
         {
             id: "policy-advocacy",
-            type: "category",
+            type: "subcategory",
             parentId: "commons-strategic-planning",
             name: {
                 longName: "Policy advocacy, and recommendations",
                 shortName: ""
             },
-            considerationLevel: "core",
+            considerationLevel: "optional",
             description: ""
         },
         {
             id: "funding-and-resourcing",
-            type: "category",
+            type: "subcategory",
             parentId: "commons-strategic-planning",
             name: {
                 longName: "Funding and Resourcing Frameworks",
@@ -286,7 +289,7 @@ export const baseModel: BaseModel = {
                 longName: "Human rights risk identification and management",
                 shortName: ""
             },
-            considerationLevel: "core",
+            considerationLevel: "optional",
             description: ""
         },
         {
