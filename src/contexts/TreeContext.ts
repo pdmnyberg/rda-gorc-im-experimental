@@ -3,6 +3,7 @@ import {
   Node,
   Edge,
   XYPosition,
+  MarkerType,
 } from "@xyflow/react";
 import {GORCNode, QuestionNode, NodeId} from "../modules/GORCNodes"
 
@@ -203,5 +204,10 @@ function edgeFromGORCNode(node: GORCNode & {parentId: NodeId}): Edge {
     source: node.parentId,
     target: node.id,
     type: "straight",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 30,
+      height: 30,
+    },
   }
 }

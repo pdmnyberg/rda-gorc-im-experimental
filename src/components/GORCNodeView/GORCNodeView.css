@@ -1,12 +1,19 @@
 .gorc-node-root {
     position: relative;
-    --gorc-shape-size: 30px;
+    --gorc-node-size: 30px;
+    --gorc-shape-size: calc(var(--gorc-node-size) * 1);
     --gorc-shape-color: #999;
+    font-size: calc(var(--gorc-node-size) / 2);
+}
+
+.gorc-node-root > .react-flow__handle.target {
+    width: 30px;
+    height: 30px;
 }
 
 .gorc-node-body {
     position: relative;
-    width: 200px;
+    width: calc(var(--gorc-node-size) * 6.7);
     padding-top: calc(0.5 * var(--gorc-shape-size));
 }
 
@@ -23,7 +30,8 @@
 }
 
 .gorc-node-root[data-type="essential-element"] {
-    --gorc-shape-size: 120px;
+    --gorc-shape-size: calc(var(--gorc-node-size) * 4);
+    font-weight: bold;
 }
 .gorc-node-root[data-type="essential-element"][data-consideration-level="core"] {
     --gorc-shape: url("../../img/groc-icon_essential-element-core.svg");
@@ -36,7 +44,7 @@
 }
 
 .gorc-node-root[data-type="category"] {
-    --gorc-shape-size: 30px;
+    --gorc-shape-size: calc(var(--gorc-node-size) * 1);
 }
 .gorc-node-root[data-type="category"][data-consideration-level="core"] {
     --gorc-shape: url("../../img/groc-icon_category-core.svg");
@@ -49,7 +57,7 @@
 }
 
 .gorc-node-root[data-type="subcategory"] {
-    --gorc-shape-size: 30px;
+    --gorc-shape-size: calc(var(--gorc-node-size) * 1);
 }
 .gorc-node-root[data-type="subcategory"][data-consideration-level="core"] {
     --gorc-shape: url("../../img/groc-icon_subcategory-core.svg");
@@ -62,7 +70,7 @@
 }
 
 .gorc-node-root[data-type="attribute"] {
-    --gorc-shape-size: 30px;
+    --gorc-shape-size: calc(var(--gorc-node-size) * 1);
 }
 .gorc-node-root[data-type="attribute"][data-consideration-level="core"] {
     --gorc-shape: url("../../img/groc-icon_attribute-core.svg");
@@ -75,7 +83,7 @@
 }
 
 .gorc-node-root[data-type="feature"] {
-    --gorc-shape-size: 30px;
+    --gorc-shape-size: calc(var(--gorc-node-size) * 1);
 }
 .gorc-node-root[data-type="feature"][data-consideration-level="core"] {
     --gorc-shape: url("../../img/groc-icon_feature-core.svg");
@@ -102,6 +110,6 @@
 
 .gorc-node-text {
     text-align: center;
-    padding: 15px;
+    padding: calc(var(--gorc-node-size) / 2);
     background-color: rgba(255,255,255,0.8);
 }

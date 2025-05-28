@@ -11,7 +11,7 @@ import Layout from "./components/Layout/Layout";
 const App = () => {
   const modelDefintion: ModelDefinition = applyLayers(baseModel, []);
   const nodes = getModelNodes(modelDefintion);
-  const nodeSize = 150;
+  const nodeSize = 120;
   const layout = React.useMemo(() => {
     const baseLayout = getLayout(nodes, nodeSize);
     return tightenLayout(baseLayout, nodes, nodeSize, 5000);
