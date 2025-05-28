@@ -89,7 +89,7 @@ export function tightenLayout(layout: Layout, nodes: HierarchyNode[], nodeSize: 
   const nodeMap = nodes.reduce<Record<string, HierarchyNode>>((acc, node) => {acc[node.id] = node; return acc;}, {});
   let velocityMap: Layout = {}
   let updatedLayout = layout;
-  const timeStep = 0.01;
+  const timeStep = 0.1;
   for (let i = 0; i < iterations; i++) {
     const forceMap: Layout = sumForces(
       getSeparationForces(updatedLayout, separation, 1),

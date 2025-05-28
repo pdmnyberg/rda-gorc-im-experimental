@@ -4,17 +4,59 @@
     min-height: 100vh;
 }
 
-.layout header, footer {
+.layout header, .layout footer {
     background-color: #f8f8f8;
-    padding: 1rem;
     text-align: center;
 }
 
-.layout main {
-    flex: 1;
+.layout footer {
     padding: 1rem;
+}
+
+.layout header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.layout header h1 {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.layout main {
+    position: relative;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: stretch;
     overflow: hidden;
+}
+
+.layout > main > .settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    width: 25rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: width 0.1s;
+}
+
+.layout > main > .settings[data-visible="false"] {
+    width: 0;
+}
+
+.layout > main > .settings > .settings-container {
+    padding: 1rem;
+    width: 25rem;
+}
+
+.layout > header > .settings-button {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    background: #999;
 }
