@@ -15,7 +15,7 @@ const App = () => {
   const modelDefintion: ModelDefinition = React.useMemo(() => applyLayers(baseModel, selectedProfiles), [baseModel, selectedProfiles]);
   const nodes = React.useMemo(() => getModelNodes(modelDefintion), [modelDefintion]);
   const nodeSize = 120;
-  const layout = React.useMemo(() => {
+   const layout = React.useMemo(() => {
     const baseLayout = getLayout(nodes, nodeSize);
     return tightenLayout(baseLayout, nodes, nodeSize, 1000);
   }, [nodes, nodeSize]);
@@ -29,12 +29,15 @@ const App = () => {
     <>
       <TreeContext.Provider value={treeManager}>
         <Layout
-          settings={
-            <>
-              <h2>Select profiles</h2>
-              <MultiSelect items={profileItems} selection={profileIds} onChange={setProfileIds}/>
-            </>
-          }
+          panels={{
+            settings: {
+              component: <>
+                <h2>Select profiles</h2>
+                <MultiSelect items={profileItems} selection={profileIds} onChange={setProfileIds}/>
+              </>,
+              icon: <></>
+            },
+          }}
           header={
             <>
               <NavLink to="documentation">See Documentation</NavLink>

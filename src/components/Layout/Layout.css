@@ -1,4 +1,5 @@
 .layout {
+    --layout-spacing: 1rem;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -10,13 +11,15 @@
 }
 
 .layout footer {
-    padding: 1rem;
+    padding: var(--layout-spacing);
 }
 
 .layout header {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: var(--layout-spacing);
+    padding: 0 var(--layout-spacing);
 }
 
 .layout header h1 {
@@ -33,7 +36,7 @@
     overflow: hidden;
 }
 
-.layout > main > .settings {
+.layout > main > .panel {
     --setting-panel-size: 25rem;
     position: absolute;
     top: 0;
@@ -46,20 +49,29 @@
     transition: width 0.1s;
 }
 
-.layout > main > .settings[data-visible="false"] {
+.layout > main > .panel[data-visible="false"] {
     width: 0;
 }
 
-.layout > main > .settings > .settings-container {
+.layout > main > .panel > .panel-container {
     padding: 1rem;
     width: var(--setting-panel-size);
     overflow: auto;
     max-height: 100%;
 }
 
-.layout > header > .settings-button {
+.layout > header > .panel-button {
+    --button-border-color: #ccc;
+    --button-spacing: 1rem;
+
     flex-shrink: 0;
     width: 3rem;
     height: 3rem;
-    background: #999;
+    background-color: rgba(255,255,255,0);
+    border: solid 1px var(--button-border-color);
+    transition: background-color 0.1s;
+}
+
+.layout > header > .panel-button:hover {
+    background-color: #fff;
 }
