@@ -1,4 +1,4 @@
-import {models, profiles} from "./example-models";
+import {models, profiles, slices} from "./example-models";
 import {Package} from "../src/modules/LayeredModel";
 import fs from "node:fs";
 
@@ -6,6 +6,7 @@ function main() {
     const rootPath = "dist-examples";
     exportPackages(`${rootPath}/models`, models);
     exportPackages(`${rootPath}/profiles`, profiles);
+    exportPackages(`${rootPath}/slices`, slices);
 }
 
 function exportPackages<T extends Package>(rootPath: string, packages: {[x: string]: T}) {
