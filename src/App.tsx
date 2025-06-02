@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
 import React from "react";
 import { Tree } from "./components/Tree.tsx";
-import { TreeContext, createTreeManagerFromModelNodes, getLayout, tightenLayout } from "./contexts/TreeContext.ts"
+import { TreeContext, createTreeManagerFromModelNodes, getLayout } from "./contexts/TreeContext.ts"
 import { ModelDefinition, getModelNodes, applyLayers } from "./modules/LayeredModel.ts"
 import { baseModel, profiles } from "../examples/example-models.ts"
 import "@xyflow/react/dist/style.css";
@@ -15,10 +15,7 @@ const App = () => {
   const modelDefintion: ModelDefinition = React.useMemo(() => applyLayers(baseModel, selectedProfiles), [baseModel, selectedProfiles]);
   const nodes = React.useMemo(() => getModelNodes(modelDefintion), [modelDefintion]);
   const nodeSize = 120;
-   const layout = React.useMemo(() => {
-    const baseLayout = getLayout(nodes, nodeSize);
-    return tightenLayout(baseLayout, nodes, nodeSize, 1000);
-  }, [nodes, nodeSize]);
+  const layout = React.useMemo(() => getLayout(nodes, nodeSize), [nodes, nodeSize]);
   const treeManager = createTreeManagerFromModelNodes(nodes, layout);
   const profileItems: SelectItem[] = Object.values(profiles).map(p => ({
     id: p.id,
