@@ -1,4 +1,4 @@
-import {BaseModel, ModelProfile, ModelNode} from "../src/modules/LayeredModel";
+import {BaseModel, ModelProfile, ThematicSlice, ModelNode} from "../src/modules/LayeredModel";
 
 export const baseModel: BaseModel = {
     version: "0.1.0",
@@ -433,6 +433,33 @@ export const onlyRoPaAProfile: ModelProfile = {
     )
 }
 
+export const onlyGoLSlice: ThematicSlice = {
+    version: "0.1.0",
+    id: "gorc-im-gol-slice",
+    label: "GORC Governance & Leadership Slice",
+    nodes: baseModel.nodes.filter(
+        node => getRoot(node, baseModel.nodes) === "governance-and-leadership"
+    ).map(n => ({nodeId: n.id}))
+}
+
+export const onlySustainabilitySlice: ThematicSlice = {
+    version: "0.1.0",
+    id: "gorc-im-sustainability-slice",
+    label: "GORC Sustainability Slice",
+    nodes: baseModel.nodes.filter(
+        node => getRoot(node, baseModel.nodes) === "sustainability"
+    ).map(n => ({nodeId: n.id}))
+}
+
+export const onlyRoPaASlice: ThematicSlice = {
+    version: "0.1.0",
+    id: "gorc-im-ropaa-slice",
+    label: "GORC Rules of Participation & Access Slice",
+    nodes: baseModel.nodes.filter(
+        node => getRoot(node, baseModel.nodes) === "rules-of-participation-and-access"
+    ).map(n => ({nodeId: n.id}))
+}
+
 export const models = {
     baseModel,
 }
@@ -441,4 +468,10 @@ export const profiles = {
     onlyGoLProfile,
     onlySustainabilityProfile,
     onlyRoPaAProfile
+}
+
+export const slices = {
+    onlyGoLSlice,
+    onlySustainabilitySlice,
+    onlyRoPaASlice
 }
