@@ -4,7 +4,9 @@ export type ModelNode = GORCNode | QuestionNode;
 
 export type BaseModel = Package & ModelDefinition;
 
-export type ModelProfile = Package & ModelLayerDefinition;
+export type ModelProfile = Package & ModelRelation & ModelLayerDefinition;
+
+export type ThematicSlice = Package & ModelRelation & ModelSlice;
 
 export type ModelDefinition = {
     nodes: ModelNode[];
@@ -13,8 +15,6 @@ export type ModelDefinition = {
 export type ModelLayerDefinition = {
     nodes: (ModelNode | Nothing)[];
 }
-
-export type ThematicSlice = Package & ModelSlice;
 
 export type ModelSlice = {
     nodes: {
@@ -26,6 +26,10 @@ export type Package = {
     id: PackageId;
     label: string;
     version: SemanticVersionString;
+}
+
+export type ModelRelation = {
+    modelId: PackageId;
 }
 
 type Nothing = {type: "nothing", id: NodeId};

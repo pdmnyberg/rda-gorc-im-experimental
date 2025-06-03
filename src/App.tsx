@@ -2,7 +2,9 @@ import React from "react";
 import { Tree } from "./components/Tree.tsx";
 import { TreeContext, createTreeManagerFromModelNodes, getLayout } from "./contexts/TreeContext.ts"
 import { ModelDefinition, getModelNodes, applyLayersAndSlices, Package } from "./modules/LayeredModel.ts"
-import { baseModel, profiles, slices } from "../examples/example-models.ts"
+import { models as mockModels, profiles as mockProfiles, slices as mockSlices } from "../examples/example-models.ts"
+import { createRepositoryManager, useRepositoryModel } from "./contexts/RepositoryContext.ts"
+import { StaticRepositorySource, RepositorySource } from "./modules/RepositorySource.ts"
 import "@xyflow/react/dist/style.css";
 import "./App.css";
 import Layout from "./components/Layout/Layout";
@@ -25,16 +27,41 @@ function usePackageSelect<T extends Package>(packages: T[] | Record<string, T>):
 }
 
 const App = () => {
+  const repositoryManager = createRepositoryManager([
+    new StaticRepositorySource(
+      {
+        id: "mock-repo",
+        name: "Mock repo"
+      },
+      Object.values(mockModels),
+      Object.values(mockProfiles),
+      Object.values(mockSlices)
+    )
+  ]);
+  const [selectedRepository, setSelectedRepository] = React.useState<RepositorySource | null>(null);
+  const [model, repoInfo, models, profiles, slices, setModel] = useRepositoryModel(selectedRepository);
   const [selectedProfiles, profileItems, profileIds, setProfileIds] = usePackageSelect(profiles);
   const [selectedSlices, sliceItems, sliceIds, setSliceIds] = usePackageSelect(slices);
   const modelDefintion: ModelDefinition = React.useMemo(
-    () => applyLayersAndSlices(baseModel, selectedProfiles, selectedSlices),
-    [baseModel, selectedProfiles, selectedSlices]
+    () => model ? applyLayersAndSlices(model, selectedProfiles, selectedSlices) : { nodes: []},
+    [model, selectedProfiles, selectedSlices]
   );
   const nodes = React.useMemo(() => getModelNodes(modelDefintion), [modelDefintion]);
   const nodeSize = 120;
   const layout = React.useMemo(() => getLayout(nodes, nodeSize), [nodes, nodeSize]);
   const treeManager = createTreeManagerFromModelNodes(nodes, layout);
+
+  React.useEffect(() => {
+    const repositories = repositoryManager.getRepositories();
+    if (selectedRepository === null && repositories.length > 0) {
+      setSelectedRepository(repositories[0]);
+    }
+  }, [repositoryManager, selectedRepository]);
+  React.useEffect(() => {
+    if (model === null && models.length > 0) {
+      setModel(models[0]);
+    }
+  }, [model, models, setModel]);
   return (
     <>
       <TreeContext.Provider value={treeManager}>
