@@ -45,6 +45,20 @@ Run tests:
 docker compose exec vite npm run test
 ```
 
+### Formatting the code
+
+This project includes "Prettier" as a code formatter. Formatting rules are specified in the `.prettierrc` file. Files that are ignored from formatting are specified in the `.prettierignore` file.
+
+Run the formatter on your code:
+
+```
+docker compose exec vite npx prettier --write .
+```
+
+**Be aware:** This will overwrite all the files in the project that are not specified in the `.prettierignore` file.
+
+To read more about how to use Prettier, check their [documentation](https://prettier.io/docs/).
+
 ### Adding dependencies
 
 This project uses `npm` to handle dependencies. To add a dependency, first start the container with
