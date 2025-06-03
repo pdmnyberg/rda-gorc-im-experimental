@@ -1,0 +1,60 @@
+.multi-select {
+    --select-border-color: #ccc;
+    --select-spacing: 1rem;
+    --select-dot-size: .7rem;
+    border: solid 1px var(--select-border-color);
+}
+
+
+.select-button > .select-label {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    flex-direction: row;
+}
+
+.select-button:not(:last-child) > .select-label {
+    border-bottom: solid 1px var(--select-border-color);
+}
+
+.select-label > .text:after {
+    position: absolute;
+    content: "";
+    top: 50%;
+    right: var(--select-spacing);
+    display: block;
+    width: var(--select-dot-size);
+    height: var(--select-dot-size);
+    border-radius: 50%;
+    border: solid 1px #666;
+    transform: translateY(-50%);
+    background-color: #fff;
+    transition: background-color 0.1s;
+}
+
+.select-button input {
+    display: none;
+}
+
+.select-button input:checked + .select-label > .text:after {
+    background-color: #369;
+}
+
+.select-label > .text {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: var(--select-spacing);
+    padding-right: calc(2 * var(--select-spacing) + var(--select-dot-size));
+    border-right: solid 1px var(--select-border-color);
+}
+
+.select-label > .info {
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: var(--select-spacing);
+    color: #666;
+    background: #eee;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

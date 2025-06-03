@@ -1,20 +1,79 @@
 .layout {
+    --layout-spacing: 1rem;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.layout header, footer {
+.layout header, .layout footer {
     background-color: #f8f8f8;
-    padding: 1rem;
     text-align: center;
 }
 
+.layout footer {
+    padding: var(--layout-spacing);
+}
+
+.layout header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--layout-spacing);
+    padding: 0 var(--layout-spacing);
+}
+
+.layout header h1 {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
 .layout main {
+    position: relative;
     flex: 1;
-    padding: 1rem;
     display: flex;
     justify-content: center;
     align-items: stretch;
     overflow: hidden;
+}
+
+.layout > main > .panel {
+    --setting-panel-size: 25rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    width: var(--setting-panel-size);
+    max-width: 100vw;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transition: width 0.1s;
+}
+
+.layout > main > .panel[data-visible="false"] {
+    width: 0;
+}
+
+.layout > main > .panel > .panel-container {
+    padding: 1rem;
+    width: var(--setting-panel-size);
+    max-width: 100vw;
+    overflow: auto;
+    max-height: 100%;
+}
+
+.layout > header > .panel-button {
+    --button-border-color: #ccc;
+    --button-spacing: 1rem;
+
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    background-color: rgba(255,255,255,0);
+    border: solid 1px var(--button-border-color);
+    transition: background-color 0.1s;
+}
+
+.layout > header > .panel-button:hover {
+    background-color: #fff;
 }
