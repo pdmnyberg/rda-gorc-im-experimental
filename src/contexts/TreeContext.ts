@@ -192,14 +192,17 @@ type HierarchyNode = {id: string} | {id: string, parentId: string};
 type Layout = {[x: string]: XYPosition}
 
 export function createTreeManagerFromModelNodes(nodes: (GORCNode | QuestionNode)[], layout: Layout = {}): TreeManager {
-  const useNodes = nodes.filter((n): n is GORCNode => n.type !== "question");
-  const treeNodes = useNodes.map<Node>(n => nodeFromGORCNode(n, layout));
-  const treeEdges = useNodes.filter((n): n is GORCNode & {parentId: NodeId} => "parentId" in n).map<Edge>(edgeFromGORCNode);
+  const useNodes = React.useMemo(() => nodes.filter((n): n is GORCNode => n.type !== "question"), [nodes]);
+  const treeNodes = React.useMemo(() => useNodes.map<Node>(n => nodeFromGORCNode(n, layout)), [useNodes]);
+  const treeEdges = React.useMemo(() => useNodes.filter((n): n is GORCNode & {parentId: NodeId} => "parentId" in n).map<Edge>(edgeFromGORCNode), [useNodes]);
 
-  return {
-    getNodes: () => treeNodes,
-    getEdges: () => treeEdges,
-  }
+  return React.useMemo(
+    () => ({
+      getNodes: () => treeNodes,
+      getEdges: () => treeEdges,
+    }),
+    [treeNodes, treeEdges]
+  );
 }
 
 function nodeFromGORCNode(node: GORCNode, layout: Layout): Node {

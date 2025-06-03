@@ -8,22 +8,15 @@ import { StaticRepositorySource, RepositorySource } from "./modules/RepositorySo
 import "@xyflow/react/dist/style.css";
 import "./App.css";
 import Layout from "./components/Layout/Layout";
-import MultiSelect, {SelectItem} from "./components/MultiSelect/MultiSelect";
+import { MultiSelect, SingleSelect, SelectItem } from "./components/MultiSelect/MultiSelect";
 
 
-function usePackageSelect<T extends Package>(packages: T[] | Record<string, T>): [T[], SelectItem[], string[], (pkgs: string[]) => void] {
-  const [packageIds, setPackageIds] = React.useState<string[]>([]);
-  const selectedPackages = React.useMemo(() => Object.values(packages).filter(p => packageIds.includes(p.id)), [packages, packageIds]);
-  return [
-    selectedPackages,
-    Object.values(packages).map(p => ({
-      id: p.id,
-      label: p.label,
-      info: p.version
-    })),
-    packageIds,
-    setPackageIds
-  ]
+function packageToSelectItem(p: Package): SelectItem {
+  return {
+    id: p.id,
+    label: p.label,
+    info: p.version
+  }
 }
 
 const App = () => {
@@ -33,23 +26,72 @@ const App = () => {
         id: "mock-repo",
         name: "Mock repo"
       },
-      Object.values(mockModels),
+      [mockModels.baseModel],
       Object.values(mockProfiles),
       Object.values(mockSlices)
+    ),
+    new StaticRepositorySource(
+      {
+        id: "oss-mock-repo",
+        name: "OSS mock repo"
+      },
+      [mockModels.ossModel],
+      [],
+      []
     )
   ]);
   const [selectedRepository, setSelectedRepository] = React.useState<RepositorySource | null>(null);
-  const [model, repoInfo, models, profiles, slices, setModel] = useRepositoryModel(selectedRepository);
-  const [selectedProfiles, profileItems, profileIds, setProfileIds] = usePackageSelect(profiles);
-  const [selectedSlices, sliceItems, sliceIds, setSliceIds] = usePackageSelect(slices);
+  const [
+    model,
+    selectedProfiles,
+    selectedSlices,
+    repoInfo,
+    models,
+    profiles,
+    slices,
+    setModel,
+    setSelectedProfiles,
+    setSelectedSlices
+  ] = useRepositoryModel(selectedRepository);
   const modelDefintion: ModelDefinition = React.useMemo(
-    () => model ? applyLayersAndSlices(model, selectedProfiles, selectedSlices) : { nodes: []},
+    () => {
+      return model ? applyLayersAndSlices(model, selectedProfiles, selectedSlices) : { nodes: []}
+    },
     [model, selectedProfiles, selectedSlices]
   );
   const nodes = React.useMemo(() => getModelNodes(modelDefintion), [modelDefintion]);
   const nodeSize = 120;
   const layout = React.useMemo(() => getLayout(nodes, nodeSize), [nodes, nodeSize]);
   const treeManager = createTreeManagerFromModelNodes(nodes, layout);
+  const setProfileIds = React.useCallback((profileIds: string[]) => {
+    setSelectedProfiles(profiles.filter(p => profileIds.includes(p.id)))
+  }, [profiles, setSelectedProfiles]);
+  const setSliceIds = React.useCallback((sliceIds: string[]) => {
+    setSelectedSlices(slices.filter(s => sliceIds.includes(s.id)))
+  }, [slices, setSelectedSlices]);
+  const setModelId = React.useCallback((modelId: string) => {
+    const selectedModel = models.filter(m => m.id === modelId)[0];
+    if (selectedModel) {
+      setModel(selectedModel);
+    }
+  }, [models, setModel]);
+  const setRepositoryId = React.useCallback((repoId: string) => {
+    const nextRepo = repositoryManager.getRepositories().filter(r => r.id === repoId)[0];
+    if (nextRepo) {
+      setSelectedRepository(nextRepo);
+    }
+  }, [repositoryManager, setSelectedRepository]);
+
+  const modelItems = models.map(packageToSelectItem);
+  const repositoryItems = repositoryManager.getRepositories().map(repo => ({
+    id: repo.id,
+    label: repo.info.name,
+    info: repo.info.url || "Local source"
+  }));
+  const profileItems = profiles.map(packageToSelectItem);
+  const sliceItems = slices.map(packageToSelectItem);
+  const profileIds = selectedProfiles.map(p => p.id)
+  const sliceIds = selectedSlices.map(s => s.id);
 
   React.useEffect(() => {
     const repositories = repositoryManager.getRepositories();
@@ -69,6 +111,10 @@ const App = () => {
           panels={{
             settings: {
               component: <>
+                <h2>Select repository</h2>
+                <SingleSelect items={repositoryItems} selection={selectedRepository ? selectedRepository.id : undefined} onChange={setRepositoryId}/>
+                <h2>Select model</h2>
+                <SingleSelect items={modelItems} selection={model ? model.id : undefined} onChange={setModelId}/>
                 <h2>Select profiles</h2>
                 <MultiSelect items={profileItems} selection={profileIds} onChange={setProfileIds}/>
                 <h2>Select slices</h2>

@@ -50,19 +50,29 @@ export function useRepositoryContext() {
   return context;
 }
 
+function resetArray<T>(prev: T[]) {
+  return prev.length === 0 ? prev : [];
+}
+
 export function useRepositoryModel(repo: RepositorySource | null): [
   BaseModel | null,
+  ModelProfile[],
+  ThematicSlice[],
   RepositoryInfo | null,
   BaseModel[],
   ModelProfile[],
   ThematicSlice[],
-  React.Dispatch<React.SetStateAction<BaseModel | null>>
+  React.Dispatch<React.SetStateAction<BaseModel | null>>,
+  React.Dispatch<ModelProfile[]>,
+  React.Dispatch<ThematicSlice[]>
 ] {
   const [model, setModel] = React.useState<BaseModel | null>(null);
   const [models, setModels] = React.useState<BaseModel[]>([]);
+  const [selectedProfiles, setSelectedProfiles] = React.useState<ModelProfile[]>([]);
   const [profiles, setProfiles] = React.useState<ModelProfile[]>([]);
+  const [selectedSlices, setSelectedSlices] = React.useState<ThematicSlice[]>([]);
   const [slices, setSlices] = React.useState<ThematicSlice[]>([]);
-  const info = repo ? repo.getInfo() : null;
+  const info = repo ? repo.info : null;
 
   React.useEffect(() => {
     if (repo !== null) {
@@ -74,10 +84,15 @@ export function useRepositoryModel(repo: RepositorySource | null): [
           _repo.getBaseModels(),
         ])
         setModels(_models);
+        setModel(null);
+        setProfiles(resetArray);
+        setSlices(resetArray);
+        setSelectedProfiles(resetArray);
+        setSelectedSlices(resetArray)
       };
       fetchData();
     }
-  }, [repo, setModel]);
+  }, [repo, setModel, setModels, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
 
   React.useEffect(() => {
     if (repo && model) {
@@ -93,17 +108,23 @@ export function useRepositoryModel(repo: RepositorySource | null): [
         ])
         setProfiles(_profiles);
         setSlices(_slices);
+        setSelectedProfiles(resetArray);
+        setSelectedSlices(resetArray);
       };
       fetchData();
     }
-  }, [repo, model, setProfiles, setSlices])
+  }, [repo, model, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices])
 
   return [
     model,
+    selectedProfiles,
+    selectedSlices,
     info,
     models,
     profiles,
     slices,
     setModel,
+    setSelectedProfiles,
+    setSelectedSlices
   ]
 }

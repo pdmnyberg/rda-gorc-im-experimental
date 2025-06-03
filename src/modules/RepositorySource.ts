@@ -9,7 +9,7 @@ export type RepositoryInfo = {
 
 export interface RepositorySource {
   id: string;
-  getInfo(): RepositoryInfo;
+  info: RepositoryInfo;
   getBaseModels(): Promise<BaseModel[]>;
   getProfiles(baseModel?: Pick<BaseModel, "id">): Promise<ModelProfile[]>;
   getThematicSlices(baseModel?: Pick<BaseModel, "id">): Promise<ThematicSlice[]>
@@ -32,7 +32,7 @@ export class StaticRepositorySource implements RepositorySource {
     return this._info.id;
   }
 
-  getInfo() {
+  get info() {
     return this._info;
   }
   async getBaseModels() {

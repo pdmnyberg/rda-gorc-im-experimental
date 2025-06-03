@@ -14,7 +14,13 @@ type MultiSelectProps = {
     selection?: string[];
 }
 
-const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, selection}) => {
+type SingleSelectProps = {
+    items: SelectItem[];
+    onChange?: (id: string) => void;
+    selection?: string;
+}
+
+export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, selection}) => {
     const groupId = React.useId();
     const selectionSet = new Set(selection);
     const handleSelect = (id: string) => {
@@ -29,13 +35,37 @@ const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, selection}) =
         }
       }
     return (
-        <div className="multi-select">
+        <div className="select">
             {items.map((item) => (
                 <SelectButton
                     key={item.id}
+                    type={"checkbox"}
                     groupId={groupId}
                     {...item}
                     selected={selectionSet.has(item.id)}
+                    onChange={handleSelect}
+                />
+            ))}
+        </div>
+    );
+};
+
+export const SingleSelect: React.FC<SingleSelectProps> = ({items, onChange, selection}) => {
+    const groupId = React.useId();
+    const handleSelect = (id: string) => {
+        if (onChange) {
+            onChange(id);
+        }
+      }
+    return (
+        <div className="select">
+            {items.map((item) => (
+                <SelectButton
+                    key={item.id}
+                    type={"radio"}
+                    groupId={groupId}
+                    {...item}
+                    selected={selection === item.id}
                     onChange={handleSelect}
                 />
             ))}
@@ -47,13 +77,14 @@ type SelectButtonProps = SelectItem & {
     groupId: string;
     selected: boolean;
     onChange: (id: string) => void;
+    type: "radio" | "checkbox";
 }
 
-const SelectButton: React.FC<SelectButtonProps> = ({groupId, label, info, id, selected, onChange}) => {
+const SelectButton: React.FC<SelectButtonProps> = ({groupId, label, info, id, selected, type, onChange}) => {
     const elementId = React.useId();
     return (
         <div className="select-button">
-            <input id={elementId} type="checkbox" name={groupId} value={id} onChange={() => onChange(id)} checked={selected}/>
+            <input id={elementId} type={type} name={groupId} value={id} onChange={() => onChange(id)} checked={selected}/>
             <label className="select-label"  htmlFor={elementId}>
                 <span className="text">{label}</span>
                 <span className="info">{info}</span>
@@ -61,5 +92,6 @@ const SelectButton: React.FC<SelectButtonProps> = ({groupId, label, info, id, se
         </div>
     );
 };
+
 
 export default MultiSelect;
