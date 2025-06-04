@@ -1,3 +1,7 @@
+:root {
+    --color-bg-light: #f9f9f9;
+}
+
 .tree-container {
     width: 100%;
     flex: 1;

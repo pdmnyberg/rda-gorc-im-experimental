@@ -1,4 +1,3 @@
-import { NavLink } from "react-router";
 import React from "react";
 import { Tree } from "./components/Tree.tsx";
 import { TreeContext, createTreeManagerFromModelNodes, getLayout } from "./contexts/TreeContext.ts"
@@ -51,12 +50,6 @@ const App = () => {
               icon: <></>
             },
           }}
-          header={
-            <>
-              <NavLink to="documentation">See Documentation</NavLink>
-              <h1>RDA Visualisation App</h1>
-            </>
-          }
         >
           <div className="tree-container">
               <Tree />

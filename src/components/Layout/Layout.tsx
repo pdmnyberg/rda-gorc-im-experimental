@@ -1,5 +1,6 @@
 import React from 'react';
 import './Layout.css';
+import Header from "../Header/Header";
 
 type Panel = {
     component: React.ReactNode,
@@ -8,24 +9,20 @@ type Panel = {
 
 type Props = React.PropsWithChildren<{
     panels?: Record<string, Panel>;
-    header: React.ReactNode;
 }>;
 
-const Layout: React.FC<Props> = ({ children, header, ...props}) => {
+const Layout: React.FC<Props> = ({ children, panels = {} }) => {
     const [currentPanel, setCurrentPanel] = React.useState<string | null>(null);
-    const panels = props.panels || {};
+
+    const panelButtons = Object.entries(panels).map(([id, panel]) => ({
+        id,
+        icon: panel.icon,
+        onClick: () => setCurrentPanel(currentPanel === id ? null : id),
+    }));
+
     return (
         <div className="layout">
-            <header>
-                {header}
-                {Object.keys(panels).map((panelId) => {
-                    const panel = panels[panelId];
-                    const targetPanel = panelId === currentPanel ? null : panelId;
-                    return (
-                        <div key={panelId} className="panel-button" onClick={() => setCurrentPanel(targetPanel)}>{panel.icon}</div>
-                    )
-                })}
-            </header>
+            <Header panelButtons={panelButtons} />
             <main>
                 {children}
                 {Object.keys(panels).map((panelId) => {
