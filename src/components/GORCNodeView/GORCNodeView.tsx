@@ -21,7 +21,7 @@ export function GORCNodeView({ data }: Props) {
         <div className="gorc-node-shape">
           <div className="gorc-node-icon" style={{"--gorc-icon": `url(${data.icon})`} as React.CSSProperties}/>
         </div>
-        <div className="gorc-node-text">{data.name.longName}</div>
+        <div className="gorc-node-text">{data.name}</div>
       </div>
       <Handle
         className="groc-node-handle"
