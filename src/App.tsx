@@ -24,7 +24,8 @@ const AppBase = () => {
       panels={{
         settings: {
           component: <SettingsPanel />,
-          icon: <></>
+          icon: <></>,
+          label: "Settings"
         },
       }}
     >
