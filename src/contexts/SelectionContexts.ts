@@ -42,17 +42,22 @@ export function useRepositories(repositoryManager: RepositoryManager): [
     if (repository !== null) {
       const _repo = repository;
       async function fetchData(){
-        const [
-          _models,
-        ] = await Promise.all([
-          _repo.getBaseModels(),
-        ])
-        setModels(_models);
-        setModel(_models[0] || null);
-        setProfiles(resetArray);
-        setSlices(resetArray);
-        setSelectedProfiles(resetArray);
-        setSelectedSlices(resetArray)
+        try {
+          const [
+            _models,
+          ] = await Promise.all([
+            _repo.getBaseModels(),
+          ]);
+          setModels(_models);
+          setModel(_models[0] || null);
+          setProfiles(resetArray);
+          setSlices(resetArray);
+          setSelectedProfiles(resetArray);
+          setSelectedSlices(resetArray);
+        } catch (e) {
+          repositoryManager.removeRepository(_repo);
+          console.log(e);
+        }
       };
       fetchData();
     }
@@ -63,17 +68,22 @@ export function useRepositories(repositoryManager: RepositoryManager): [
       const _repo = repository;
       const _model = model;
       async function fetchData(){
-        const [
-          _profiles,
-          _slices,
-        ] = await Promise.all([
-          _repo.getProfiles(_model),
-          _repo.getThematicSlices(_model),
-        ])
-        setProfiles(_profiles);
-        setSlices(_slices);
-        setSelectedProfiles(resetArray);
-        setSelectedSlices(resetArray);
+        try {
+          const [
+            _profiles,
+            _slices,
+          ] = await Promise.all([
+            _repo.getProfiles(_model),
+            _repo.getThematicSlices(_model),
+          ]);
+          setProfiles(_profiles);
+          setSlices(_slices);
+          setSelectedProfiles(resetArray);
+          setSelectedSlices(resetArray);
+        } catch (e) {
+          repositoryManager.removeRepository(_repo);
+          console.log(e)
+        }
       };
       fetchData();
     }
