@@ -4,7 +4,7 @@ import { TreeContext, createTreeManagerFromModelNodes, getLayout } from "./conte
 import { ModelDefinition, getModelNodes, applyLayersAndSlices } from "./modules/LayeredModel.ts"
 import { models as mockModels, profiles as mockProfiles, slices as mockSlices } from "../examples/example-models.ts"
 import { createRepositoryManager } from "./contexts/RepositoryContext.ts"
-import { StaticRepositorySource } from "./modules/RepositorySource.ts"
+import { StaticRepositorySource, HttpRepositorySource } from "./modules/RepositorySource.ts"
 import {
   useRepositories,
   RepositorySelectionContext,
@@ -54,7 +54,8 @@ const App = () => {
       [mockModels.ossModel],
       [],
       []
-    )
+    ),
+    new HttpRepositorySource({url: "http-repo/root.json", id: "http-repo", name: "HTTP Based Repo"})
   ]);
   const [
     repoSelection,

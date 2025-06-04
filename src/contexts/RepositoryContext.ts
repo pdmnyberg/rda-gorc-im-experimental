@@ -24,7 +24,7 @@ export function createRepositoryManager(initialRepos: (RepositorySource & Option
   const addRepository = React.useCallback((repo: RepositorySource & OptionalIndicator) => {
     setRepositories((repos) => {
       return [
-        ...repos,
+        ...repos.filter(r => r.id !== repo.id),
         repo
       ]
     });
@@ -35,11 +35,13 @@ export function createRepositoryManager(initialRepos: (RepositorySource & Option
     })
   }, [setRepositories]);
   return React.useMemo(
-    () => ({
-      getRepositories,
-      addRepository,
-      removeRepository
-    }),
+    () => {
+      return {
+        getRepositories,
+        addRepository,
+        removeRepository
+      }
+    },
     [getRepositories, addRepository, removeRepository]
   );
 }
