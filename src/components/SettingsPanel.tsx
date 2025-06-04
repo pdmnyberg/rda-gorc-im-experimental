@@ -1,18 +1,27 @@
 import React from "react";
 import { MultiSelect, SingleSelect, SelectItem } from "./MultiSelect/MultiSelect";
-import { Package } from "../modules/LayeredModel.ts"
+import { Package } from "../modules/LayeredModel"
 import {
   RepositorySelectionContext,
   ModelSelectionContext,
   ProfileSelectionContext,
   SliceSelectionContext,
-} from "../contexts/SelectionContexts.ts"
+} from "../contexts/SelectionContexts"
+import { RepositorySource } from "../modules/RepositorySource"
 
 function packageToSelectItem(p: Package): SelectItem {
   return {
     id: p.id,
     label: p.label,
     info: p.version
+  }
+}
+
+function repositoryToSelection(repo: RepositorySource) {
+  return {
+    id: repo.id,
+    label: repo.info.name,
+    info: repo.info.url || "Local source"
   }
 }
 
@@ -42,11 +51,7 @@ export const SettingsPanel = () => {
   }, [repositories, setRepository]);
 
   const modelItems = models.map(packageToSelectItem);
-  const repositoryItems = repositories.map(repo => ({
-    id: repo.id,
-    label: repo.info.name,
-    info: repo.info.url || "Local source"
-  }));
+  const repositoryItems = repositories.map(repositoryToSelection);
   const profileItems = profiles.map(packageToSelectItem);
   const sliceItems = slices.map(packageToSelectItem);
   const profileIds = selectedProfiles.map(p => p.id)
