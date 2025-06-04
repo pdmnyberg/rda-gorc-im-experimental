@@ -53,7 +53,7 @@ export function useRepositories(repositoryManager: RepositoryManager): [
           _repo.getBaseModels(),
         ])
         setModels(_models);
-        setModel(null);
+        setModel(_models[0] || null);
         setProfiles(resetArray);
         setSlices(resetArray);
         setSelectedProfiles(resetArray);
@@ -83,12 +83,6 @@ export function useRepositories(repositoryManager: RepositoryManager): [
       fetchData();
     }
   }, [repository, model, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
-
-  React.useEffect(() => {
-    if (model === null && models.length > 0) {
-      setModel(models[0]);
-    }
-  }, [model, models, setModel]);
 
   return [
     [repository, repositories, setRepository],
