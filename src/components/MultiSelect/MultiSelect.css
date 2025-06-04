@@ -16,7 +16,7 @@
     border-bottom: solid 1px var(--select-border-color);
 }
 
-.select-label > .text:after {
+.select-label > .text::after {
     position: absolute;
     content: "";
     top: 50%;
@@ -35,8 +35,12 @@
     display: none;
 }
 
-.select-button input:checked + .select-label > .text:after {
+.select-button input:checked + .select-label > .text::after {
     background-color: #369;
+}
+
+.select-button input[type="checkbox"] + .select-label > .text::after {
+    border-radius: 0;
 }
 
 .select-label > .text {
