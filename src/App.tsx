@@ -3,8 +3,9 @@ import { Tree } from "./components/Tree.tsx";
 import { TreeContext, createTreeManagerFromModelNodes, getLayout } from "./contexts/TreeContext.ts"
 import { ModelDefinition, getModelNodes, applyLayersAndSlices, Package } from "./modules/LayeredModel.ts"
 import { models as mockModels, profiles as mockProfiles, slices as mockSlices } from "../examples/example-models.ts"
-import { createRepositoryManager, useRepositoryModel } from "./contexts/RepositoryContext.ts"
-import { StaticRepositorySource, RepositorySource } from "./modules/RepositorySource.ts"
+import { createRepositoryManager } from "./contexts/RepositoryContext.ts"
+import { StaticRepositorySource } from "./modules/RepositorySource.ts"
+import { useRepositories } from "./contexts/SelectionContexts.ts"
 import "@xyflow/react/dist/style.css";
 import "./App.css";
 import Layout from "./components/Layout/Layout";
@@ -40,19 +41,12 @@ const App = () => {
       []
     )
   ]);
-  const [selectedRepository, setSelectedRepository] = React.useState<RepositorySource | null>(null);
   const [
-    model,
-    selectedProfiles,
-    selectedSlices,
-    repoInfo,
-    models,
-    profiles,
-    slices,
-    setModel,
-    setSelectedProfiles,
-    setSelectedSlices
-  ] = useRepositoryModel(selectedRepository);
+    [repository, repositories, setRepository],
+    [model, models, setModel],
+    [selectedProfiles, profiles, setSelectedProfiles],
+    [selectedSlices, slices, setSelectedSlices],
+  ] = useRepositories(repositoryManager);
   const modelDefintion: ModelDefinition = React.useMemo(
     () => {
       return model ? applyLayersAndSlices(model, selectedProfiles, selectedSlices) : { nodes: []}
@@ -76,14 +70,14 @@ const App = () => {
     }
   }, [models, setModel]);
   const setRepositoryId = React.useCallback((repoId: string) => {
-    const nextRepo = repositoryManager.getRepositories().filter(r => r.id === repoId)[0];
+    const nextRepo = repositories.filter(r => r.id === repoId)[0];
     if (nextRepo) {
-      setSelectedRepository(nextRepo);
+      setRepository(nextRepo);
     }
-  }, [repositoryManager, setSelectedRepository]);
+  }, [repositories, setRepository]);
 
   const modelItems = models.map(packageToSelectItem);
-  const repositoryItems = repositoryManager.getRepositories().map(repo => ({
+  const repositoryItems = repositories.map(repo => ({
     id: repo.id,
     label: repo.info.name,
     info: repo.info.url || "Local source"
@@ -94,11 +88,10 @@ const App = () => {
   const sliceIds = selectedSlices.map(s => s.id);
 
   React.useEffect(() => {
-    const repositories = repositoryManager.getRepositories();
-    if (selectedRepository === null && repositories.length > 0) {
-      setSelectedRepository(repositories[0]);
+    if (repository === null && repositories.length > 0) {
+      setRepository(repositories[0]);
     }
-  }, [repositoryManager, selectedRepository]);
+  }, [repositories, repository]);
   React.useEffect(() => {
     if (model === null && models.length > 0) {
       setModel(models[0]);
@@ -112,7 +105,7 @@ const App = () => {
             settings: {
               component: <>
                 <h2>Select repository</h2>
-                <SingleSelect items={repositoryItems} selection={selectedRepository ? selectedRepository.id : undefined} onChange={setRepositoryId}/>
+                <SingleSelect items={repositoryItems} selection={repository ? repository.id : undefined} onChange={setRepositoryId}/>
                 <h2>Select model</h2>
                 <SingleSelect items={modelItems} selection={model ? model.id : undefined} onChange={setModelId}/>
                 <h2>Select profiles</h2>
