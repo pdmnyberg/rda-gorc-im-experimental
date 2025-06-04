@@ -3,12 +3,12 @@ import { RepositorySource } from "../modules/RepositorySource";
 import { BaseModel, ModelProfile, ThematicSlice } from "../modules/LayeredModel";
 import { RepositoryManager } from "./RepositoryContext";
 
-type SingleSelectionManager<T> = [T | null, T[], (selection: T) => void]
-type MultiSelectionManager<T> = [T[], T[], (selection: T[]) => void]
+type SelectionManager<T, S=T, D=null> = [S | D, T[], (selection: S) => void]
+type MultiSelectionManager<T> = SelectionManager<T, T[], T[]>
 
-export const RepositorySelectionContext = React.createContext<SingleSelectionManager<RepositorySource>>([null, [], () => {}]);
+export const RepositorySelectionContext = React.createContext<SelectionManager<RepositorySource>>([null, [], () => {}]);
 
-export const ModelSelectionContext = React.createContext<SingleSelectionManager<BaseModel>>([null, [], () => {}]);
+export const ModelSelectionContext = React.createContext<SelectionManager<BaseModel>>([null, [], () => {}]);
 
 export const ProfileSelectionContext = React.createContext<MultiSelectionManager<ModelProfile>>([[], [], () => {}]);
 
@@ -18,19 +18,14 @@ function resetArray<T>(prev: T[]) {
   return prev.length === 0 ? prev : [];
 }
 
-export function useSingleSelected<C>(context: React.Context<SingleSelectionManager<C>>) {
-  const [selected, ..._rest] = React.useContext(context);
-  return selected;
-}
-
-export function useMultiSelected<C>(context: React.Context<MultiSelectionManager<C>>) {
+export function useSelected<T, S, D>(context: React.Context<SelectionManager<T, S, D>>) {
   const [selected, ..._rest] = React.useContext(context);
   return selected;
 }
 
 export function useRepositories(repositoryManager: RepositoryManager): [
-  SingleSelectionManager<RepositorySource>,
-  SingleSelectionManager<BaseModel>,
+  SelectionManager<RepositorySource>,
+  SelectionManager<BaseModel>,
   MultiSelectionManager<ModelProfile>,
   MultiSelectionManager<ThematicSlice>,
 ] {
