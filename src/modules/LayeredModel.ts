@@ -1,6 +1,6 @@
 import {GORCNode, QuestionNode, NodeId} from "./GORCNodes";
 
-type ModelNode = GORCNode | QuestionNode;
+export type ModelNode = GORCNode | QuestionNode;
 
 export type BaseModel = Package & ModelDefinition;
 
@@ -14,7 +14,9 @@ export type ModelLayerDefinition = {
     nodes: (ModelNode | Nothing)[];
 }
 
-export type ThematicSlice = Package & {
+export type ThematicSlice = Package & ModelSlice;
+
+export type ModelSlice = {
     nodes: {
         nodeId: NodeId;
     }[];
@@ -33,7 +35,13 @@ type SemanticVersionString = string;
 type PackageId = string;
 
 
-export function applyLayers(model: ModelDefinition, layers: ModelLayerDefinition[]): ModelDefinition {
+export function applyLayersAndSlices(model: ModelDefinition, layers: ModelLayerDefinition[], slices: ModelSlice[]): ModelDefinition {
+    const activeNodes = slices.length > 0 ? slices.reduce<Set<NodeId>>((acc, slice) => {
+        for (const node of slice.nodes) {
+            acc.add(node.nodeId);
+        }
+        return acc;
+    }, new Set()) : null;
     const initialNodes = mapNodes(model.nodes);
     const allNodes = layers.reduce<{[x: NodeId]: ModelNode | Nothing}>(
         (acc, layer) => {
@@ -47,8 +55,9 @@ export function applyLayers(model: ModelDefinition, layers: ModelLayerDefinition
         .map(key => allNodes[key])
         .filter((node): node is ModelNode => node.type !== "nothing")
     );
+    const nodesInSlices = activeNodes ? modelNodes.filter(n => activeNodes.has(n.id)) : modelNodes;
     return {
-        nodes: modelNodes
+        nodes: nodesInSlices
     }
 }
 

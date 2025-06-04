@@ -1,4 +1,4 @@
-import {BaseModel, ModelProfile} from "../src/modules/LayeredModel";
+import {BaseModel, ModelProfile, ThematicSlice, ModelNode} from "../src/modules/LayeredModel";
 
 export const baseModel: BaseModel = {
     version: "0.1.0",
@@ -388,19 +388,76 @@ export const baseModel: BaseModel = {
     ]
 }
 
+function getRoot(node: ModelNode, nodes: ModelNode[]) {
+    const nodeMap = nodes.reduce<Record<string, ModelNode>>((acc, n) => {acc[n.id] = n; return acc;}, {});
+    let currentNode = node;
+    while ("parentId" in currentNode) {
+        currentNode = nodeMap[currentNode.parentId]
+    }
+    return currentNode.id;
+}
+
 export const onlyGoLProfile: ModelProfile = {
     version: "0.1.0",
     id: "gorc-im-only-gol",
     label: "GORC Only Governance & Leadership",
-    nodes: [
-        /**
-         * This is an example of removing nodes using a profile
-         */
-        {type: "nothing", id: "rules-of-participation-and-access"},
-        {type: "nothing", id: "sustainability"},
-        {type: "nothing", id: "minimal-set-of-rights-and-obligations"},
-        {type: "nothing", id: "minimal-accountability"},
-    ]
+    nodes: baseModel.nodes.filter(
+            node => getRoot(node, baseModel.nodes) !== "governance-and-leadership"
+        ).map(node => ({
+            type: "nothing", id: node.id
+        })
+    )
+}
+
+export const onlySustainabilityProfile: ModelProfile = {
+    version: "0.0.1",
+    id: "gorc-im-only-sustainability",
+    label: "GORC Only Sustainability",
+    nodes: baseModel.nodes.filter(
+            node => getRoot(node, baseModel.nodes) !== "sustainability"
+        ).map(node => ({
+            type: "nothing", id: node.id
+        })
+    )
+}
+
+export const onlyRoPaAProfile: ModelProfile = {
+    version: "0.0.1",
+    id: "gorc-im-only-ropaa",
+    label: "GORC Only Rules of Participation & Access",
+    nodes: baseModel.nodes.filter(
+            node => getRoot(node, baseModel.nodes) !== "rules-of-participation-and-access"
+        ).map(node => ({
+            type: "nothing", id: node.id
+        })
+    )
+}
+
+export const onlyGoLSlice: ThematicSlice = {
+    version: "0.1.0",
+    id: "gorc-im-gol-slice",
+    label: "GORC Governance & Leadership Slice",
+    nodes: baseModel.nodes.filter(
+        node => getRoot(node, baseModel.nodes) === "governance-and-leadership"
+    ).map(n => ({nodeId: n.id}))
+}
+
+export const onlySustainabilitySlice: ThematicSlice = {
+    version: "0.1.0",
+    id: "gorc-im-sustainability-slice",
+    label: "GORC Sustainability Slice",
+    nodes: baseModel.nodes.filter(
+        node => getRoot(node, baseModel.nodes) === "sustainability"
+    ).map(n => ({nodeId: n.id}))
+}
+
+export const onlyRoPaASlice: ThematicSlice = {
+    version: "0.1.0",
+    id: "gorc-im-ropaa-slice",
+    label: "GORC Rules of Participation & Access Slice",
+    nodes: baseModel.nodes.filter(
+        node => getRoot(node, baseModel.nodes) === "rules-of-participation-and-access"
+    ).map(n => ({nodeId: n.id}))
 }
 
 export const models = {
@@ -409,4 +466,12 @@ export const models = {
 
 export const profiles = {
     onlyGoLProfile,
+    onlySustainabilityProfile,
+    onlyRoPaAProfile
+}
+
+export const slices = {
+    onlyGoLSlice,
+    onlySustainabilitySlice,
+    onlyRoPaASlice
 }

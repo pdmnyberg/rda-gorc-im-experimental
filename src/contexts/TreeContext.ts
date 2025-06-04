@@ -23,7 +23,12 @@ export function useTreeContext() {
   return context;
 }
 
-export function getLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
+export function getLayout(nodes: HierarchyNode[], nodeSize: number) {
+  const baseLayout = getBaseLayout(nodes, nodeSize);
+  return tightenLayout(baseLayout, nodes, nodeSize, 1000);
+}
+
+function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
   const nodeMap = nodes.reduce<{[x: string]: HierarchyNode}>((acc, node) => {
     acc[node.id] = node;
     return acc;
@@ -60,7 +65,7 @@ export function getLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
     const levelNodes = nodes.filter(node => nodeDepthMap[node.id] === level);
     const groups = Array.from(new Set(levelNodes.map(n => "parentId" in n ? n.parentId : null)));
     for (const group of groups) {
-      const groupNodes = levelNodes.filter(n => "parentId" in n ? n.parentId === group : true)
+      const groupNodes = levelNodes.filter(n => "parentId" in n ? n.parentId === group : true);
       const levelSize = groupNodes.map(getNodeSize).reduce((a, b) => a + b);
       const levelRadius = levelSize / (2 * Math.PI);
       const useRadians = level < 2 ? 2 * Math.PI : 2 * Math.PI;
@@ -84,12 +89,12 @@ export function getLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
   return positions;
 }
 
-export function tightenLayout(layout: Layout, nodes: HierarchyNode[], nodeSize: number, iterations: number) {
+function tightenLayout(layout: Layout, nodes: HierarchyNode[], nodeSize: number, iterations: number) {
   const separation = nodeSize * 2;
   const nodeMap = nodes.reduce<Record<string, HierarchyNode>>((acc, node) => {acc[node.id] = node; return acc;}, {});
   let velocityMap: Layout = {}
   let updatedLayout = layout;
-  const timeStep = 0.01;
+  const timeStep = 0.1;
   for (let i = 0; i < iterations; i++) {
     const forceMap: Layout = sumForces(
       getSeparationForces(updatedLayout, separation, 1),
@@ -143,16 +148,25 @@ function sumForces(fA: Layout, fB: Layout): Layout {
 }
 
 function applyForces(velocityMap: Layout, forceMap: Layout, time: number, dampening: number = 0): Layout {
-  return Object.keys(forceMap).reduce<Layout>((acc, nodeId) => {
+  const velocityReduction = 1 - Math.max(Math.min(dampening * time, 1), 0);
+  const initialVelocities = Object.keys(velocityMap).reduce<Layout>((acc, nodeId) => {
     const velocity = velocityMap[nodeId] || {x: 0, y: 0};
-    const force = forceMap[nodeId];
-    const velocityReduction = 1 - Math.max(Math.min(dampening * time, 1), 0);
     acc[nodeId] = {
-      x: velocity.x * velocityReduction + force.x * time,
-      y: velocity.y * velocityReduction + force.y * time,
+      x: velocity.x * velocityReduction,
+      y: velocity.y * velocityReduction,
     };
     return acc;
-  }, {})
+  }, {});
+
+  return Object.keys(forceMap).reduce<Layout>((acc, nodeId) => {
+    const velocity = acc[nodeId] || {x: 0, y: 0};
+    const force = forceMap[nodeId];
+    acc[nodeId] = {
+      x: velocity.x + force.x * time,
+      y: velocity.y + force.y * time,
+    };
+    return acc;
+  }, initialVelocities);
 }
 
 function sumXY(a: XYPosition, b: XYPosition): XYPosition {
