@@ -18,13 +18,24 @@ function resetArray<T>(prev: T[]) {
   return prev.length === 0 ? prev : [];
 }
 
+export function useSingleSelected<C>(context: React.Context<SingleSelectionManager<C>>) {
+  const [selected, ..._rest] = React.useContext(context);
+  return selected;
+}
+
+export function useMultiSelected<C>(context: React.Context<MultiSelectionManager<C>>) {
+  const [selected, ..._rest] = React.useContext(context);
+  return selected;
+}
+
 export function useRepositories(repositoryManager: RepositoryManager): [
   SingleSelectionManager<RepositorySource>,
   SingleSelectionManager<BaseModel>,
   MultiSelectionManager<ModelProfile>,
   MultiSelectionManager<ThematicSlice>,
 ] {
-  const [repo, setRepo] = React.useState<RepositorySource | null>(null);
+  const repositories = repositoryManager.getRepositories();
+  const [repository, setRepository] = React.useState<RepositorySource | null>(repositories[0] || null);
   const [model, setModel] = React.useState<BaseModel | null>(null);
   const [models, setModels] = React.useState<BaseModel[]>([]);
   const [selectedProfiles, setSelectedProfiles] = React.useState<ModelProfile[]>([]);
@@ -33,8 +44,8 @@ export function useRepositories(repositoryManager: RepositoryManager): [
   const [slices, setSlices] = React.useState<ThematicSlice[]>([]);
 
   React.useEffect(() => {
-    if (repo !== null) {
-      const _repo = repo;
+    if (repository !== null) {
+      const _repo = repository;
       async function fetchData(){
         const [
           _models,
@@ -50,11 +61,11 @@ export function useRepositories(repositoryManager: RepositoryManager): [
       };
       fetchData();
     }
-  }, [repo, setModel, setModels, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
+  }, [repository, setModel, setModels, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
 
   React.useEffect(() => {
-    if (repo && model) {
-      const _repo = repo;
+    if (repository && model) {
+      const _repo = repository;
       const _model = model;
       async function fetchData(){
         const [
@@ -71,10 +82,16 @@ export function useRepositories(repositoryManager: RepositoryManager): [
       };
       fetchData();
     }
-  }, [repo, model, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices])
+  }, [repository, model, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
+
+  React.useEffect(() => {
+    if (model === null && models.length > 0) {
+      setModel(models[0]);
+    }
+  }, [model, models, setModel]);
 
   return [
-    [repo, repositoryManager.getRepositories(), setRepo],
+    [repository, repositories, setRepository],
     [model, models, setModel],
     [selectedProfiles, profiles, setSelectedProfiles],
     [selectedSlices, slices, setSelectedSlices]
