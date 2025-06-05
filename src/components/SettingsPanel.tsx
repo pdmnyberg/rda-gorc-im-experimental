@@ -60,9 +60,9 @@ export const SettingsPanel = () => {
   return (
     <>
       <h2>Select repository</h2>
-      <SingleSelect items={repositoryItems} selection={repository ? repository.id : undefined} onChange={setRepositoryId} variant="wide-info"/>
+      <SingleSelect items={repositoryItems} selection={repository ? repository.id : undefined} onChange={setRepositoryId} variant="wide-info" noItemsText="No repositories available"/>
       <h2>Select model</h2>
-      <SingleSelect items={modelItems} selection={model ? model.id : undefined} onChange={setModelId} />
+      <SingleSelect items={modelItems} selection={model ? model.id : undefined} onChange={setModelId} noItemsText="No models available in this repository"/>
       <h2>Select profiles</h2>
       <MultiSelect items={profileItems} selection={profileIds} onChange={setProfileIds} noItemsText="No profiles available for this model"/>
       <h2>Select slices</h2>
