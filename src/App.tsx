@@ -6,7 +6,7 @@ import { models as mockModels, profiles as mockProfiles, slices as mockSlices } 
 import { createRepositoryManager } from "./contexts/RepositoryContext.ts"
 import { StaticRepositorySource, HttpRepositorySource } from "./modules/RepositorySource.ts"
 import {
-  useRepositories,
+  useModelSelectionManagers,
   RepositorySelectionContext,
   ModelSelectionContext,
   ProfileSelectionContext,
@@ -42,18 +42,9 @@ const App = () => {
         id: "mock-repo",
         name: "Mock repo"
       },
-      [mockModels.baseModel],
+      Object.values(mockModels),
       Object.values(mockProfiles),
       Object.values(mockSlices)
-    ),
-    new StaticRepositorySource(
-      {
-        id: "oss-mock-repo",
-        name: "OSS mock repo"
-      },
-      [mockModels.ossModel],
-      [],
-      []
     ),
     new HttpRepositorySource({url: "http-repo/root.json", id: "http-repo", name: "HTTP Based Repo"})
   ]);
@@ -62,7 +53,7 @@ const App = () => {
     modelSelection,
     profileSelection,
     sliceSelection,
-  ] = useRepositories(repositoryManager);
+  ] = useModelSelectionManagers(repositoryManager);
   const model = modelSelection[0];
   const profiles = profileSelection[0];
   const slices = sliceSelection[0];

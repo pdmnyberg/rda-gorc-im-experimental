@@ -23,7 +23,7 @@ export function useSelected<T, S, D>(context: React.Context<SelectionManager<T, 
   return selected;
 }
 
-export function useRepositories(repositoryManager: RepositoryManager): [
+export function useModelSelectionManagers(repositoryManager: RepositoryManager): [
   SelectionManager<RepositorySource>,
   SelectionManager<BaseModel>,
   MultiSelectionManager<ModelProfile>,
@@ -37,6 +37,7 @@ export function useRepositories(repositoryManager: RepositoryManager): [
   const [profiles, setProfiles] = React.useState<ModelProfile[]>([]);
   const [selectedSlices, setSelectedSlices] = React.useState<ThematicSlice[]>([]);
   const [slices, setSlices] = React.useState<ThematicSlice[]>([]);
+  const removeRepository = repositoryManager.removeRepository;
 
   React.useEffect(() => {
     if (repository !== null) {
@@ -55,13 +56,18 @@ export function useRepositories(repositoryManager: RepositoryManager): [
           setSelectedProfiles(resetArray);
           setSelectedSlices(resetArray);
         } catch (e) {
-          repositoryManager.removeRepository(_repo);
+          setRepository(null);
+          setModels(resetArray);
+          setModel(null);
+          setProfiles(resetArray);
+          setSlices(resetArray);
+          removeRepository(_repo);
           console.log(e);
         }
       };
       fetchData();
     }
-  }, [repository, setModel, setModels, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
+  }, [repository, removeRepository, setRepository, setModel, setModels, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
 
   React.useEffect(() => {
     if (repository && model) {
@@ -81,13 +87,18 @@ export function useRepositories(repositoryManager: RepositoryManager): [
           setSelectedProfiles(resetArray);
           setSelectedSlices(resetArray);
         } catch (e) {
-          repositoryManager.removeRepository(_repo);
+          setRepository(null);
+          setModels(resetArray);
+          setModel(null);
+          setProfiles(resetArray);
+          setSlices(resetArray);
+          removeRepository(_repo);
           console.log(e)
         }
       };
       fetchData();
     }
-  }, [repository, model, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
+  }, [repository, model, removeRepository, setRepository, setProfiles, setSlices, setSelectedProfiles, setSelectedSlices]);
 
   return [
     [repository, repositories, setRepository],
