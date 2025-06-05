@@ -70,3 +70,18 @@
     background: #eee;
     padding: var(--select-spacing);
 }
+
+
+.select[data-select-variant="wide-info"] .select-label {
+    flex-direction: column;
+}
+
+.select[data-select-variant="wide-info"] .select-label > .text {
+    border-right: none;
+    border-bottom: dashed 1px var(--select-border-color);
+}
+
+.select[data-select-variant="wide-info"] .select-label > .info {
+    max-width: none;
+    
+}

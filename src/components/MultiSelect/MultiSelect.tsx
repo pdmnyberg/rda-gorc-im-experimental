@@ -11,6 +11,7 @@ export type SelectItem = {
 type SelectProps = {
     items: SelectItem[];
     noItemsText?: string;
+    variant?: "normal" | "wide-info";
 }
 
 type MultiSelectProps = SelectProps & {
@@ -23,7 +24,8 @@ type SingleSelectProps = SelectProps & {
     selection?: string;
 }
 
-export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, selection, noItemsText}) => {
+export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, selection, noItemsText, variant}) => {
+    variant = variant || "normal";
     const groupId = React.useId();
     const selectionSet = new Set(selection);
     const handleSelect = (id: string) => {
@@ -38,7 +40,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, select
         }
       }
     return (
-        <div className="select">
+        <div className="select" data-select-variant={variant}>
             {items.length > 0 ? (
                 items.map((item) => (
                     <SelectButton
@@ -57,7 +59,8 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, select
     );
 };
 
-export const SingleSelect: React.FC<SingleSelectProps> = ({items, onChange, selection, noItemsText}) => {
+export const SingleSelect: React.FC<SingleSelectProps> = ({items, onChange, selection, noItemsText, variant}) => {
+    variant = variant || "normal";
     const groupId = React.useId();
     const handleSelect = (id: string) => {
         if (onChange) {
@@ -65,7 +68,7 @@ export const SingleSelect: React.FC<SingleSelectProps> = ({items, onChange, sele
         }
       }
     return (
-        <div className="select">
+        <div className="select" data-select-variant={variant}>
             {items.length > 0 ? (
                 items.map((item) => (
                     <SelectButton
