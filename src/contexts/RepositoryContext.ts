@@ -45,8 +45,3 @@ export function createRepositoryManager(initialRepos: (RepositorySource & Option
     [getRepositories, addRepository, removeRepository]
   );
 }
-
-export function useRepositoryContext() {
-  const context = React.useContext(RepositoryContext);
-  return context;
-}
