@@ -8,19 +8,22 @@ export type SelectItem = {
     info: string;
 }
 
-type MultiSelectProps = {
+type SelectProps = {
     items: SelectItem[];
+    noItemsText?: string;
+}
+
+type MultiSelectProps = SelectProps & {
     onChange?: (id: string[]) => void;
     selection?: string[];
 }
 
-type SingleSelectProps = {
-    items: SelectItem[];
+type SingleSelectProps = SelectProps & {
     onChange?: (id: string) => void;
     selection?: string;
 }
 
-export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, selection}) => {
+export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, selection, noItemsText}) => {
     const groupId = React.useId();
     const selectionSet = new Set(selection);
     const handleSelect = (id: string) => {
@@ -36,21 +39,25 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({items, onChange, select
       }
     return (
         <div className="select">
-            {items.map((item) => (
-                <SelectButton
-                    key={item.id}
-                    type={"checkbox"}
-                    groupId={groupId}
-                    {...item}
-                    selected={selectionSet.has(item.id)}
-                    onChange={handleSelect}
-                />
-            ))}
+            {items.length > 0 ? (
+                items.map((item) => (
+                    <SelectButton
+                        key={item.id}
+                        type={"checkbox"}
+                        groupId={groupId}
+                        {...item}
+                        selected={selectionSet.has(item.id)}
+                        onChange={handleSelect}
+                    />
+                ))
+            ) : (
+                <NoOptions text={noItemsText}/>
+            )}
         </div>
     );
 };
 
-export const SingleSelect: React.FC<SingleSelectProps> = ({items, onChange, selection}) => {
+export const SingleSelect: React.FC<SingleSelectProps> = ({items, onChange, selection, noItemsText}) => {
     const groupId = React.useId();
     const handleSelect = (id: string) => {
         if (onChange) {
@@ -59,16 +66,20 @@ export const SingleSelect: React.FC<SingleSelectProps> = ({items, onChange, sele
       }
     return (
         <div className="select">
-            {items.map((item) => (
-                <SelectButton
-                    key={item.id}
-                    type={"radio"}
-                    groupId={groupId}
-                    {...item}
-                    selected={selection === item.id}
-                    onChange={handleSelect}
-                />
-            ))}
+            {items.length > 0 ? (
+                items.map((item) => (
+                    <SelectButton
+                        key={item.id}
+                        type={"radio"}
+                        groupId={groupId}
+                        {...item}
+                        selected={selection === item.id}
+                        onChange={handleSelect}
+                    />
+                ))
+            ) : (
+                <NoOptions text={noItemsText}/>
+            )}
         </div>
     );
 };
@@ -92,3 +103,8 @@ const SelectButton: React.FC<SelectButtonProps> = ({groupId, label, info, id, se
         </div>
     );
 };
+
+
+const NoOptions: React.FC<{text?: string}> = ({text}) => {
+    return <div className="no-options">{text ? text : "There are currently no options available."}</div>
+}

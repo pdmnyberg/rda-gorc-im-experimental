@@ -64,3 +64,9 @@
     max-width: 50%;
     overflow: hidden;
 }
+
+.select > .no-options {
+    color: #666;
+    background: #eee;
+    padding: var(--select-spacing);
+}

@@ -64,9 +64,9 @@ export const SettingsPanel = () => {
       <h2>Select model</h2>
       <SingleSelect items={modelItems} selection={model ? model.id : undefined} onChange={setModelId} />
       <h2>Select profiles</h2>
-      <MultiSelect items={profileItems} selection={profileIds} onChange={setProfileIds} />
+      <MultiSelect items={profileItems} selection={profileIds} onChange={setProfileIds} noItemsText="No profiles available for this model"/>
       <h2>Select slices</h2>
-      <MultiSelect items={sliceItems} selection={sliceIds} onChange={setSliceIds} />
+      <MultiSelect items={sliceItems} selection={sliceIds} onChange={setSliceIds} noItemsText="No slices available for this model"/>
     </>
   )
 }
