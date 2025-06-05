@@ -92,6 +92,3 @@ const SelectButton: React.FC<SelectButtonProps> = ({groupId, label, info, id, se
         </div>
     );
 };
-
-
-export default MultiSelect;
