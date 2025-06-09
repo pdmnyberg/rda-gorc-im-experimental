@@ -15,7 +15,8 @@ export const baseModel: BaseModel = {
             name: "Governance & Leadership",
             shortName: "G & L",
             considerationLevel: "core",
-            description: "Stakeholders that define the commons purpose and the development of the strategies, objectives, values, and policies that frame how that purpose will be pursued."
+            description: "Stakeholders that define the commons purpose and the development of the strategies, objectives, values, and policies that frame how that purpose will be pursued.",
+            shortDescription: "Stakeholders who define the commons' purpose and direction.",
         },
         {
             id: "rules-of-participation-and-access",
