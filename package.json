@@ -9,10 +9,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "build-examples": "tsx examples/export-model.ts"
+    "build-examples": "tsx examples/export-model.ts",
+    "prettify": "prettier --write ."
   },
   "dependencies": {
     "@xyflow/react": "^12.6.0",
+    "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.6.1"
