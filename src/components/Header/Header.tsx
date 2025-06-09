@@ -35,11 +35,9 @@ function Header({ panelButtons = [] }: HeaderProps) {
 }
 
 function PanelButton({icon, label, onClick}: PanelButton) {
-    const id = React.useId();
     return (
         <div className="panel-button">
-            <button id={id} title={label} onClick={onClick}>{icon}</button>
-            <label htmlFor={id}>{label}</label>
+            <button title={label} onClick={onClick}><span className="icon">{icon}</span><span className="label">{label}</span></button>
         </div>
     )
 }
