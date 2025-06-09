@@ -52,7 +52,7 @@ This project includes "Prettier" as a code formatter. Formatting rules are speci
 Run the formatter on your code:
 
 ```
-docker compose exec vite npx prettier --write .
+npm run prettify
 ```
 
 **Be aware:** This will overwrite all the files in the project that are not specified in the `.prettierignore` file.
