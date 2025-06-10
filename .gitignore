@@ -25,3 +25,5 @@ dist-ssr
 
 # Project dev files
 dist-examples
+public/config.json
+public/example-repo/
