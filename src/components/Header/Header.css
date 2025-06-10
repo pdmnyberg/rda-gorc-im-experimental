@@ -5,6 +5,7 @@
   background-color: var(--color-bg-light);
   padding: 0 1rem;
   gap: 1rem;
+  height: 4rem;
 }
 
 .header-title {
