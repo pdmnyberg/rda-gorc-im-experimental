@@ -23,7 +23,7 @@ export type QuestionNode = {
     type: "question";
     id: NodeId;
     parentId: NodeId;
-    label: string;
+    text: string;
     description: string;
 }
 
@@ -31,11 +31,10 @@ type IdentifiableEntity = {
     id: NodeId;
     parentId: NodeId;
     icon?: string;
-    name: {
-        shortName: string;
-        longName: string;
-    };
+    name: string;
+    shortName?: string;
     description: string;
+    shortDescription?: string;
     examples?: string[];
     sources?: Source[];
     considerationLevel: ConsiderationLevel;
