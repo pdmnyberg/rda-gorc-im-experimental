@@ -27,6 +27,9 @@ function Header({ panelButtons = [] }: HeaderProps) {
       <nav className="header-nav">
         <ul className="nav-list">
           <li>
+            <NavLink to="/">Home</NavLink>
+          </li>
+          <li>
             <NavLink to="/documentation">Documentation</NavLink>
           </li>
         </ul>
