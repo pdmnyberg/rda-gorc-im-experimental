@@ -10,10 +10,8 @@ export const ossModel: BaseModel = {
             id: "ee1",
             type: "essential-element",
             icon: "icons/compass.png",
-            name: {
-                shortName: "Governance",
-                longName: "Project Governance"
-            },
+            shortName: "Governance",
+            name: "Project Governance",
             description: "Processes and roles that define how decisions are made in the project.",
             considerationLevel: "core"
         },
@@ -21,10 +19,8 @@ export const ossModel: BaseModel = {
             id: "cat1",
             parentId: "ee1",
             type: "category",
-            name: {
-                shortName: "Leadership",
-                longName: "Leadership Structure"
-            },
+            shortName: "Leadership",
+            name: "Leadership Structure",
             description: "Defines who leads and how leadership changes.",
             considerationLevel: "core"
         },
@@ -32,10 +28,8 @@ export const ossModel: BaseModel = {
             id: "attr1",
             parentId: "cat1",
             type: "attribute",
-            name: {
-                shortName: "Decisions",
-                longName: "Decision-Making Process"
-            },
+            shortName: "Decisions",
+            name: "Decision-Making Process",
             description: "How key decisions are made, including voting or consensus mechanisms.",
             considerationLevel: "core"
         },
@@ -43,10 +37,8 @@ export const ossModel: BaseModel = {
             id: "feat1",
             parentId: "attr1",
             type: "feature",
-            name: {
-                shortName: "Voting",
-                longName: "Voting Mechanisms"
-            },
+            shortName: "Voting",
+            name: "Voting Mechanisms",
             description: "Whether decisions are made by majority vote, consensus, etc.",
             considerationLevel: "core"
         },
@@ -54,10 +46,8 @@ export const ossModel: BaseModel = {
             id: "feat1b",
             parentId: "attr1",
             type: "feature",
-            name: {
-                shortName: "Transparency",
-                longName: "Decision Transparency"
-            },
+            shortName: "Transparency",
+            name: "Decision Transparency",
             description: "Availability of decision rationales and public logs.",
             considerationLevel: "core"
         },
@@ -65,10 +55,8 @@ export const ossModel: BaseModel = {
             id: "kpi1",
             parentId: "feat1",
             type: "kpi",
-            name: {
-                shortName: "Participation",
-                longName: "Governance Participation Rate"
-            },
+            shortName: "Participation",
+            name: "Governance Participation Rate",
             description: "The percentage of eligible members participating in votes.",
             considerationLevel: "core"
         },
@@ -76,10 +64,8 @@ export const ossModel: BaseModel = {
             id: "kpi1b",
             parentId: "feat1",
             type: "kpi",
-            name: {
-                shortName: "Timeliness",
-                longName: "Average Decision Time"
-            },
+            shortName: "Timeliness",
+            name: "Average Decision Time",
             description: "Average time taken to reach a decision from proposal to resolution.",
             considerationLevel: "optional"
         },
@@ -89,10 +75,8 @@ export const ossModel: BaseModel = {
             id: "ee2",
             type: "essential-element",
             icon: "icons/two-guys.png",
-            name: {
-                shortName: "Community",
-                longName: "Community Engagement"
-            },
+            shortName: "Community",
+            name: "Community Engagement",
             description: "How contributors, users, and stakeholders engage with the project.",
             considerationLevel: "core"
         },
@@ -100,10 +84,8 @@ export const ossModel: BaseModel = {
             id: "attr2",
             parentId: "ee2",
             type: "attribute",
-            name: {
-                shortName: "Onboarding",
-                longName: "Contributor Onboarding"
-            },
+            shortName: "Onboarding",
+            name: "Contributor Onboarding",
             description: "How new contributors are introduced to the project and its processes.",
             considerationLevel: "desirable"
         },
@@ -111,10 +93,8 @@ export const ossModel: BaseModel = {
             id: "feat2",
             parentId: "attr2",
             type: "feature",
-            name: {
-                shortName: "Guide",
-                longName: "Contributor Guide"
-            },
+            shortName: "Guide",
+            name: "Contributor Guide",
             description: "Whether a contributor guide exists and how comprehensive it is.",
             considerationLevel: "desirable"
         },
@@ -122,10 +102,8 @@ export const ossModel: BaseModel = {
             id: "feat2b",
             parentId: "attr2",
             type: "feature",
-            name: {
-                shortName: "Mentorship",
-                longName: "Mentorship Program"
-            },
+            shortName: "Mentorship",
+            name: "Mentorship Program",
             description: "Structured pairing of newcomers with experienced contributors.",
             considerationLevel: "optional"
         },
@@ -133,10 +111,8 @@ export const ossModel: BaseModel = {
             id: "kpi2",
             parentId: "feat2",
             type: "kpi",
-            name: {
-                shortName: "Retention",
-                longName: "New Contributor Retention Rate"
-            },
+            shortName: "Retention",
+            name: "New Contributor Retention Rate",
             description: "Percentage of new contributors who remain active after 3 months.",
             considerationLevel: "optional"
         },
@@ -144,10 +120,8 @@ export const ossModel: BaseModel = {
             id: "kpi2b",
             parentId: "feat2",
             type: "kpi",
-            name: {
-                shortName: "Guide Usage",
-                longName: "Contributor Guide Access Rate"
-            },
+            shortName: "Guide Usage",
+            name: "Contributor Guide Access Rate",
             description: "Frequency with which the contributor guide is accessed.",
             considerationLevel: "optional"
         },
@@ -157,10 +131,8 @@ export const ossModel: BaseModel = {
             id: "ee3",
             type: "essential-element",
             icon: "icons/money-bag.png",
-            name: {
-                shortName: "Sustainability",
-                longName: "Project Sustainability"
-            },
+            shortName: "Sustainability",
+            name: "Project Sustainability",
             description: "Long-term viability including funding, resources, and project health.",
             considerationLevel: "core"
         },
@@ -168,10 +140,8 @@ export const ossModel: BaseModel = {
             id: "cat2",
             parentId: "ee3",
             type: "category",
-            name: {
-                shortName: "Finance",
-                longName: "Financial Health"
-            },
+            shortName: "Finance",
+            name: "Financial Health",
             description: "Resources available to support ongoing development.",
             considerationLevel: "desirable"
         },
@@ -179,10 +149,8 @@ export const ossModel: BaseModel = {
             id: "subcat1",
             parentId: "cat2",
             type: "subcategory",
-            name: {
-                shortName: "Funding",
-                longName: "Funding Sources"
-            },
+            shortName: "Funding",
+            name: "Funding Sources",
             description: "Where the money comes from: sponsors, grants, donations.",
             considerationLevel: "desirable"
         },
@@ -190,10 +158,8 @@ export const ossModel: BaseModel = {
             id: "attr3",
             parentId: "subcat1",
             type: "attribute",
-            name: {
-                shortName: "Grants",
-                longName: "Dependency on Grant Funding"
-            },
+            shortName: "Grants",
+            name: "Dependency on Grant Funding",
             description: "Extent to which project relies on grants for survival.",
             considerationLevel: "optional"
         },
@@ -201,10 +167,8 @@ export const ossModel: BaseModel = {
             id: "attr3b",
             parentId: "subcat1",
             type: "attribute",
-            name: {
-                shortName: "Sponsors",
-                longName: "Sponsor Engagement"
-            },
+            shortName: "Sponsors",
+            name: "Sponsor Engagement",
             description: "How sponsors are acquired, retained, and acknowledged.",
             considerationLevel: "optional"
         },
@@ -212,10 +176,8 @@ export const ossModel: BaseModel = {
             id: "kpi3",
             parentId: "attr3",
             type: "kpi",
-            name: {
-                shortName: "Funding $",
-                longName: "Annual Funding Amount"
-            },
+            shortName: "Funding $",
+            name: "Annual Funding Amount",
             description: "Total financial contributions received annually.",
             considerationLevel: "optional"
         },
@@ -223,10 +185,8 @@ export const ossModel: BaseModel = {
             id: "kpi3b",
             parentId: "attr3b",
             type: "kpi",
-            name: {
-                shortName: "Sponsorship Count",
-                longName: "Number of Active Sponsors"
-            },
+            shortName: "Sponsorship Count",
+            name: "Number of Active Sponsors",
             description: "Number of sponsors contributing financially in the current year.",
             considerationLevel: "optional"
         },
@@ -236,10 +196,8 @@ export const ossModel: BaseModel = {
             id: "ee4",
             type: "essential-element",
             icon: "icons/chain-link.png",
-            name: {
-                shortName: "Interop",
-                longName: "Interoperability"
-            },
+            shortName: "Interop",
+            name: "Interoperability",
             description: "The ability of the project to integrate and function across systems.",
             considerationLevel: "core"
         },
@@ -247,10 +205,8 @@ export const ossModel: BaseModel = {
             id: "cat3",
             parentId: "ee4",
             type: "category",
-            name: {
-                shortName: "Standards",
-                longName: "Standards and Protocols"
-            },
+            shortName: "Standards",
+            name: "Standards and Protocols",
             description: "Use of and alignment with open standards and interfaces.",
             considerationLevel: "core"
         },
@@ -258,10 +214,8 @@ export const ossModel: BaseModel = {
             id: "subcat2",
             parentId: "cat3",
             type: "subcategory",
-            name: {
-                shortName: "APIs",
-                longName: "API Design"
-            },
+            shortName: "APIs",
+            name: "API Design",
             description: "How well the APIs are designed for external consumption.",
             considerationLevel: "core"
         },
@@ -269,10 +223,8 @@ export const ossModel: BaseModel = {
             id: "attr4",
             parentId: "subcat2",
             type: "attribute",
-            name: {
-                shortName: "API Docs",
-                longName: "API Documentation Quality"
-            },
+            shortName: "API Docs",
+            name: "API Documentation Quality",
             description: "Clarity and completeness of API documentation.",
             considerationLevel: "desirable"
         },
@@ -280,10 +232,8 @@ export const ossModel: BaseModel = {
             id: "attr4b",
             parentId: "subcat2",
             type: "attribute",
-            name: {
-                shortName: "Versioning",
-                longName: "API Versioning Strategy"
-            },
+            shortName: "Versioning",
+            name: "API Versioning Strategy",
             description: "How API changes are managed and communicated.",
             considerationLevel: "optional"
         },
@@ -291,10 +241,8 @@ export const ossModel: BaseModel = {
             id: "kpi4",
             parentId: "attr4",
             type: "kpi",
-            name: {
-                shortName: "API Usage",
-                longName: "External API Usage Count"
-            },
+            shortName: "API Usage",
+            name: "External API Usage Count",
             description: "Number of external integrations using the API.",
             considerationLevel: "core"
         },
@@ -302,10 +250,8 @@ export const ossModel: BaseModel = {
             id: "kpi4b",
             parentId: "attr4b",
             type: "kpi",
-            name: {
-                shortName: "API Breaks",
-                longName: "Backward Compatibility Breaks"
-            },
+            shortName: "API Breaks",
+            name: "Backward Compatibility Breaks",
             description: "Number of times backwards compatibility is broken in major releases.",
             considerationLevel: "optional"
         },
@@ -315,10 +261,8 @@ export const ossModel: BaseModel = {
             id: "ee5",
             type: "essential-element",
             icon: "icons/rocket.png",
-            name: {
-                shortName: "Adoption",
-                longName: "User and Market Adoption"
-            },
+            shortName: "Adoption",
+            name: "User and Market Adoption",
             description: "How the project is used and adopted in practice.",
             considerationLevel: "core"
         },
@@ -326,10 +270,8 @@ export const ossModel: BaseModel = {
             id: "cat4",
             parentId: "ee5",
             type: "category",
-            name: {
-                shortName: "Reach",
-                longName: "Community and Market Reach"
-            },
+            shortName: "Reach",
+            name: "Community and Market Reach",
             description: "Extent and diversity of the project's usage and audience.",
             considerationLevel: "core"
         },
@@ -337,10 +279,8 @@ export const ossModel: BaseModel = {
             id: "subcat3",
             parentId: "cat4",
             type: "subcategory",
-            name: {
-                shortName: "Localization",
-                longName: "Internationalization and Localization"
-            },
+            shortName: "Localization",
+            name: "Internationalization and Localization",
             description: "Support for non-English languages and local deployment contexts.",
             considerationLevel: "optional"
         },
@@ -348,10 +288,8 @@ export const ossModel: BaseModel = {
             id: "attr5",
             parentId: "subcat3",
             type: "attribute",
-            name: {
-                shortName: "Lang Support",
-                longName: "Language Support Breadth"
-            },
+            shortName: "Lang Support",
+            name: "Language Support Breadth",
             description: "How many languages the project supports.",
             considerationLevel: "optional"
         },
@@ -359,10 +297,8 @@ export const ossModel: BaseModel = {
             id: "attr5b",
             parentId: "subcat3",
             type: "attribute",
-            name: {
-                shortName: "Docs i18n",
-                longName: "Translated Documentation Availability"
-            },
+            shortName: "Docs i18n",
+            name: "Translated Documentation Availability",
             description: "Availability of documentation in non-English languages.",
             considerationLevel: "optional"
         },
@@ -370,10 +306,8 @@ export const ossModel: BaseModel = {
             id: "kpi5",
             parentId: "attr5",
             type: "kpi",
-            name: {
-                shortName: "Locales",
-                longName: "Number of Supported Locales"
-            },
+            shortName: "Locales",
+            name: "Number of Supported Locales",
             description: "Count of fully supported languages/locales.",
             considerationLevel: "optional"
         },
@@ -381,10 +315,8 @@ export const ossModel: BaseModel = {
             id: "kpi5b",
             parentId: "attr5b",
             type: "kpi",
-            name: {
-                shortName: "Docs Translated",
-                longName: "Percentage of Docs Translated"
-            },
+            shortName: "Docs Translated",
+            name: "Percentage of Docs Translated",
             description: "Percent of documentation that has been translated.",
             considerationLevel: "optional"
         }
