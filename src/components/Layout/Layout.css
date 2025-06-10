@@ -1,5 +1,4 @@
 .layout {
-  --layout-spacing: 1rem;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -26,12 +25,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   transition: width 0.1s;
-}
-
-.layout footer {
-  background-color: var(--color-bg-light);
-  text-align: center;
-  padding: var(--layout-spacing);
 }
 
 .layout > main > .panel[data-visible="false"] {
