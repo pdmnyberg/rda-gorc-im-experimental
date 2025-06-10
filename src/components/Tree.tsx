@@ -1,10 +1,5 @@
 import { useCallback } from "react";
-import {
-  ReactFlow,
-  MiniMap,
-  Controls,
-  Node,
-} from "@xyflow/react";
+import { ReactFlow, MiniMap, Controls, Node } from "@xyflow/react";
 import { useTreeContext } from "../contexts/TreeContext";
 import { GORCNodeView } from "./GORCNodeView/GORCNodeView";
 
@@ -18,12 +13,12 @@ export const Tree = () => {
   const edges = treeManager.getEdges();
 
   const onNodeClick = useCallback((_event: unknown, node: Node) => {
-    console.log(node)
+    console.log(node);
   }, []);
 
   return (
     <>
-      <div style={{ width: '100%', height: '100%' }}>
+      <div style={{ width: "100%", height: "100%" }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
