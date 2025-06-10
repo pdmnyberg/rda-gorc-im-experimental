@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router";
 import "./Header.css";
+import { useConfig } from "../../contexts/ConfigContext.ts";
 import {
   RepositorySelectionContext,
   useSelected,
@@ -18,11 +19,15 @@ type HeaderProps = {
 };
 
 function Header({ panelButtons = [] }: HeaderProps) {
+  const config = useConfig();
   const repository = useSelected(RepositorySelectionContext);
+  const pageTitle = repository ? repository.info.name : "";
+  const fullTitle = pageTitle ? `${config.title}: ${pageTitle}` : config.title;
   return (
     <header className="header">
       <div className="header-title">
-        RDA Visualisation App: {repository ? repository.info.name : ""}
+        <title>{fullTitle}</title>
+        {fullTitle}
       </div>
       <nav className="header-nav">
         <ul className="nav-list">
