@@ -2,14 +2,6 @@
   --color-bg-light: #f9f9f9;
 }
 
-.tree-container {
-  width: 100%;
-  flex: 1;
-  margin: 0 auto;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
 * {
   box-sizing: border-box;
 }
