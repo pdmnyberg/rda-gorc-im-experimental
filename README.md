@@ -15,6 +15,23 @@ The project is meant to be run locally in a docker environment, visit the [Docke
 - [Docker](https://www.docker.com/) installed
 - [Docker Compose](https://docs.docker.com/compose/) installed
 
+### Initial setup
+
+In order for the system to work you need to make sure that you have a repository available. Start by running `docker compose run vite build-examples`. Then you should add the file `public/config.json` which should contain the following:
+
+```json
+{
+  "title": "This is my GORC IM",
+  "repositories": [
+    {
+      "url": "example-repo/root.json",
+      "id": "example-repo",
+      "name": "Example Repo"
+    }
+  ]
+}
+```
+
 ### Executing program
 
 After cloning the repository you can run the project with:
