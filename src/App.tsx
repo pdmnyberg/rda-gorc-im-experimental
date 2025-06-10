@@ -16,6 +16,7 @@ import "@xyflow/react/dist/style.css";
 import "./App.css";
 import { SettingsPanel } from "./components/SettingsPanel.tsx";
 import Layout from "./components/Layout/Layout";
+import SettingIcon from "./img/app-icon_settings.svg";
 
 
 const AppBase = () => {
@@ -24,7 +25,8 @@ const AppBase = () => {
       panels={{
         settings: {
           component: <SettingsPanel />,
-          icon: <></>
+          icon: <img src={SettingIcon} />,
+          label: "Settings"
         },
       }}
     >

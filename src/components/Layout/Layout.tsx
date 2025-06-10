@@ -5,6 +5,7 @@ import Header from "../Header/Header";
 type Panel = {
     component: React.ReactNode,
     icon: React.ReactNode;
+    label: string;
 }
 
 type Props = React.PropsWithChildren<{
@@ -18,6 +19,7 @@ const Layout: React.FC<Props> = ({ children, panels = {} }) => {
         id,
         icon: panel.icon,
         onClick: () => setCurrentPanel(currentPanel === id ? null : id),
+        label: panel.label,
     }));
 
     return (
