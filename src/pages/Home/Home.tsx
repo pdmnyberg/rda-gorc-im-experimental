@@ -14,16 +14,8 @@ import {
   getModelNodes,
   applyLayersAndSlices,
 } from "./../../modules/LayeredModel.ts";
-import {
-  models as mockModels,
-  profiles as mockProfiles,
-  slices as mockSlices,
-} from "../../../examples/example-models.ts";
 import { createRepositoryManager } from "./../../contexts/RepositoryContext.ts";
-import {
-  StaticRepositorySource,
-  HttpRepositorySource,
-} from "./../../modules/RepositorySource.ts";
+import { HttpRepositorySource } from "./../../modules/RepositorySource.ts";
 import {
   useModelSelectionManagers,
   RepositorySelectionContext,
@@ -31,6 +23,7 @@ import {
   ProfileSelectionContext,
   SliceSelectionContext,
 } from "./../../contexts/SelectionContexts.ts";
+import { useConfig } from "../../contexts/ConfigContext.ts";
 import "@xyflow/react/dist/style.css";
 import "./Home.css";
 
@@ -53,22 +46,10 @@ const HomeBase = () => {
 };
 
 const Home = () => {
-  const repositoryManager = createRepositoryManager([
-    new StaticRepositorySource(
-      {
-        id: "mock-repo",
-        name: "Mock repo",
-      },
-      Object.values(mockModels),
-      Object.values(mockProfiles),
-      Object.values(mockSlices)
-    ),
-    new HttpRepositorySource({
-      url: "http-repo/root.json",
-      id: "http-repo",
-      name: "HTTP Based Repo",
-    }),
-  ]);
+  const { repositories } = useConfig();
+  const repositoryManager = createRepositoryManager(
+    repositories.map((r) => new HttpRepositorySource(r))
+  );
   const [repoSelection, modelSelection, profileSelection, sliceSelection] =
     useModelSelectionManagers(repositoryManager);
   const model = modelSelection[0];
