@@ -1,6 +1,7 @@
 import React from "react";
 import "./Layout.css";
 import Header from "../Header/Header";
+import { Footer } from "../Footer/Footer";
 
 type Panel = {
   component: React.ReactNode;
@@ -40,9 +41,7 @@ const Layout: React.FC<Props> = ({ children, panels = {} }) => {
           );
         })}
       </main>
-      <footer>
-        <small>NBIS development</small>
-      </footer>
+      <Footer />
     </div>
   );
 };
