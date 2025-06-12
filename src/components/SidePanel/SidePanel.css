@@ -1,0 +1,60 @@
+.side-panel {
+  --side-panel-size: 25rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--side-panel-size);
+  height: 100%;
+  background: #fff;
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.25);
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.side-panel-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.side-panel-close:hover {
+  color: #000;
+}
+
+.data-type {
+  text-transform: uppercase;
+  color: #333333;
+  font-family: sans-serif;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: sans-serif;
+  background-color: #999;
+  border-radius: 0.3rem;
+  text-transform: uppercase;
+}
+
+.badge.core {
+  background-color: #00327c;
+  color: white;
+}
+
+.badge.desirable {
+  background-color: #986129;
+  color: white;
+}
+
+.badge.optional {
+  background-color: #249b6c;
+  color: #222;
+}
