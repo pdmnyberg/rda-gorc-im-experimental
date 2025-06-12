@@ -11,6 +11,11 @@
   height: 30px;
 }
 
+.gorc-node-root.selected {
+  outline: 3px solid #007bff;
+  border-radius: 4px;
+}
+
 .gorc-node-body {
   position: relative;
   width: calc(var(--gorc-node-size) * 6.7);

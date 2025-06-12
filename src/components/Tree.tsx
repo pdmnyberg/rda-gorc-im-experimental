@@ -11,9 +11,15 @@ const nodeTypes = { gorc: GORCNodeView };
 
 export const Tree = () => {
   const treeManager = useTreeContext();
-  const nodes = treeManager.getNodes();
-  const edges = treeManager.getEdges();
   const [selectedNode, setSelectedNode] = useState<Node<GORCNode> | null>(null);
+  const nodes = treeManager.getNodes().map((node) => ({
+    ...node,
+    data: {
+      ...node.data,
+      isSelected: selectedNode?.id === node.id,
+    },
+  }));
+  const edges = treeManager.getEdges();
 
   const onNodeClick = useCallback((_event: unknown, node: Node<GORCNode>) => {
     setSelectedNode(node);

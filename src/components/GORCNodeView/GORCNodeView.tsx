@@ -3,13 +3,13 @@ import { GORCNode } from "../../modules/GORCNodes";
 import "./GORCNodeView.css";
 
 type Props = {
-  data: GORCNode;
+  data: GORCNode & { isSelected?: boolean };
 };
 
 export function GORCNodeView({ data }: Props) {
   return (
     <div
-      className="gorc-node-root"
+      className={`gorc-node-root${data.isSelected ? " selected" : ""}`}
       data-type={data.type}
       data-consideration-level={data.considerationLevel}
     >
