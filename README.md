@@ -17,7 +17,13 @@ The project is meant to be run locally in a docker environment, visit the [Docke
 
 ### Initial setup
 
-In order for the system to work you need to make sure that you have a repository available. Start by running `docker compose run vite build-examples`. Then you should add the file `public/config.json` which should contain the following:
+In order for the system to work you need to make sure that you have a repository available. Start by running:
+
+```
+docker compose run vite npm run build-examples
+```
+
+Then you should add the file `public/config.json` which should contain the following:
 
 ```json
 {
