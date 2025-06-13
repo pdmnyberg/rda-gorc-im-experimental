@@ -334,7 +334,7 @@ export const baseModel: BaseModel = {
         {
             id: "governance-and-leadership",
             type: "essential-element",
-            icon: "icons/groc-icon_governance-and-leadership.svg",
+            icon: "icons/gorc-icon_governance-and-leadership.svg",
             name: "Governance & Leadership",
             shortName: "G & L",
             considerationLevel: "core",
@@ -344,7 +344,7 @@ export const baseModel: BaseModel = {
         {
             id: "rules-of-participation-and-access",
             type: "essential-element",
-            icon: "icons/groc-icon_rules-of-participation-and-access.svg",
+            icon: "icons/gorc-icon_rules-of-participation-and-access.svg",
             name: "Rules of Participation & Access",
             shortName: "RoP & A",
             considerationLevel: "core",
@@ -353,7 +353,7 @@ export const baseModel: BaseModel = {
         {
             id: "sustainability",
             type: "essential-element",
-            icon: "icons/groc-icon_sustainability.svg",
+            icon: "icons/gorc-icon_sustainability.svg",
             name: "Sustainability",
             shortName: "S",
             considerationLevel: "core",
