@@ -83,7 +83,6 @@ export function useModelSelectionManagers(
           setModel(null);
           setProfiles(resetArray);
           setSlices(resetArray);
-          removeRepository(_repo);
           console.log(e);
         }
       }
@@ -121,7 +120,6 @@ export function useModelSelectionManagers(
           setModel(null);
           setProfiles(resetArray);
           setSlices(resetArray);
-          removeRepository(_repo);
           console.log(e);
         }
       }

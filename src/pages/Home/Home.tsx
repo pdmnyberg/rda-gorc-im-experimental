@@ -26,8 +26,10 @@ import {
 import { useConfig } from "../../contexts/ConfigContext.ts";
 import "@xyflow/react/dist/style.css";
 import "./Home.css";
+import { ErrorMessage } from "../../components/ErrorMessage/ErrorMessage.tsx";
 
 const HomeBase = () => {
+  const [selectedRepo] = React.useContext(RepositorySelectionContext);
   return (
     <Layout
       panels={{
@@ -38,9 +40,13 @@ const HomeBase = () => {
         },
       }}
     >
-      <div className="tree-container">
-        <Tree />
-      </div>
+      {selectedRepo ? (
+        <div className="tree-container">
+          <Tree />
+        </div>
+      ) : (
+        <ErrorMessage />
+      )}
     </Layout>
   );
 };
