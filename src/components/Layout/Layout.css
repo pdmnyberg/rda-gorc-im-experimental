@@ -13,27 +13,13 @@
   overflow: hidden;
 }
 
-.layout > main > .panel {
-  --setting-panel-size: 25rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: #fff;
-  width: var(--setting-panel-size);
-  max-width: 100vw;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  transition: width 0.1s;
-}
-
 .layout > main > .panel[data-visible="false"] {
   width: 0;
 }
 
 .layout > main > .panel > .panel-container {
   padding: 1rem;
-  width: var(--setting-panel-size);
+  width: var(--panel-size);
   max-width: 100vw;
   overflow: auto;
   max-height: 100%;

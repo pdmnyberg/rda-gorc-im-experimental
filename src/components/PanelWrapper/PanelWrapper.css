@@ -1,0 +1,21 @@
+.side-panel {
+  --panel-size: 25rem;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+  width: var(--panel-size);
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.25);
+  padding: 1rem;
+  transition: width 0.1s;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.side-panel--left {
+  left: 0;
+}
+
+.side-panel--right {
+  right: 0;
+}

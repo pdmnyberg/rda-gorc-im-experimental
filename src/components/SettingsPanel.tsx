@@ -12,6 +12,7 @@ import {
   SliceSelectionContext,
 } from "../contexts/SelectionContexts";
 import { RepositorySource } from "../modules/RepositorySource";
+import { PanelWrapper } from "./PanelWrapper/PanelWrapper";
 
 function packageToSelectItem(p: Package): SelectItem {
   return {
@@ -80,7 +81,7 @@ export const SettingsPanel = () => {
   const sliceIds = selectedSlices.map((s) => s.id);
 
   return (
-    <>
+    <PanelWrapper position={"right"}>
       <h2>Select repository</h2>
       <SingleSelect
         items={repositoryItems}
@@ -110,6 +111,6 @@ export const SettingsPanel = () => {
         onChange={setSliceIds}
         noItemsText="No slices available for this model"
       />
-    </>
+    </PanelWrapper>
   );
 };

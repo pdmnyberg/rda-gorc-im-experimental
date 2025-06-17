@@ -1,6 +1,8 @@
 import type { Node } from "@xyflow/react";
 import { GORCNode } from "../../modules/GORCNodes";
 import "./SidePanel.css";
+import { PanelWrapper } from "../PanelWrapper/PanelWrapper";
+import React from "react";
 
 type Props = {
   node: Node<GORCNode> | null;
@@ -13,7 +15,7 @@ export const SidePanel = ({ node, onClose }: Props) => {
   const data = node.data;
 
   return (
-    <div className="side-panel">
+    <PanelWrapper position={"left"}>
       <button
         className="side-panel-close"
         onClick={onClose}
@@ -28,6 +30,7 @@ export const SidePanel = ({ node, onClose }: Props) => {
           <p className="data-type"> {data.type}</p>
           {data.description && <p>{data.description}</p>}
           <p>
+            Consideration Level
             <span className={`badge ${data.considerationLevel}`}>
               {data.considerationLevel}
             </span>
@@ -36,6 +39,6 @@ export const SidePanel = ({ node, onClose }: Props) => {
       ) : (
         "No data available"
       )}
-    </div>
+    </PanelWrapper>
   );
 };
