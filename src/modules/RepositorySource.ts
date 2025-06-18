@@ -1,8 +1,11 @@
+import { BaseModel, ModelProfile, ThematicSlice } from "./LayeredModel";
 import {
-  BaseModel,
-  ModelProfile,
-  ThematicSlice,
-} from "../modules/LayeredModel";
+  parseModel,
+  parseModelLayer,
+  parseModelSlice,
+  parsePackage,
+  parseRepository,
+} from "./Validation";
 
 export type RepositoryInfo = {
   id: string;
@@ -88,32 +91,47 @@ export class HttpRepositorySource implements RepositorySource {
     return this._getData<RepositoryRoot>(this._root.url) || this._root;
   }
   async getBaseModels() {
-    const info = await this._fetchData<RepositoryRoot>(this._root.url);
+    const info = await this._fetchData<RepositoryRoot>(
+      this._root.url,
+      parseRepository
+    );
     return await Promise.all<BaseModel>(
       info.baseModels.map((m) =>
-        "ref" in m ? this._fetchData<BaseModel>(m.ref) : Promise.resolve(m)
+        "ref" in m
+          ? this._fetchData<BaseModel>(m.ref, parsePackage(parseModel))
+          : Promise.resolve(m)
       )
     );
   }
   async getProfiles(baseModel?: Pick<BaseModel, "id">) {
-    const info = await this._fetchData<RepositoryRoot>(this._root.url);
+    const info = await this._fetchData<RepositoryRoot>(
+      this._root.url,
+      parseRepository
+    );
     const selectedProfiles = baseModel
       ? info.profiles.filter((p) => p.modelId == baseModel.id)
       : info.profiles;
     return await Promise.all<ModelProfile>(
       selectedProfiles.map((m) =>
-        "ref" in m ? this._fetchData<ModelProfile>(m.ref) : Promise.resolve(m)
+        "ref" in m
+          ? this._fetchData<ModelProfile>(m.ref, parsePackage(parseModelLayer))
+          : Promise.resolve(m)
       )
     );
   }
   async getThematicSlices(baseModel?: Pick<BaseModel, "id">) {
-    const info = await this._fetchData<RepositoryRoot>(this._root.url);
+    const info = await this._fetchData<RepositoryRoot>(
+      this._root.url,
+      parseRepository
+    );
     const selectedSlices = baseModel
       ? info.thematicSlices.filter((p) => p.modelId == baseModel.id)
       : info.thematicSlices;
     return await Promise.all<ThematicSlice>(
       selectedSlices.map((m) =>
-        "ref" in m ? this._fetchData<ThematicSlice>(m.ref) : Promise.resolve(m)
+        "ref" in m
+          ? this._fetchData<ThematicSlice>(m.ref, parsePackage(parseModelSlice))
+          : Promise.resolve(m)
       )
     );
   }
@@ -122,11 +140,11 @@ export class HttpRepositorySource implements RepositorySource {
     return url in this._cache ? (this._cache[url] as T) : undefined;
   }
 
-  async _fetchData<T>(url: string): Promise<T> {
+  async _fetchData<T>(url: string, parser: (data: unknown) => T): Promise<T> {
     const result = this._getData<T>(url);
     if (result === undefined) {
       const data = await fetchData<T>(url);
-      this._cache[url] = data;
+      this._cache[url] = parser(data);
       return data;
     } else {
       return result;
