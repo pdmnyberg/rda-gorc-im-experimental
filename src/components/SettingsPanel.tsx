@@ -81,7 +81,7 @@ export const SettingsPanel = () => {
   const sliceIds = selectedSlices.map((s) => s.id);
 
   return (
-    <PanelWrapper position={"right"}>
+    <>
       <h2>Select repository</h2>
       <SingleSelect
         items={repositoryItems}
@@ -111,6 +111,6 @@ export const SettingsPanel = () => {
         onChange={setSliceIds}
         noItemsText="No slices available for this model"
       />
-    </PanelWrapper>
+    </>
   );
 };

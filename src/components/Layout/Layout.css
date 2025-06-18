@@ -12,15 +12,3 @@
   align-items: stretch;
   overflow: hidden;
 }
-
-.layout > main > .panel[data-visible="false"] {
-  width: 0;
-}
-
-.layout > main > .panel > .panel-container {
-  padding: 1rem;
-  width: var(--panel-size);
-  max-width: 100vw;
-  overflow: auto;
-  max-height: 100%;
-}

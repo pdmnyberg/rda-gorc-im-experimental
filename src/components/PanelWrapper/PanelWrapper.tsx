@@ -4,8 +4,14 @@ import "./PanelWrapper.css";
 type Props = {
   children: React.ReactNode;
   position: "left" | "right";
+  visible?: boolean;
 };
 
-export const PanelWrapper = ({ children, position }: Props) => (
-  <div className={`side-panel ${position}`}>{children}</div>
+export const PanelWrapper = ({ children, position, visible = true }: Props) => (
+  <div
+    className={`panel-wrapper panel-wrapper--${position}`}
+    data-visible={visible}
+  >
+    {children}
+  </div>
 );
