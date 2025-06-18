@@ -22,6 +22,7 @@ export type RepositoryRoot = RepositoryInfo & {
 export interface RepositorySource {
   id: string;
   info: RepositoryInfo;
+  failed?: boolean;
   getBaseModels(): Promise<BaseModel[]>;
   getProfiles(baseModel?: Pick<BaseModel, "id">): Promise<ModelProfile[]>;
   getThematicSlices(

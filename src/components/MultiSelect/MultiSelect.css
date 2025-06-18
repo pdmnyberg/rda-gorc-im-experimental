@@ -34,6 +34,16 @@
   display: none;
 }
 
+.select-button input:disabled + .select-label {
+  cursor: not-allowed;
+  color: #888;
+}
+
+.select-button input:disabled + .select-label > .text::after {
+  background-color: #eee;
+  border-color: #aaa;
+}
+
 .select-button input:checked + .select-label > .text::after {
   background-color: #369;
 }

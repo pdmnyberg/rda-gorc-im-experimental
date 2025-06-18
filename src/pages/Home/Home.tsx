@@ -40,7 +40,7 @@ const HomeBase = () => {
         },
       }}
     >
-      {selectedRepo ? (
+      {selectedRepo?.failed !== true ? (
         <div className="tree-container">
           <Tree />
         </div>

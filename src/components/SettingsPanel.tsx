@@ -26,6 +26,7 @@ function repositoryToSelection(repo: RepositorySource) {
     id: repo.id,
     label: repo.info.name,
     info: repo.info.url || "Local source",
+    failed: repo.failed,
   };
 }
 
@@ -88,6 +89,7 @@ export const SettingsPanel = () => {
         onChange={setRepositoryId}
         variant="wide-info"
         noItemsText="No repositories available"
+        disabled={repository?.failed}
       />
       <h2>Select model</h2>
       <SingleSelect
