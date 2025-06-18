@@ -78,12 +78,12 @@ export function useModelSelectionManagers(
           setSelectedProfiles(resetArray);
           setSelectedSlices(resetArray);
         } catch (e) {
-          setRepository(null);
+          _repo.failed = true;
+          setRepository(_repo);
           setModels(resetArray);
           setModel(null);
           setProfiles(resetArray);
           setSlices(resetArray);
-          removeRepository(_repo);
           console.log(e);
         }
       }
@@ -116,12 +116,12 @@ export function useModelSelectionManagers(
           setSelectedProfiles(resetArray);
           setSelectedSlices(resetArray);
         } catch (e) {
-          setRepository(null);
+          _repo.failed = true;
+          setRepository(_repo);
           setModels(resetArray);
           setModel(null);
           setProfiles(resetArray);
           setSlices(resetArray);
-          removeRepository(_repo);
           console.log(e);
         }
       }

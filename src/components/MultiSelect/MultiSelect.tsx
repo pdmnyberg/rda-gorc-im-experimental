@@ -5,6 +5,7 @@ export type SelectItem = {
   id: string;
   label: string;
   info: string;
+  failed?: boolean;
 };
 
 type SelectProps = {
@@ -21,6 +22,7 @@ type MultiSelectProps = SelectProps & {
 type SingleSelectProps = SelectProps & {
   onChange?: (id: string) => void;
   selection?: string;
+  disabled?: boolean;
 };
 
 export const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -89,6 +91,7 @@ export const SingleSelect: React.FC<SingleSelectProps> = ({
             {...item}
             selected={selection === item.id}
             onChange={handleSelect}
+            disabled={item.failed}
           />
         ))
       ) : (
@@ -103,6 +106,7 @@ type SelectButtonProps = SelectItem & {
   selected: boolean;
   onChange: (id: string) => void;
   type: "radio" | "checkbox";
+  disabled?: boolean;
 };
 
 const SelectButton: React.FC<SelectButtonProps> = ({
@@ -112,6 +116,7 @@ const SelectButton: React.FC<SelectButtonProps> = ({
   id,
   selected,
   type,
+  disabled,
   onChange,
 }) => {
   const elementId = React.useId();
@@ -124,6 +129,7 @@ const SelectButton: React.FC<SelectButtonProps> = ({
         value={id}
         onChange={() => onChange(id)}
         checked={selected}
+        disabled={disabled}
       />
       <label className="select-label" htmlFor={elementId}>
         <span className="text">{label}</span>
