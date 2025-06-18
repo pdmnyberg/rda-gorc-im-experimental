@@ -22,10 +22,13 @@ export type RepositoryRoot = RepositoryInfo & {
   thematicSlices: (DataOrRef<ThematicSlice> & Pick<ThematicSlice, "modelId">)[];
 };
 
+type RepositoryStatus = { status: "ok" } | { status: "error"; message: string };
+
 export interface RepositorySource {
   id: string;
   info: RepositoryInfo;
-  failed?: boolean;
+  status: RepositoryStatus;
+  isActive: boolean;
   getBaseModels(): Promise<BaseModel[]>;
   getProfiles(baseModel?: Pick<BaseModel, "id">): Promise<ModelProfile[]>;
   getThematicSlices(
@@ -38,17 +41,20 @@ export class StaticRepositorySource implements RepositorySource {
   private _models: BaseModel[];
   private _profiles: ModelProfile[];
   private _slices: ThematicSlice[];
+  private _status: RepositoryStatus;
 
   constructor(
     info: RepositoryInfo,
     models: BaseModel[],
     profiles: ModelProfile[],
-    slices: ThematicSlice[]
+    slices: ThematicSlice[],
+    status: RepositoryStatus = { status: "ok" }
   ) {
     this._info = info;
     this._models = models;
     this._profiles = profiles;
     this._slices = slices;
+    this._status = status;
   }
 
   get id() {
@@ -56,6 +62,12 @@ export class StaticRepositorySource implements RepositorySource {
   }
   get info() {
     return this._info;
+  }
+  get status() {
+    return this._status;
+  }
+  get isActive() {
+    return this._status.status === "ok";
   }
   async getBaseModels() {
     return [...this._models];
@@ -79,6 +91,7 @@ async function fetchData<T>(url: string): Promise<T> {
 export class HttpRepositorySource implements RepositorySource {
   private _root: Pick<RepositoryRoot, "id" | "name"> & { url: string };
   private _cache: Record<string, unknown> = {};
+  private _status: RepositoryStatus = { status: "ok" };
 
   constructor(info: Pick<RepositoryRoot, "id" | "name"> & { url: string }) {
     this._root = info;
@@ -90,50 +103,84 @@ export class HttpRepositorySource implements RepositorySource {
   get info() {
     return this._getData<RepositoryRoot>(this._root.url) || this._root;
   }
+  get status(): RepositoryStatus {
+    return this._status;
+  }
+  get isActive() {
+    return this._status.status === "ok";
+  }
   async getBaseModels() {
-    const info = await this._fetchData<RepositoryRoot>(
-      this._root.url,
-      parseRepository
-    );
-    return await Promise.all<BaseModel>(
-      info.baseModels.map((m) =>
-        "ref" in m
-          ? this._fetchData<BaseModel>(m.ref, parsePackage(parseModel))
-          : Promise.resolve(m)
-      )
-    );
+    try {
+      const info = await this._fetchData<RepositoryRoot>(
+        this._root.url,
+        parseRepository
+      );
+      return await Promise.all<BaseModel>(
+        info.baseModels.map((m) =>
+          "ref" in m
+            ? this._fetchData<BaseModel>(m.ref, parsePackage(parseModel))
+            : Promise.resolve(m)
+        )
+      );
+    } catch (e) {
+      this._setError(String(e));
+      throw e;
+    }
   }
   async getProfiles(baseModel?: Pick<BaseModel, "id">) {
-    const info = await this._fetchData<RepositoryRoot>(
-      this._root.url,
-      parseRepository
-    );
-    const selectedProfiles = baseModel
-      ? info.profiles.filter((p) => p.modelId == baseModel.id)
-      : info.profiles;
-    return await Promise.all<ModelProfile>(
-      selectedProfiles.map((m) =>
-        "ref" in m
-          ? this._fetchData<ModelProfile>(m.ref, parsePackage(parseModelLayer))
-          : Promise.resolve(m)
-      )
-    );
+    try {
+      const info = await this._fetchData<RepositoryRoot>(
+        this._root.url,
+        parseRepository
+      );
+      const selectedProfiles = baseModel
+        ? info.profiles.filter((p) => p.modelId == baseModel.id)
+        : info.profiles;
+      return await Promise.all<ModelProfile>(
+        selectedProfiles.map((m) =>
+          "ref" in m
+            ? this._fetchData<ModelProfile>(
+                m.ref,
+                parsePackage(parseModelLayer)
+              )
+            : Promise.resolve(m)
+        )
+      );
+    } catch (e) {
+      this._setError(String(e));
+      throw e;
+    }
   }
   async getThematicSlices(baseModel?: Pick<BaseModel, "id">) {
-    const info = await this._fetchData<RepositoryRoot>(
-      this._root.url,
-      parseRepository
-    );
-    const selectedSlices = baseModel
-      ? info.thematicSlices.filter((p) => p.modelId == baseModel.id)
-      : info.thematicSlices;
-    return await Promise.all<ThematicSlice>(
-      selectedSlices.map((m) =>
-        "ref" in m
-          ? this._fetchData<ThematicSlice>(m.ref, parsePackage(parseModelSlice))
-          : Promise.resolve(m)
-      )
-    );
+    try {
+      const info = await this._fetchData<RepositoryRoot>(
+        this._root.url,
+        parseRepository
+      );
+      const selectedSlices = baseModel
+        ? info.thematicSlices.filter((p) => p.modelId == baseModel.id)
+        : info.thematicSlices;
+      return await Promise.all<ThematicSlice>(
+        selectedSlices.map((m) =>
+          "ref" in m
+            ? this._fetchData<ThematicSlice>(
+                m.ref,
+                parsePackage(parseModelSlice)
+              )
+            : Promise.resolve(m)
+        )
+      );
+    } catch (e) {
+      this._setError(String(e));
+      throw e;
+    }
+  }
+
+  _setError(message: string) {
+    this._status = {
+      status: "error",
+      message: message,
+    };
   }
 
   _getData<T>(url: string): T | undefined {
