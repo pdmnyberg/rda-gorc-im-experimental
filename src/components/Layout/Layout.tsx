@@ -2,6 +2,7 @@ import React from "react";
 import "./Layout.css";
 import Header from "../Header/Header";
 import { Footer } from "../Footer/Footer";
+import { PanelWrapper } from "../PanelWrapper/PanelWrapper";
 
 type Panel = {
   component: React.ReactNode;
@@ -31,13 +32,13 @@ const Layout: React.FC<Props> = ({ children, panels = {} }) => {
         {Object.keys(panels).map((panelId) => {
           const panel = panels[panelId];
           return (
-            <aside
+            <PanelWrapper
               key={panelId}
-              className="panel"
-              data-visible={currentPanel === panelId}
+              position="right"
+              visible={currentPanel === panelId}
             >
-              <div className="panel-container">{panel.component}</div>
-            </aside>
+              {panel.component}
+            </PanelWrapper>
           );
         })}
       </main>

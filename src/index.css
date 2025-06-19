@@ -1,5 +1,6 @@
 :root {
   --color-bg-light: #f9f9f9;
+  --panel-size: 25rem;
 }
 
 * {
