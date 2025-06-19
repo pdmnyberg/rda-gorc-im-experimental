@@ -106,6 +106,7 @@ export function useModelSelectionManagers(
           const [_models] = await Promise.all([repo.getBaseModels()]);
           const _model = _models[0] || null;
           setRepository(repo);
+          setModels(_models);
           await setModelCallback(_model, repo, setRepositoryCallback);
         } catch (e) {
           console.warn(String(e));
@@ -122,6 +123,10 @@ export function useModelSelectionManagers(
     },
     [repository, model]
   );
+
+  React.useEffect(() => {
+    setRepositoryCallback(repositories[0]);
+  }, [repositories]);
 
   return [
     [repository, repositories, setRepositoryCallback],

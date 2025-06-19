@@ -40,7 +40,7 @@ const HomeBase = () => {
         },
       }}
     >
-      {selectedRepo?.status.status === "ok" ? (
+      {selectedRepo?.status.status === "ok" || !selectedRepo ? (
         <div className="tree-container">
           <Tree />
         </div>
