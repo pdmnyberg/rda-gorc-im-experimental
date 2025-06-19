@@ -32,11 +32,13 @@ const Layout: React.FC<Props> = ({ children, panels = {} }) => {
         {Object.keys(panels).map((panelId) => {
           const panel = panels[panelId];
           return (
-            <aside key={panelId}>
-              <PanelWrapper position="right" visible={currentPanel === panelId}>
-                {panel.component}
-              </PanelWrapper>
-            </aside>
+            <PanelWrapper
+              key={panelId}
+              position="right"
+              visible={currentPanel === panelId}
+            >
+              {panel.component}
+            </PanelWrapper>
           );
         })}
       </main>

@@ -12,6 +12,6 @@ export const PanelWrapper = ({ children, position, visible = true }: Props) => (
     className={`panel-wrapper panel-wrapper--${position}`}
     data-visible={visible}
   >
-    {children}
+    <div className="panel-content">{children}</div>
   </div>
 );

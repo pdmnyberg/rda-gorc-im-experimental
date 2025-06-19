@@ -10,34 +10,54 @@ type Props = {
 };
 
 export const SidePanel = ({ node, onClose }: Props) => {
-  if (!node) return null;
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [displayedNode, setDisplayedNode] = React.useState<typeof node>(null);
 
-  const data = node.data;
+  React.useEffect(() => {
+    if (node) {
+      setDisplayedNode(node);
+      setIsOpen(true);
+    }
+  }, [node]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setTimeout(() => {
+      setDisplayedNode(null);
+      onClose();
+    }, 100);
+  };
+
+  const data = displayedNode?.data;
 
   return (
-    <PanelWrapper position={"left"}>
+    <PanelWrapper position="left" visible={isOpen}>
       <button
         className="side-panel-close"
-        onClick={onClose}
+        onClick={handleClose}
         aria-label="Close panel"
       >
         ×
       </button>
-      {data ? (
-        <>
-          <h2>{data.shortName}</h2>
-          <h3>{data.name}</h3>
-          <p className="data-type"> {data.type}</p>
-          {data.description && <p>{data.description}</p>}
-          <p>
-            Consideration Level
-            <span className={`badge ${data.considerationLevel}`}>
-              {data.considerationLevel}
-            </span>
-          </p>
-        </>
+      {displayedNode ? (
+        data ? (
+          <>
+            <h2>{data.shortName}</h2>
+            <h3>{data.name}</h3>
+            <p className="data-type">{data.type}</p>
+            {data.description && <p>{data.description}</p>}
+            <p>
+              Consideration Level
+              <span className={`badge ${data.considerationLevel}`}>
+                {data.considerationLevel}
+              </span>
+            </p>
+          </>
+        ) : (
+          "No data available"
+        )
       ) : (
-        "No data available"
+        (null as React.ReactNode)
       )}
     </PanelWrapper>
   );
