@@ -14,7 +14,7 @@ export function GORCNodeView({ data }: Props) {
       data-consideration-level={data.considerationLevel}
     >
       <Handle
-        className="groc-node-handle"
+        className="gorc-node-handle"
         type="target"
         position={Position.Top}
         isConnectable={false}
@@ -31,7 +31,7 @@ export function GORCNodeView({ data }: Props) {
         <div className="gorc-node-text">{data.name}</div>
       </div>
       <Handle
-        className="groc-node-handle"
+        className="gorc-node-handle"
         type="source"
         position={Position.Top}
         id="a"
