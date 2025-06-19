@@ -84,7 +84,9 @@ export function useModelSelectionManagers(
           setSlices(_slices);
           setSelectedProfiles(resetArray);
           setSelectedSlices(resetArray);
-        } catch {
+        } catch (e) {
+          console.warn(String(e));
+          setRepository(repo);
           setProfiles(resetArray);
           setSlices(resetArray);
           setSelectedProfiles(resetArray);
@@ -106,7 +108,7 @@ export function useModelSelectionManagers(
           setRepository(repo);
           await setModelCallback(_model, repo, setRepositoryCallback);
         } catch (e) {
-          console.log(String(e));
+          console.warn(String(e));
           setRepository(repo);
           setModel(null);
           setModels(resetArray);

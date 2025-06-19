@@ -24,27 +24,37 @@ import { RepositoryRoot } from "./RepositorySource";
 
 type OtherNodes = Category | Subcategory | Attribute | Feature | KPI;
 
-class ModelReferenceError {
+export class ModelReferenceError {
   public readonly item: Package & ModelRelation;
   constructor(item: Package & ModelRelation) {
     this.item = item;
   }
   toString() {
-    return `Model reference '${this.item.modelId}', used by ${this.item.id}, could not be found.`;
+    return `Model reference '${this.item.modelId}', used by '${this.item.id}', could not be found.`;
   }
 }
 
-class ParentReferenceError {
+export class IdConflictError {
+  public readonly id: string;
+  constructor(id: string) {
+    this.id = id;
+  }
+  toString() {
+    return `Duplicate id found: '${this.id}'`;
+  }
+}
+
+export class ParentReferenceError {
   public readonly item: { id: NodeId; parentId: NodeId };
   constructor(item: { id: NodeId; parentId: NodeId }) {
     this.item = item;
   }
   toString() {
-    return `Parent reference '${this.item.parentId}', used by ${this.item.id}, could not be found.`;
+    return `Parent reference '${this.item.parentId}', used by '${this.item.id}', could not be found.`;
   }
 }
 
-class ParentTypeError {
+export class ParentTypeError {
   public readonly parentType: ModelNode["type"] | null;
   public readonly node: ModelNode;
   constructor(node: ModelNode, parentType: ModelNode["type"] | null) {
@@ -52,20 +62,21 @@ class ParentTypeError {
     this.parentType = parentType;
   }
   toString() {
-    return `Parent type '${this.parentType}', is not valid for ${this.node.id}`;
+    return `Parent type '${this.parentType}', is not valid for '${this.node.id}'`;
   }
 }
 
-type GroupedError =
+export type GroupedError =
   | unknown
   | string
   | Error
   | ModelReferenceError
   | ParentReferenceError
   | ParentTypeError
+  | IdConflictError
   | ErrorGroup;
 
-class ErrorGroup {
+export class ErrorGroup {
   readonly errors: GroupedError[];
   readonly context: string;
   constructor(errors: GroupedError[] | GroupedError, context: string) {
@@ -85,6 +96,13 @@ class ErrorGroup {
       return String(e);
     }
   }
+  static from(iterator: Iterable<GroupedError>, context: string) {
+    const errors = Array.from(iterator);
+    if (errors.length > 0) {
+      return new ErrorGroup(errors, context);
+    }
+    return undefined;
+  }
 }
 
 export function* validateRelations(
@@ -102,24 +120,18 @@ export function* validateRelations(
   for (const profile of profiles) {
     const model = modelMap[profile.modelId];
     if (!model) {
-      yield new ErrorGroup(
-        new ModelReferenceError(profile),
-        "ValidateRelations"
-      );
+      yield new ModelReferenceError(profile);
     }
   }
   for (const slice of slices) {
     const model = modelMap[slice.modelId];
     if (!model) {
-      yield new ErrorGroup(new ModelReferenceError(slice), "ValidateRelations");
+      yield new ModelReferenceError(slice);
     }
   }
 }
 
-export function* validateModel(
-  model: ModelDefinition,
-  context: string = "ValidateModel"
-) {
+export function* validateModel(model: ModelDefinition) {
   const nodeMap = model.nodes.reduce<{ [x: NodeId]: ModelNode }>(
     (acc, node) => {
       acc[node.id] = node;
@@ -150,11 +162,21 @@ export function* validateModel(
     const allowedParents = allowedParentsMap[node.type];
     if (!allowedParents.includes(parentType)) {
       if (parentType !== null) {
-        yield new ErrorGroup(new ParentTypeError(node, parentType), context);
+        yield new ParentTypeError(node, parentType);
       } else if ("parentId" in node) {
-        yield new ErrorGroup(new ParentReferenceError(node), context);
+        yield new ParentReferenceError(node);
       }
     }
+  }
+}
+
+export function* validateUniqueIds(items: { id: string }[]) {
+  const idSet = new Set<string>();
+  for (const item of items) {
+    if (idSet.has(item.id)) {
+      yield new IdConflictError(item.id);
+    }
+    idSet.add(item.id);
   }
 }
 
@@ -163,7 +185,7 @@ export function* validateProfile(
   profile: ModelProfile
 ) {
   const updatedModel = applyLayersAndSlices(model, [profile], []);
-  for (const error of validateModel(updatedModel, "ValidateProfile")) {
+  for (const error of validateModel(updatedModel)) {
     yield error;
   }
 }
@@ -173,7 +195,7 @@ export function* validateThematicSlice(
   slice: ThematicSlice
 ) {
   const updatedModel = applyLayersAndSlices(model, [], [slice]);
-  for (const error of validateModel(updatedModel, "ValidateThematicSlice")) {
+  for (const error of validateModel(updatedModel)) {
     yield error;
   }
 }

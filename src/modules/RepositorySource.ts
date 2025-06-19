@@ -5,6 +5,13 @@ import {
   parseModelSlice,
   parsePackage,
   parseRepository,
+  GroupedError,
+  ErrorGroup,
+  chain,
+  validateModel,
+  validateProfile,
+  validateThematicSlice,
+  validateUniqueIds,
 } from "./Validation";
 
 export type RepositoryInfo = {
@@ -115,28 +122,43 @@ export class HttpRepositorySource implements RepositorySource {
         this._root.url,
         parseRepository
       );
-      return await Promise.all<BaseModel>(
+      const models = await Promise.all<BaseModel>(
         info.baseModels.map((m) =>
           "ref" in m
             ? this._fetchData<BaseModel>(m.ref, parsePackage(parseModel))
             : Promise.resolve(m)
         )
       );
+      for (const model of models) {
+        const error = ErrorGroup.from(
+          chain<GroupedError>([
+            validateUniqueIds(model.nodes),
+            validateModel(model),
+          ]),
+          `validateModel: ${model.id}`
+        );
+
+        if (error) {
+          throw error;
+        }
+      }
+      return models;
     } catch (e) {
       this._setError(String(e));
       throw e;
     }
   }
-  async getProfiles(baseModel?: Pick<BaseModel, "id">) {
+  async getProfiles(modelRef?: Pick<BaseModel, "id">) {
     try {
       const info = await this._fetchData<RepositoryRoot>(
         this._root.url,
         parseRepository
       );
-      const selectedProfiles = baseModel
-        ? info.profiles.filter((p) => p.modelId == baseModel.id)
+      const selectedProfiles = modelRef
+        ? info.profiles.filter((p) => p.modelId == modelRef.id)
         : info.profiles;
-      return await Promise.all<ModelProfile>(
+
+      const profiles = await Promise.all<ModelProfile>(
         selectedProfiles.map((m) =>
           "ref" in m
             ? this._fetchData<ModelProfile>(
@@ -146,6 +168,23 @@ export class HttpRepositorySource implements RepositorySource {
             : Promise.resolve(m)
         )
       );
+      const modelMap = await this._getModelMap();
+      for (const profile of profiles) {
+        const model = modelMap[profile.modelId];
+
+        const error = ErrorGroup.from(
+          chain<GroupedError>([
+            validateUniqueIds(profile.nodes),
+            validateProfile(model, profile),
+          ]),
+          `validateProfile: ${profile.id}`
+        );
+
+        if (error) {
+          throw error;
+        }
+      }
+      return profiles;
     } catch (e) {
       this._setError(String(e));
       throw e;
@@ -160,7 +199,8 @@ export class HttpRepositorySource implements RepositorySource {
       const selectedSlices = baseModel
         ? info.thematicSlices.filter((p) => p.modelId == baseModel.id)
         : info.thematicSlices;
-      return await Promise.all<ThematicSlice>(
+      const modelMap = await this._getModelMap();
+      const slices = await Promise.all<ThematicSlice>(
         selectedSlices.map((m) =>
           "ref" in m
             ? this._fetchData<ThematicSlice>(
@@ -170,10 +210,31 @@ export class HttpRepositorySource implements RepositorySource {
             : Promise.resolve(m)
         )
       );
+      for (const slice of slices) {
+        const model = modelMap[slice.modelId];
+
+        const error = ErrorGroup.from(
+          chain<GroupedError>([validateThematicSlice(model, slice)]),
+          `validateThematicSlice: ${slice.id}`
+        );
+
+        if (error) {
+          throw error;
+        }
+      }
+      return slices;
     } catch (e) {
       this._setError(String(e));
       throw e;
     }
+  }
+
+  async _getModelMap() {
+    const baseModels = await this.getBaseModels();
+    return baseModels.reduce<Record<string, BaseModel>>((acc, m) => {
+      acc[m.id] = m;
+      return acc;
+    }, {});
   }
 
   _setError(message: string) {

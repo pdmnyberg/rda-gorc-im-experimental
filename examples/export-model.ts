@@ -1,7 +1,7 @@
 import {models, profiles, slices} from "./example-models";
 import {Package} from "../src/modules/LayeredModel";
 import {RepositoryRoot} from "../src/modules/RepositorySource";
-import {chain, validateRelations, validateModel, validateProfile, validateThematicSlice} from "../src/modules/Validation";
+import {ErrorGroup, chain, validateRelations, validateModel, validateProfile, validateThematicSlice, validateUniqueIds} from "../src/modules/Validation";
 import fs from "node:fs";
 
 function main() {
@@ -9,11 +9,15 @@ function main() {
     const rootPath = `public/${repoId}`;
 
     const errors = [
-        ...Array.from(validateRelations(Object.values(models), Object.values(profiles), Object.values(slices))),
-        ...Array.from(chain(Object.values(models).map(m => validateModel(m)))),
-        ...Array.from(chain(Object.values(models).map(m => chain(Object.values(profiles).filter(p => p.modelId === m.id).map(p => validateProfile(m, p)))))),
-        ...Array.from(chain(Object.values(models).map(m => chain(Object.values(slices).filter(p => p.modelId === m.id).map(p => validateThematicSlice(m, p)))))),
-    ];
+        ErrorGroup.from(validateRelations(Object.values(models), Object.values(profiles), Object.values(slices)), "validateModel"),
+        ErrorGroup.from(chain(Object.values(models).map(m => validateUniqueIds(m.nodes))), "validateNodeIds"),
+        ErrorGroup.from(chain(Object.values(models).map(m => validateModel(m))), "validateModels"),
+        ErrorGroup.from(chain(Object.values(models).map(m => chain(Object.values(profiles).filter(p => p.modelId === m.id).map(p => validateProfile(m, p))))), "validateProfiles"),
+        ErrorGroup.from(chain(Object.values(models).map(m => chain(Object.values(slices).filter(p => p.modelId === m.id).map(p => validateThematicSlice(m, p))))), "validateSlices"),
+        ErrorGroup.from(validateUniqueIds(Object.values(models)), "validateModelIds"),
+        ErrorGroup.from(validateUniqueIds(Object.values(profiles)), "validateProfileIds"),
+        ErrorGroup.from(validateUniqueIds(Object.values(slices)), "validateSliceIds"),
+    ].filter(e => !!e);
 
     if (errors.length > 0) {
         for (const error of errors) {
