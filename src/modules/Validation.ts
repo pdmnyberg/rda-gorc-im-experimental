@@ -131,7 +131,7 @@ export function* validateRelations(
   }
 }
 
-export function* validateModel(model: ModelDefinition) {
+export function* validateModelHierarchy(model: ModelDefinition) {
   const nodeMap = model.nodes.reduce<{ [x: NodeId]: ModelNode }>(
     (acc, node) => {
       acc[node.id] = node;
@@ -154,6 +154,7 @@ export function* validateModel(model: ModelDefinition) {
       "subcategory",
       "attribute",
       "feature",
+      "kpi",
     ],
   };
   for (const node of model.nodes) {
@@ -185,7 +186,7 @@ export function* validateProfile(
   profile: ModelProfile
 ) {
   const updatedModel = applyLayersAndSlices(model, [profile], []);
-  for (const error of validateModel(updatedModel)) {
+  for (const error of validateModelHierarchy(updatedModel)) {
     yield error;
   }
 }
@@ -195,7 +196,7 @@ export function* validateThematicSlice(
   slice: ThematicSlice
 ) {
   const updatedModel = applyLayersAndSlices(model, [], [slice]);
-  for (const error of validateModel(updatedModel)) {
+  for (const error of validateModelHierarchy(updatedModel)) {
     yield error;
   }
 }

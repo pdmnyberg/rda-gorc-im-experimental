@@ -1,7 +1,7 @@
 import {models, profiles, slices} from "./example-models";
 import {Package} from "../src/modules/LayeredModel";
 import {RepositoryRoot} from "../src/modules/RepositorySource";
-import {ErrorGroup, chain, validateRelations, validateModel, validateProfile, validateThematicSlice, validateUniqueIds} from "../src/modules/Validation";
+import {ErrorGroup, chain, validateRelations, validateModelHierarchy, validateProfile, validateThematicSlice, validateUniqueIds} from "../src/modules/Validation";
 import fs from "node:fs";
 
 function main() {
@@ -11,7 +11,7 @@ function main() {
     const errors = [
         ErrorGroup.from(validateRelations(Object.values(models), Object.values(profiles), Object.values(slices)), "validateModel"),
         ErrorGroup.from(chain(Object.values(models).map(m => validateUniqueIds(m.nodes))), "validateNodeIds"),
-        ErrorGroup.from(chain(Object.values(models).map(m => validateModel(m))), "validateModels"),
+        ErrorGroup.from(chain(Object.values(models).map(m => validateModelHierarchy(m))), "validateModels"),
         ErrorGroup.from(chain(Object.values(models).map(m => chain(Object.values(profiles).filter(p => p.modelId === m.id).map(p => validateProfile(m, p))))), "validateProfiles"),
         ErrorGroup.from(chain(Object.values(models).map(m => chain(Object.values(slices).filter(p => p.modelId === m.id).map(p => validateThematicSlice(m, p))))), "validateSlices"),
         ErrorGroup.from(validateUniqueIds(Object.values(models)), "validateModelIds"),
