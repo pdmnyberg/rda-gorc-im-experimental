@@ -51,7 +51,7 @@ export function useModelSelectionManagers(
 ] {
   const repositories = repositoryManager.getRepositories();
   const [repository, setRepository] = React.useState<RepositorySource | null>(
-    repositories[0] || null
+    null
   );
   const [model, setModel] = React.useState<BaseModel | null>(null);
   const [models, setModels] = React.useState<BaseModel[]>([]);
@@ -63,84 +63,74 @@ export function useModelSelectionManagers(
     []
   );
   const [slices, setSlices] = React.useState<ThematicSlice[]>([]);
-  const removeRepository = repositoryManager.removeRepository;
+  const actionRef = React.useRef<unknown>(null);
 
-  React.useEffect(() => {
-    if (repository !== null) {
-      const _repo = repository;
-      async function fetchData() {
+  const setModelCallback = React.useCallback(
+    async (
+      m: BaseModel,
+      repo: RepositorySource | null = repository,
+      scope: unknown = undefined
+    ) => {
+      if (!actionRef.current || actionRef.current === scope) {
+        actionRef.current = setModelCallback;
         try {
-          const [_models] = await Promise.all([_repo.getBaseModels()]);
-          setModels(_models);
-          setModel(_models[0] || null);
-          setProfiles(resetArray);
-          setSlices(resetArray);
-          setSelectedProfiles(resetArray);
-          setSelectedSlices(resetArray);
-        } catch (e) {
-          _repo.failed = true;
-          setRepository(_repo);
-          setModels(resetArray);
-          setModel(null);
-          setProfiles(resetArray);
-          setSlices(resetArray);
-          console.log(e);
-        }
-      }
-      fetchData();
-    }
-  }, [
-    repository,
-    removeRepository,
-    setRepository,
-    setModel,
-    setModels,
-    setProfiles,
-    setSlices,
-    setSelectedProfiles,
-    setSelectedSlices,
-  ]);
-
-  React.useEffect(() => {
-    if (repository && model) {
-      const _repo = repository;
-      const _model = model;
-      async function fetchData() {
-        try {
+          if (!m || !repo) throw "Missing model or repo";
+          setModel(m);
           const [_profiles, _slices] = await Promise.all([
-            _repo.getProfiles(_model),
-            _repo.getThematicSlices(_model),
+            repo.getProfiles(m),
+            repo.getThematicSlices(m),
           ]);
           setProfiles(_profiles);
           setSlices(_slices);
           setSelectedProfiles(resetArray);
           setSelectedSlices(resetArray);
         } catch (e) {
-          _repo.failed = true;
-          setRepository(_repo);
-          setModels(resetArray);
-          setModel(null);
+          console.warn(String(e));
+          setRepository(repo);
           setProfiles(resetArray);
           setSlices(resetArray);
-          console.log(e);
+          setSelectedProfiles(resetArray);
+          setSelectedSlices(resetArray);
         }
+        actionRef.current = null;
       }
-      fetchData();
-    }
-  }, [
-    repository,
-    model,
-    removeRepository,
-    setRepository,
-    setProfiles,
-    setSlices,
-    setSelectedProfiles,
-    setSelectedSlices,
-  ]);
+    },
+    [repository, model]
+  );
+
+  const setRepositoryCallback = React.useCallback(
+    async (repo: RepositorySource) => {
+      if (repo !== repository && !actionRef.current) {
+        actionRef.current = setRepositoryCallback;
+        try {
+          const [_models] = await Promise.all([repo.getBaseModels()]);
+          const _model = _models[0] || null;
+          setRepository(repo);
+          setModels(_models);
+          await setModelCallback(_model, repo, setRepositoryCallback);
+        } catch (e) {
+          console.warn(String(e));
+          setRepository(repo);
+          setModel(null);
+          setModels(resetArray);
+          setProfiles(resetArray);
+          setSlices(resetArray);
+          setSelectedProfiles(resetArray);
+          setSelectedSlices(resetArray);
+        }
+        actionRef.current = null;
+      }
+    },
+    [repository, model]
+  );
+
+  React.useEffect(() => {
+    setRepositoryCallback(repositories[0]);
+  }, [repositories]);
 
   return [
-    [repository, repositories, setRepository],
-    [model, models, setModel],
+    [repository, repositories, setRepositoryCallback],
+    [model, models, setModelCallback],
     [selectedProfiles, profiles, setSelectedProfiles],
     [selectedSlices, slices, setSelectedSlices],
   ];

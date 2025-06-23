@@ -5,7 +5,7 @@ export type SelectItem = {
   id: string;
   label: string;
   info: string;
-  failed?: boolean;
+  disabled?: boolean;
 };
 
 type SelectProps = {
@@ -91,7 +91,7 @@ export const SingleSelect: React.FC<SingleSelectProps> = ({
             {...item}
             selected={selection === item.id}
             onChange={handleSelect}
-            disabled={item.failed}
+            disabled={item.disabled}
           />
         ))
       ) : (

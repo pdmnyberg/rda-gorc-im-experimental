@@ -32,7 +32,7 @@ export type ModelRelation = {
   modelId: PackageId;
 };
 
-type Nothing = { type: "nothing"; id: NodeId };
+export type Nothing = { type: "nothing"; id: NodeId };
 
 type SemanticVersionString = string;
 

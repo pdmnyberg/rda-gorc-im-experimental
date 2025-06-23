@@ -1,11 +1,31 @@
 import {models, profiles, slices} from "./example-models";
 import {Package} from "../src/modules/LayeredModel";
 import {RepositoryRoot} from "../src/modules/RepositorySource";
+import {ErrorGroup, chain, validateRelations, validateModelHierarchy, validateProfile, validateThematicSlice, validateUniqueIds} from "../src/modules/Validation";
 import fs from "node:fs";
 
 function main() {
     const repoId = "example-repo";
     const rootPath = `public/${repoId}`;
+
+    const errors = [
+        ErrorGroup.from(validateRelations(Object.values(models), Object.values(profiles), Object.values(slices)), "validateModel"),
+        ErrorGroup.from(chain(Object.values(models).map(m => validateUniqueIds(m.nodes))), "validateNodeIds"),
+        ErrorGroup.from(chain(Object.values(models).map(m => validateModelHierarchy(m))), "validateModels"),
+        ErrorGroup.from(chain(Object.values(models).map(m => chain(Object.values(profiles).filter(p => p.modelId === m.id).map(p => validateProfile(m, p))))), "validateProfiles"),
+        ErrorGroup.from(chain(Object.values(models).map(m => chain(Object.values(slices).filter(p => p.modelId === m.id).map(p => validateThematicSlice(m, p))))), "validateSlices"),
+        ErrorGroup.from(validateUniqueIds(Object.values(models)), "validateModelIds"),
+        ErrorGroup.from(validateUniqueIds(Object.values(profiles)), "validateProfileIds"),
+        ErrorGroup.from(validateUniqueIds(Object.values(slices)), "validateSliceIds"),
+    ].filter(e => !!e);
+
+    if (errors.length > 0) {
+        for (const error of errors) {
+            console.log(error.toString())
+        }
+        return;
+    }
+
     exportPackages(`${rootPath}/models`, models);
     exportPackages(`${rootPath}/profiles`, profiles);
     exportPackages(`${rootPath}/slices`, slices);

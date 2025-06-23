@@ -22,12 +22,12 @@ function packageToSelectItem(p: Package): SelectItem {
   };
 }
 
-function repositoryToSelection(repo: RepositorySource) {
+function repositoryToSelection(repo: RepositorySource): SelectItem {
   return {
     id: repo.id,
     label: repo.info.name,
     info: repo.info.url || "Local source",
-    failed: repo.failed,
+    disabled: !repo.isActive,
   };
 }
 
@@ -90,7 +90,7 @@ export const SettingsPanel = () => {
         onChange={setRepositoryId}
         variant="wide-info"
         noItemsText="No repositories available"
-        disabled={repository?.failed}
+        disabled={repository?.isActive}
       />
       <h2>Select model</h2>
       <SingleSelect

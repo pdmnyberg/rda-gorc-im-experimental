@@ -40,12 +40,14 @@ const HomeBase = () => {
         },
       }}
     >
-      {selectedRepo?.failed !== true ? (
+      {selectedRepo?.status.status === "ok" || !selectedRepo ? (
         <div className="tree-container">
           <Tree />
         </div>
       ) : (
-        <ErrorMessage />
+        <ErrorMessage
+          message={selectedRepo?.status.message || "No repository selected"}
+        />
       )}
     </Layout>
   );
