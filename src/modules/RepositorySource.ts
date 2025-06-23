@@ -8,7 +8,7 @@ import {
   GroupedError,
   ErrorGroup,
   chain,
-  validateModel,
+  validateModelHierarchy,
   validateProfile,
   validateThematicSlice,
   validateUniqueIds,
@@ -25,7 +25,7 @@ type DataOrRef<T> = T | { ref: string };
 
 export type RepositoryRoot = RepositoryInfo & {
   baseModels: DataOrRef<BaseModel>[];
-  profiles: (DataOrRef<ModelProfile> & Pick<ThematicSlice, "modelId">)[];
+  profiles: (DataOrRef<ModelProfile> & Pick<ModelProfile, "modelId">)[];
   thematicSlices: (DataOrRef<ThematicSlice> & Pick<ThematicSlice, "modelId">)[];
 };
 
@@ -133,7 +133,7 @@ export class HttpRepositorySource implements RepositorySource {
         const error = ErrorGroup.from(
           chain<GroupedError>([
             validateUniqueIds(model.nodes),
-            validateModel(model),
+            validateModelHierarchy(model),
           ]),
           `validateModel: ${model.id}`
         );

@@ -24,42 +24,50 @@ import { RepositoryRoot } from "./RepositorySource";
 
 type OtherNodes = Category | Subcategory | Attribute | Feature | KPI;
 
-export class ModelReferenceError {
+export class ModelReferenceError extends Error {
   public readonly item: Package & ModelRelation;
   constructor(item: Package & ModelRelation) {
+    super();
     this.item = item;
+    this.message = this.toString();
   }
   toString() {
     return `Model reference '${this.item.modelId}', used by '${this.item.id}', could not be found.`;
   }
 }
 
-export class IdConflictError {
+export class IdConflictError extends Error {
   public readonly id: string;
   constructor(id: string) {
+    super();
     this.id = id;
+    super.message = this.toString();
   }
   toString() {
     return `Duplicate id found: '${this.id}'`;
   }
 }
 
-export class ParentReferenceError {
+export class ParentReferenceError extends Error {
   public readonly item: { id: NodeId; parentId: NodeId };
   constructor(item: { id: NodeId; parentId: NodeId }) {
+    super();
     this.item = item;
+    this.message = this.toString();
   }
   toString() {
     return `Parent reference '${this.item.parentId}', used by '${this.item.id}', could not be found.`;
   }
 }
 
-export class ParentTypeError {
+export class ParentTypeError extends Error {
   public readonly parentType: ModelNode["type"] | null;
   public readonly node: ModelNode;
   constructor(node: ModelNode, parentType: ModelNode["type"] | null) {
+    super();
     this.node = node;
     this.parentType = parentType;
+    this.message = this.toString();
   }
   toString() {
     return `Parent type '${this.parentType}', is not valid for '${this.node.id}'`;
@@ -76,12 +84,14 @@ export type GroupedError =
   | IdConflictError
   | ErrorGroup;
 
-export class ErrorGroup {
+export class ErrorGroup extends Error {
   readonly errors: GroupedError[];
   readonly context: string;
   constructor(errors: GroupedError[] | GroupedError, context: string) {
+    super();
     this.errors = Array.isArray(errors) ? errors : [errors];
     this.context = context;
+    this.message = this.toString();
   }
   toString(level: number = 0) {
     const depth = " ".repeat(level);
@@ -201,16 +211,6 @@ export function* validateThematicSlice(
   }
 }
 
-export function requireNoErrors<T>(
-  errorIterator: Iterable<T>,
-  context: string
-) {
-  const allErrors = Array.from(errorIterator);
-  if (allErrors.length > 0) {
-    throw new Error(`${context}`);
-  }
-}
-
 export function parsePackage<T>(
   parser: (d: unknown) => T
 ): (d: unknown) => Package & T {
@@ -250,7 +250,7 @@ export function parseRefOr<T extends object>(
   };
 }
 
-export function parseRelatedRefOr<T extends object>(
+export function parseRelatedRefOr<T extends ModelRelation>(
   parser: (d: unknown) => T
 ): (d: unknown) => T | (ModelRelation & { ref: string }) {
   return (data: unknown) => {
@@ -321,7 +321,7 @@ export function parseModelSlice(data: unknown): ModelRelation & ModelSlice {
   throw new Error("Data is not a ModelSlice");
 }
 
-export function parseNodeOrNothing(data: unknown): ModelNode | Nothing {
+function parseNodeOrNothing(data: unknown): ModelNode | Nothing {
   if (typeof data === "object" && data !== null && "type" in data) {
     if (data.type === "nothing") {
       const parsers: Parsers<Nothing> = {
@@ -405,18 +405,20 @@ function parseNodeRef(data: unknown): { nodeId: NodeId } {
   throw new Error("Data is not a ModelNode");
 }
 
-function parseType<T>(...types: string[]): (v: unknown) => T {
+export function parseType<T>(...types: string[]): (v: unknown) => T {
   return (value: unknown) => {
     const checkType = typeof value;
     if (types.includes(checkType)) {
       return value as T;
     } else {
-      throw new Error(`Type ${checkType} is not compatible with ${types}`);
+      throw new Error(`Type '${checkType}' is not compatible with '${types}'`);
     }
   };
 }
 
-function parseArray<T>(parser: (value: unknown) => T): (v: unknown) => T[] {
+export function parseArray<T>(
+  parser: (value: unknown) => T
+): (v: unknown) => T[] {
   return (value: unknown) => {
     if (Array.isArray(value)) {
       return value.map(parser);
@@ -426,7 +428,7 @@ function parseArray<T>(parser: (value: unknown) => T): (v: unknown) => T[] {
   };
 }
 
-function parseOptional<T>(
+export function parseOptional<T>(
   parser: (value: unknown) => T
 ): (v: unknown) => T | undefined {
   return (value: unknown) => {
@@ -438,14 +440,15 @@ function parseOptional<T>(
   };
 }
 
-function parseEnumeration<T>(enumeration: T[]): (v: unknown) => T {
+export function parseEnumeration<T>(enumeration: T[]): (v: unknown) => T {
   return (value: unknown) => {
     const maybeValue = value as T;
+    console.log("derp", value);
     if (enumeration.includes(maybeValue)) {
       return maybeValue;
     } else {
       throw new Error(
-        `Value ${value} is not in ${JSON.stringify(enumeration)}`
+        `Value '${maybeValue}' is not in ${JSON.stringify(enumeration)}`
       );
     }
   };
@@ -455,7 +458,7 @@ type Parsers<T extends object> = {
   [P in keyof T]: (v: unknown) => Exclude<T[P], null>;
 };
 
-function parseObject<T extends object>(
+export function parseObject<T extends object>(
   obj: object,
   parsers: Parsers<T>,
   context: string = "parseObject"
@@ -466,7 +469,10 @@ function parseObject<T extends object>(
   for (const key of Object.keys(parsers) as Array<keyof T>) {
     try {
       const parser = parsers[key];
-      parsed[key] = parser(maybeObject[key]);
+      const result = parser(maybeObject[key]);
+      if (result !== undefined) {
+        parsed[key] = result;
+      }
     } catch (e) {
       errors.push(new ErrorGroup(e, String(key)));
     }
