@@ -6,3 +6,8 @@
 * {
   box-sizing: border-box;
 }
+
+body {
+  font-family:
+    "Inter", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+}
