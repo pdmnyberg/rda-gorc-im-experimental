@@ -43,7 +43,8 @@
   mask-repeat: no-repeat;
   background-color: white;
 }
-.gorc-node-shape::before, .gorc-node-shape::after {
+.gorc-node-shape::before,
+.gorc-node-shape::after {
   content: "";
   display: block;
   position: absolute;
@@ -51,7 +52,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  transition: top var(--gorc-node-animation-time), left var(--gorc-node-animation-time), width var(--gorc-node-animation-time), height var(--gorc-node-animation-time);
+  transition:
+    top var(--gorc-node-animation-time),
+    left var(--gorc-node-animation-time),
+    width var(--gorc-node-animation-time),
+    height var(--gorc-node-animation-time);
 }
 .gorc-node-shape::after {
   mask-image: var(--gorc-shape), var(--gorc-shape);
@@ -122,7 +127,8 @@
   height: 100%;
 }
 
-.gorc-node-icon::after, .gorc-node-icon::before {
+.gorc-node-icon::after,
+.gorc-node-icon::before {
   content: "";
   position: absolute;
   top: 0;

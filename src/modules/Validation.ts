@@ -443,7 +443,6 @@ export function parseOptional<T>(
 export function parseEnumeration<T>(enumeration: T[]): (v: unknown) => T {
   return (value: unknown) => {
     const maybeValue = value as T;
-    console.log("derp", value);
     if (enumeration.includes(maybeValue)) {
       return maybeValue;
     } else {
