@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { HashRouter, BrowserRouter, Routes, Route } from "react-router";
 import React from "react";
 import "./index.css";
 import Home from "./pages/Home/Home.tsx";
@@ -27,14 +27,19 @@ export const App = () => {
     });
   }, [setConfig, loadConfig]);
 
+  const routes = (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="documentation" element={<Documentation />} />
+    </Routes>
+  )
   return config ? (
     <ConfigContext.Provider value={config}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="documentation" element={<Documentation />} />
-        </Routes>
-      </BrowserRouter>
+      {config.useHashRouter ? (
+        <HashRouter>{routes}</HashRouter>
+      ) : (
+        <BrowserRouter>{routes}</BrowserRouter>
+      )}
     </ConfigContext.Provider>
   ) : (
     <div className="loading-config">Loading Config</div>
