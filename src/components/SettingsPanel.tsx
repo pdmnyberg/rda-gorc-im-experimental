@@ -12,8 +12,6 @@ import {
   SliceSelectionContext,
 } from "../contexts/SelectionContexts";
 import { RepositorySource } from "../modules/RepositorySource";
-import { PanelWrapper } from "./PanelWrapper/PanelWrapper";
-
 function packageToSelectItem(p: Package): SelectItem {
   return {
     id: p.id,

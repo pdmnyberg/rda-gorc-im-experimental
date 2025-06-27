@@ -2,8 +2,8 @@ import React from "react";
 import { Node, Edge, XYPosition, MarkerType } from "@xyflow/react";
 import { GORCNode, QuestionNode, NodeId } from "../modules/GORCNodes";
 
-export interface TreeManager {
-  getNodes(): Node[];
+export interface TreeManager<T extends Record<string, unknown> = GORCNode> {
+  getNodes(): Node<T>[];
   getEdges(): Edge[];
 }
 
@@ -240,13 +240,13 @@ type Layout = { [x: string]: XYPosition };
 export function createTreeManagerFromModelNodes(
   nodes: (GORCNode | QuestionNode)[],
   layout: Layout = {}
-): TreeManager {
+): TreeManager<GORCNode> {
   const useNodes = React.useMemo(
     () => nodes.filter((n): n is GORCNode => n.type !== "question"),
     [nodes]
   );
   const treeNodes = React.useMemo(
-    () => useNodes.map<Node>((n) => nodeFromGORCNode(n, layout)),
+    () => useNodes.map<Node<GORCNode>>((n) => nodeFromGORCNode(n, layout)),
     [useNodes]
   );
   const treeEdges = React.useMemo(
@@ -257,7 +257,7 @@ export function createTreeManagerFromModelNodes(
     [useNodes]
   );
 
-  return React.useMemo(
+  return React.useMemo<TreeManager<GORCNode>>(
     () => ({
       getNodes: () => treeNodes,
       getEdges: () => treeEdges,
@@ -266,7 +266,7 @@ export function createTreeManagerFromModelNodes(
   );
 }
 
-function nodeFromGORCNode(node: GORCNode, layout: Layout): Node {
+function nodeFromGORCNode(node: GORCNode, layout: Layout): Node<GORCNode> {
   const position = layout[node.id] || {
     x: Math.random() * 300,
     y: Math.random() * 300,
