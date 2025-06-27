@@ -6,7 +6,8 @@ import fs from "node:fs";
 
 function main() {
     const repoId = "example-repo";
-    const rootPath = `public/repos/${repoId}`;
+    const urlRootPath = `repos/${repoId}`;
+    const rootPath = `public/${urlRootPath}`;
 
     const errors = [
         ErrorGroup.from(validateRelations(Object.values(models), Object.values(profiles), Object.values(slices)), "validateModel"),
@@ -33,10 +34,10 @@ function main() {
         id: repoId,
         name: "Example Repo",
         description: "This is an example repo",
-        url: `${repoId}/root.json`,
-        baseModels: Object.values(models).map(m => ({ref: `${repoId}/models/${m.id}.json`})),
-        profiles: Object.values(profiles).map(p => ({ref: `${repoId}/profiles/${p.id}.json`, modelId: p.modelId})),
-        thematicSlices: Object.values(slices).map(s => ({ref: `${repoId}/slices/${s.id}.json`, modelId: s.modelId})),
+        url: `${urlRootPath}/root.json`,
+        baseModels: Object.values(models).map(m => ({ref: `${urlRootPath}/models/${m.id}.json`})),
+        profiles: Object.values(profiles).map(p => ({ref: `${urlRootPath}/profiles/${p.id}.json`, modelId: p.modelId})),
+        thematicSlices: Object.values(slices).map(s => ({ref: `${urlRootPath}/slices/${s.id}.json`, modelId: s.modelId})),
     }
     fs.mkdirSync(rootPath, {recursive: true});
     fs.writeFileSync(`${rootPath}/root.json`, JSON.stringify(repoRoot));
