@@ -1,0 +1,15 @@
+{
+  "title": "Development Demo for GORC IM",
+  "repositories": [
+    {
+      "url": "repos/example-repo/root.json",
+      "id": "example-repo",
+      "name": "Example Repo"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pdmnyberg/gorc-example-repo/refs/heads/main/gorc-and-oss/root.json",
+      "id": "gorc-and-oss",
+      "name": "GORC and OSS"
+    }
+  ]
+}

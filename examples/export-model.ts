@@ -6,7 +6,7 @@ import fs from "node:fs";
 
 function main() {
     const repoId = "example-repo";
-    const rootPath = `public/${repoId}`;
+    const rootPath = `public/repos/${repoId}`;
 
     const errors = [
         ErrorGroup.from(validateRelations(Object.values(models), Object.values(profiles), Object.values(slices)), "validateModel"),
