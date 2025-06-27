@@ -1,5 +1,6 @@
 {
   "title": "Development Demo for GORC IM",
+  "useHashRouter": true,
   "repositories": [
     {
       "url": "repos/example-repo/root.json",
