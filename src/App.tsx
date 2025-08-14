@@ -8,6 +8,10 @@ import {
   ConfigContext,
   AppConfig,
 } from "./contexts/ConfigContext.ts";
+import {
+  createLocalStorageSettings,
+  SettingsContext,
+} from "./contexts/SettingsContext.ts";
 
 async function loadConfig(url: string): Promise<AppConfig | null> {
   try {
@@ -26,20 +30,23 @@ export const App = () => {
       setConfig(loadedConfig);
     });
   }, [setConfig, loadConfig]);
+  const settings = createLocalStorageSettings("rda-user-settings");
 
   const routes = (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="documentation" element={<Documentation />} />
     </Routes>
-  )
+  );
   return config ? (
     <ConfigContext.Provider value={config}>
-      {config.useHashRouter ? (
-        <HashRouter>{routes}</HashRouter>
-      ) : (
-        <BrowserRouter>{routes}</BrowserRouter>
-      )}
+      <SettingsContext.Provider value={settings}>
+        {config.useHashRouter ? (
+          <HashRouter>{routes}</HashRouter>
+        ) : (
+          <BrowserRouter>{routes}</BrowserRouter>
+        )}
+      </SettingsContext.Provider>
     </ConfigContext.Provider>
   ) : (
     <div className="loading-config">Loading Config</div>

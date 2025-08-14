@@ -6,6 +6,7 @@ import {
   ThematicSlice,
 } from "../modules/LayeredModel";
 import { RepositoryManager } from "./RepositoryContext";
+import { useSettings, SettingsData } from "../contexts/SettingsContext";
 
 type SelectionManager<T, S = T, D = null> = [
   S | D,
@@ -30,15 +31,72 @@ export const SliceSelectionContext = React.createContext<
   MultiSelectionManager<ThematicSlice>
 >([[], [], () => {}]);
 
-function resetArray<T>(prev: T[]) {
-  return prev.length === 0 ? prev : [];
-}
-
 export function useSelected<T, S, D>(
   context: React.Context<SelectionManager<T, S, D>>
 ) {
   const [selected, ..._rest] = React.useContext(context);
   return selected;
+}
+
+type SelectionState = {
+  repositories: RepositorySource[];
+  models: BaseModel[];
+  profiles: ModelProfile[];
+  slices: ThematicSlice[];
+  repository: RepositorySource | null;
+  model: BaseModel | null;
+  selectedProfiles: ModelProfile[];
+  selectedSlices: ThematicSlice[];
+};
+
+async function fetchSelectionState(
+  repositories: RepositorySource[],
+  { repositoryId, modelId, profileIds, sliceIds }: SettingsData
+): Promise<SelectionState> {
+  const nextRepository =
+    repositories.filter((r) => r.id === repositoryId)[0] || null;
+  try {
+    if (nextRepository) {
+      const [nextModels, nextProfiles, nextSlices] = await Promise.all([
+        nextRepository.getBaseModels(),
+        modelId
+          ? nextRepository.getProfiles({ id: modelId })
+          : Promise.resolve([]),
+        modelId
+          ? nextRepository.getThematicSlices({ id: modelId })
+          : Promise.resolve([]),
+      ]);
+      const nextModel = nextModels.filter((m) => m.id === modelId)[0];
+      const nextSelectedProfiles = nextProfiles.filter((p) =>
+        profileIds.has(p.id)
+      );
+      const nextSelectedSlices = nextSlices.filter((p) => sliceIds.has(p.id));
+      return {
+        repositories: repositories,
+        models: nextModels,
+        profiles: nextProfiles,
+        slices: nextSlices,
+        repository: nextRepository || null,
+        model: nextModel || null,
+        selectedProfiles: nextSelectedProfiles,
+        selectedSlices: nextSelectedSlices,
+      };
+    }
+  } catch (e) {
+    console.warn("Failed to get next selection state.");
+    console.warn(e);
+  }
+
+  return {
+    repositories: repositories,
+    models: [],
+    profiles: [],
+    slices: [],
+    repository: nextRepository || null,
+    model: null,
+    selectedProfiles: [],
+    selectedSlices: [],
+  };
 }
 
 export function useModelSelectionManagers(
@@ -49,89 +107,71 @@ export function useModelSelectionManagers(
   MultiSelectionManager<ModelProfile>,
   MultiSelectionManager<ThematicSlice>,
 ] {
-  const repositories = repositoryManager.getRepositories();
-  const [repository, setRepository] = React.useState<RepositorySource | null>(
-    null
-  );
-  const [model, setModel] = React.useState<BaseModel | null>(null);
-  const [models, setModels] = React.useState<BaseModel[]>([]);
-  const [selectedProfiles, setSelectedProfiles] = React.useState<
-    ModelProfile[]
-  >([]);
-  const [profiles, setProfiles] = React.useState<ModelProfile[]>([]);
-  const [selectedSlices, setSelectedSlices] = React.useState<ThematicSlice[]>(
-    []
-  );
-  const [slices, setSlices] = React.useState<ThematicSlice[]>([]);
+  const { repositoryId, modelId, profileIds, sliceIds, update } = useSettings();
   const actionRef = React.useRef<unknown>(null);
 
-  const setModelCallback = React.useCallback(
-    async (
-      m: BaseModel,
-      repo: RepositorySource | null = repository,
-      scope: unknown = undefined
-    ) => {
-      if (!actionRef.current || actionRef.current === scope) {
-        actionRef.current = setModelCallback;
-        try {
-          if (!m || !repo) throw "Missing model or repo";
-          setModel(m);
-          const [_profiles, _slices] = await Promise.all([
-            repo.getProfiles(m),
-            repo.getThematicSlices(m),
-          ]);
-          setProfiles(_profiles);
-          setSlices(_slices);
-          setSelectedProfiles(resetArray);
-          setSelectedSlices(resetArray);
-        } catch (e) {
-          console.warn(String(e));
-          setRepository(repo);
-          setProfiles(resetArray);
-          setSlices(resetArray);
-          setSelectedProfiles(resetArray);
-          setSelectedSlices(resetArray);
-        }
-        actionRef.current = null;
-      }
-    },
-    [repository, model]
-  );
-
-  const setRepositoryCallback = React.useCallback(
-    async (repo: RepositorySource) => {
-      if (repo !== repository && !actionRef.current) {
-        actionRef.current = setRepositoryCallback;
-        try {
-          const [_models] = await Promise.all([repo.getBaseModels()]);
-          const _model = _models[0] || null;
-          setRepository(repo);
-          setModels(_models);
-          await setModelCallback(_model, repo, setRepositoryCallback);
-        } catch (e) {
-          console.warn(String(e));
-          setRepository(repo);
-          setModel(null);
-          setModels(resetArray);
-          setProfiles(resetArray);
-          setSlices(resetArray);
-          setSelectedProfiles(resetArray);
-          setSelectedSlices(resetArray);
-        }
-        actionRef.current = null;
-      }
-    },
-    [repository, model]
-  );
+  const [state, setState] = React.useState<SelectionState>({
+    repositories: [],
+    models: [],
+    profiles: [],
+    slices: [],
+    repository: null,
+    model: null,
+    selectedProfiles: [],
+    selectedSlices: [],
+  });
 
   React.useEffect(() => {
-    setRepositoryCallback(repositories[0]);
-  }, [repositories]);
+    const updateState = async () => {
+      const repositories = repositoryManager.getRepositories();
+      const nextState = await fetchSelectionState(repositories, {
+        repositoryId,
+        modelId,
+        profileIds,
+        sliceIds,
+      });
+      if (actionRef.current === updateState) {
+        setState(nextState);
+      }
+    };
+    actionRef.current = updateState;
+    updateState();
+  }, [
+    repositoryManager,
+    repositoryId,
+    modelId,
+    profileIds,
+    sliceIds,
+    setState,
+  ]);
 
   return [
-    [repository, repositories, setRepositoryCallback],
-    [model, models, setModelCallback],
-    [selectedProfiles, profiles, setSelectedProfiles],
-    [selectedSlices, slices, setSelectedSlices],
+    [
+      state.repository,
+      state.repositories,
+      (r) =>
+        update({
+          repositoryId: r.id,
+          modelId: undefined,
+          profileIds: new Set(),
+          sliceIds: new Set(),
+        }),
+    ],
+    [
+      state.model,
+      state.models,
+      (m) =>
+        update({ modelId: m.id, profileIds: new Set(), sliceIds: new Set() }),
+    ],
+    [
+      state.selectedProfiles,
+      state.profiles,
+      (ps) => update({ profileIds: new Set(ps.map((p) => p.id)) }),
+    ],
+    [
+      state.selectedSlices,
+      state.slices,
+      (ss) => update({ sliceIds: new Set(ss.map((s) => s.id)) }),
+    ],
   ];
 }

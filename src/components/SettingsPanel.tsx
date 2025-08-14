@@ -12,6 +12,7 @@ import {
   SliceSelectionContext,
 } from "../contexts/SelectionContexts";
 import { RepositorySource } from "../modules/RepositorySource";
+
 function packageToSelectItem(p: Package): SelectItem {
   return {
     id: p.id,
@@ -25,7 +26,6 @@ function repositoryToSelection(repo: RepositorySource): SelectItem {
     id: repo.id,
     label: repo.info.name,
     info: repo.info.url || "Local source",
-    disabled: !repo.isActive,
   };
 }
 
