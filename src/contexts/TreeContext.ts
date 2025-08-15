@@ -1,6 +1,7 @@
 import React from "react";
 import { Node, Edge, XYPosition, MarkerType } from "@xyflow/react";
 import { GORCNode, QuestionNode, NodeId } from "../modules/GORCNodes";
+import * as d3 from "d3";
 
 export interface TreeManager<T extends Record<string, unknown> = GORCNode> {
   getNodes(): Node<T>[];
@@ -17,12 +18,7 @@ export function useTreeContext() {
   return context;
 }
 
-export function getLayout(nodes: HierarchyNode[], nodeSize: number) {
-  const baseLayout = getBaseLayout(nodes, nodeSize);
-  return tightenLayout(baseLayout, nodes, nodeSize, 1000);
-}
-
-function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
+function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): TreeLayout {
   const nodeMap = nodes.reduce<{ [x: string]: HierarchyNode }>((acc, node) => {
     acc[node.id] = node;
     return acc;
@@ -93,153 +89,59 @@ function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): Layout {
   return positions;
 }
 
-function tightenLayout(
-  layout: Layout,
-  nodes: HierarchyNode[],
-  nodeSize: number,
-  iterations: number
-) {
-  const separation = nodeSize * 2;
-  const nodeMap = nodes.reduce<Record<string, HierarchyNode>>((acc, node) => {
-    acc[node.id] = node;
-    return acc;
-  }, {});
-  let velocityMap: Layout = {};
-  let updatedLayout = layout;
-  const timeStep = 0.1;
-  for (let i = 0; i < iterations; i++) {
-    const forceMap: Layout = sumForces(
-      getSeparationForces(updatedLayout, separation, 1),
-      getSpringForces(nodeMap, updatedLayout, separation, 2)
-    );
-    velocityMap = applyForces(velocityMap, forceMap, timeStep, 0.5);
-    updatedLayout = applyForces(updatedLayout, velocityMap, timeStep);
-  }
-  return updatedLayout;
-}
-
-function getSpringForces(
-  nodeMap: Record<string, HierarchyNode>,
-  layout: Layout,
-  separation: number,
-  scale: number = 1
-): Layout {
-  return Object.keys(nodeMap).reduce<Layout>((acc, nodeId) => {
-    const node = nodeMap[nodeId];
-    const parentId = "parentId" in node ? node.parentId : null;
-    const a: XYPosition = layout[nodeId];
-    const b: XYPosition = parentId ? layout[parentId] : { x: 0, y: 0 };
-    const [distance, direction] = getNormalizedDirection(a, b);
-    const forceSize = (distance - separation) * scale;
-    acc[nodeId] = sumXY(acc[nodeId] || { x: 0, y: 0 }, {
-      x: -direction.x * forceSize,
-      y: -direction.y * forceSize,
-    });
-    if (parentId) {
-      acc[parentId] = sumXY(acc[parentId] || { x: 0, y: 0 }, {
-        x: direction.x * forceSize,
-        y: direction.y * forceSize,
-      });
-    }
-    return acc;
-  }, {});
-}
-
-function getSeparationForces(
-  layout: Layout,
-  separation: number,
-  scale: number
-): Layout {
-  const f = Object.keys(layout).reduce<Layout>((acc, nodeIdA) => {
-    const a = layout[nodeIdA];
-    for (const nodeIdB in layout) {
-      if (nodeIdA !== nodeIdB) {
-        const b = layout[nodeIdB];
-        const [distance, direction] = getNormalizedDirection(a, b);
-        const forceSize = (separation - Math.min(distance, separation)) * scale;
-        const force =
-          forceSize > 0
-            ? { x: -direction.x * forceSize, y: -direction.y * forceSize }
-            : { x: 0, y: 0 };
-        acc[nodeIdA] = sumXY(acc[nodeIdA] || { x: 0, y: 0 }, {
-          x: -force.x,
-          y: -force.y,
-        });
-        acc[nodeIdB] = sumXY(acc[nodeIdB] || { x: 0, y: 0 }, {
-          x: force.x,
-          y: force.y,
-        });
-      }
-    }
-    return acc;
-  }, {});
-  return f;
-}
-
-function sumForces(fA: Layout, fB: Layout): Layout {
-  return Object.keys(fA).reduce<Layout>((acc, nodeId) => {
-    acc[nodeId] = sumXY(fA[nodeId], fB[nodeId]);
-    return acc;
-  }, {});
-}
-
-function applyForces(
-  velocityMap: Layout,
-  forceMap: Layout,
-  time: number,
-  dampening: number = 0
-): Layout {
-  const velocityReduction = 1 - Math.max(Math.min(dampening * time, 1), 0);
-  const initialVelocities = Object.keys(velocityMap).reduce<Layout>(
-    (acc, nodeId) => {
-      const velocity = velocityMap[nodeId] || { x: 0, y: 0 };
-      acc[nodeId] = {
-        x: velocity.x * velocityReduction,
-        y: velocity.y * velocityReduction,
-      };
-      return acc;
-    },
-    {}
-  );
-
-  return Object.keys(forceMap).reduce<Layout>((acc, nodeId) => {
-    const velocity = acc[nodeId] || { x: 0, y: 0 };
-    const force = forceMap[nodeId];
-    acc[nodeId] = {
-      x: velocity.x + force.x * time,
-      y: velocity.y + force.y * time,
-    };
-    return acc;
-  }, initialVelocities);
-}
-
-function sumXY(a: XYPosition, b: XYPosition): XYPosition {
-  return {
-    x: a.x + b.x,
-    y: a.y + b.y,
-  };
-}
-
-function getNormalizedDirection(
-  a: XYPosition,
-  b: XYPosition
-): [number, XYPosition] {
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  const distance = Math.sqrt(dx * dx + dy * dy);
-
-  return distance > 0
-    ? [distance, { x: dx / distance, y: dy / distance }]
-    : [distance, { x: 0, y: 0 }];
-}
-
 type HierarchyNode = { id: string } | { id: string; parentId: string };
 
-type Layout = { [x: string]: XYPosition };
+export type TreeLayout = { [x: string]: XYPosition };
+
+export function getD3Layout(
+  nodes: (GORCNode | QuestionNode)[],
+  nodeSize: number = 120
+): TreeLayout {
+  const useNodes = nodes.filter((n): n is GORCNode => n.type !== "question");
+
+  const edges = useNodes
+    .filter((n): n is GORCNode & { parentId: NodeId } => "parentId" in n)
+    .map(({ id, parentId }) => ({ source: parentId, target: id }));
+
+  const positions = getBaseLayout(useNodes, nodeSize);
+  const d3Nodes = useNodes.map((n) => ({
+    ...n,
+    x: positions[n.id]?.x || 0,
+    y: positions[n.id]?.y || 0,
+  }));
+
+  const simulation = d3
+    .forceSimulation(d3Nodes)
+    .force(
+      "link",
+      d3
+        .forceLink(edges)
+        .id((d: any) => d.id)
+        .distance(nodeSize * 2)
+    )
+    .force("charge", d3.forceManyBody().strength(3800))
+    .force("center", d3.forceCenter())
+    .force(
+      "collide",
+      d3
+        .forceCollide()
+        .strength(0.5)
+        .radius(nodeSize * 1.2)
+    );
+
+  simulation.tick(300);
+  simulation.stop();
+  const layout: TreeLayout = d3Nodes.reduce((acc, node: any) => {
+    acc[node.id] = { x: node.x, y: node.y };
+    return acc;
+  }, {} as TreeLayout);
+
+  return layout;
+}
 
 export function createTreeManagerFromModelNodes(
   nodes: (GORCNode | QuestionNode)[],
-  layout: Layout = {}
+  layout: TreeLayout = {}
 ): TreeManager<GORCNode> {
   const useNodes = React.useMemo(
     () => nodes.filter((n): n is GORCNode => n.type !== "question"),
@@ -266,7 +168,7 @@ export function createTreeManagerFromModelNodes(
   );
 }
 
-function nodeFromGORCNode(node: GORCNode, layout: Layout): Node<GORCNode> {
+function nodeFromGORCNode(node: GORCNode, layout: TreeLayout): Node<GORCNode> {
   const position = layout[node.id] || {
     x: Math.random() * 300,
     y: Math.random() * 300,

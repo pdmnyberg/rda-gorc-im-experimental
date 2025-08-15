@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { Tree } from "./../../components/Tree.tsx";
 import Layout from "./../../components/Layout/Layout";
@@ -7,7 +7,8 @@ import SettingIcon from "./../../img/app-icon_settings.svg";
 import {
   TreeContext,
   createTreeManagerFromModelNodes,
-  getLayout,
+  getD3Layout,
+  TreeLayout,
 } from "./../../contexts/TreeContext.ts";
 import {
   ModelDefinition,
@@ -73,8 +74,9 @@ const Home = () => {
     [modelDefintion]
   );
   const nodeSize = 120;
+
   const layout = React.useMemo(
-    () => getLayout(nodes, nodeSize),
+    () => getD3Layout(nodes, nodeSize),
     [nodes, nodeSize]
   );
   const treeManager = createTreeManagerFromModelNodes(nodes, layout);
