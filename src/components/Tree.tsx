@@ -1,5 +1,11 @@
-import { useCallback, useState } from "react";
-import { ReactFlow, MiniMap, Controls, Node } from "@xyflow/react";
+import { useCallback, useState, useEffect, useMemo } from "react";
+import {
+  ReactFlow,
+  MiniMap,
+  Controls,
+  Node,
+  useNodesState,
+} from "@xyflow/react";
 import { useTreeContext } from "../contexts/TreeContext";
 import { GORCNodeView } from "./GORCNodeView/GORCNodeView";
 import { SidePanel } from "./SidePanel/SidePanel.tsx";
@@ -12,14 +18,22 @@ const nodeTypes = { gorc: GORCNodeView };
 export const Tree = () => {
   const treeManager = useTreeContext();
   const [selectedNode, setSelectedNode] = useState<Node<GORCNode> | null>(null);
-  const nodes = treeManager.getNodes().map((node) => ({
-    ...node,
-    data: {
-      ...node.data,
-      isSelected: selectedNode?.id === node.id,
-    },
-  }));
+  const treeNodes = treeManager.getNodes();
+  const initialNodes = useMemo(() => {
+    return treeNodes.map((node) => ({
+      ...node,
+      data: {
+        ...node.data,
+        isSelected: selectedNode?.id === node.id,
+      },
+    }));
+  }, [treeNodes, selectedNode]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const edges = treeManager.getEdges();
+
+  useEffect(() => {
+    setNodes(initialNodes);
+  }, [initialNodes, setNodes]);
 
   const onNodeClick = useCallback((_event: unknown, node: Node<GORCNode>) => {
     setSelectedNode(node);
@@ -37,9 +51,10 @@ export const Tree = () => {
           fitView
           nodeTypes={nodeTypes}
           nodesDraggable={false}
+          onNodesChange={onNodesChange}
           minZoom={0.1}
         >
-          <MiniMap />
+          <MiniMap nodeStrokeWidth={3} />
           <Controls />
         </ReactFlow>
         <SidePanel node={selectedNode} onClose={closePanel} />
