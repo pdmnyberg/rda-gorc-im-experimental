@@ -1,9 +1,9 @@
-.error-container {
-  align-self: center;
-  margin: 0 auto 0 2rem;
+.error-content {
+  padding: 0.25rem;
 }
 
-.error-container > pre {
+.error-content > pre {
   border: solid 1px #ccc;
+  border-radius: 0.25rem;
   padding: 1rem;
 }
