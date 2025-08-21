@@ -49,7 +49,7 @@ function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): TreeLayout {
   }, {});
 
   const getNodeSize = (n: HierarchyNode): number => {
-    return Math.pow(2, nodeSizeMap[n.id]) * nodeSize;
+    return nodeSizeMap[n.id] * nodeSize;
   };
   const levels = Array.from(new Set(Object.values(nodeDepthMap))).sort();
   const nodeRadialPosition: { [x: string]: number } = {};
@@ -97,10 +97,22 @@ export function getD3Layout(
   nodes: (GORCNode | QuestionNode)[],
   nodeSize: number = 120
 ): TreeLayout {
-  const useNodes = nodes.filter((n): n is GORCNode => n.type !== "question");
+  const useNodes = nodes
+    .filter((n): n is GORCNode => n.type !== "question")
+    .map<HierarchyNode>((n) =>
+      "parentId" in n
+        ? {
+            id: n.id,
+            parentId: n.parentId,
+          }
+        : { id: n.id, parentId: "__root" }
+    );
+  useNodes.push({
+    id: "__root",
+  });
 
   const edges = useNodes
-    .filter((n): n is GORCNode & { parentId: NodeId } => "parentId" in n)
+    .filter((n): n is HierarchyNode & { parentId: NodeId } => "parentId" in n)
     .map(({ id, parentId }) => ({ source: parentId, target: id }));
 
   const positions = getBaseLayout(useNodes, nodeSize);
@@ -117,9 +129,8 @@ export function getD3Layout(
       d3
         .forceLink(edges)
         .id((d: any) => d.id)
-        .distance(nodeSize * 2)
+        .distance(nodeSize * 1.2)
     )
-    .force("charge", d3.forceManyBody().strength(3800))
     .force("center", d3.forceCenter())
     .force(
       "collide",
@@ -129,7 +140,7 @@ export function getD3Layout(
         .radius(nodeSize * 1.2)
     );
 
-  simulation.tick(300);
+  simulation.tick(500);
   simulation.stop();
   const layout: TreeLayout = d3Nodes.reduce((acc, node: any) => {
     acc[node.id] = { x: node.x, y: node.y };
