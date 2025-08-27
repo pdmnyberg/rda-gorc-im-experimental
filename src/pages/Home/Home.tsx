@@ -35,7 +35,7 @@ const HomeBase = () => {
       panels={{
         settings: {
           component: <SettingsPanel />,
-          icon: <img src={SettingIcon} />,
+          icon: <img src={SettingIcon} alt={"Gear icon"}/>,
           label: "Settings",
         },
       }}

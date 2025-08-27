@@ -25,10 +25,10 @@ function Header({ panelButtons = [] }: HeaderProps) {
   const fullTitle = pageTitle ? `${config.title}: ${pageTitle}` : config.title;
   return (
     <header className="header">
-      <div className="header-title">
+      <h1 className="header-title">
         <title>{fullTitle}</title>
         {fullTitle}
-      </div>
+      </h1>
       <nav className="header-nav">
         <ul className="nav-list">
           <li>
