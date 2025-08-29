@@ -28,9 +28,10 @@ export function parseAppConfig(data?: unknown): AppConfig {
         "repositories" in data && Array.isArray(data.repositories)
           ? data.repositories.map<AppConfig["repositories"][number]>((r) => r)
           : defaults.repositories,
-      useHashRouter: "useHashRouter" in data  && typeof data.useHashRouter === "boolean"
-        ? data.useHashRouter
-        : defaults.useHashRouter,
+      useHashRouter:
+        "useHashRouter" in data && typeof data.useHashRouter === "boolean"
+          ? data.useHashRouter
+          : defaults.useHashRouter,
     };
   } else {
     return defaults;

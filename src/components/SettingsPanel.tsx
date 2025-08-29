@@ -12,6 +12,11 @@ import {
   SliceSelectionContext,
 } from "../contexts/SelectionContexts";
 import { RepositorySource } from "../modules/RepositorySource";
+import {
+  createKMPackage,
+  createPackageBundleObject,
+} from "../modules/DSWExport/export";
+import { Button } from "../components/Button/Button";
 
 function packageToSelectItem(p: Package): SelectItem {
   return {
@@ -27,6 +32,16 @@ function repositoryToSelection(repo: RepositorySource): SelectItem {
     label: repo.info.name,
     info: repo.info.url || "Local source",
   };
+}
+
+function downloadData(data: string, mimeType: string, fileName: string) {
+  const blob = new Blob([data], { type: mimeType });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.download = fileName;
+  link.href = url;
+  link.click();
+  window.URL.revokeObjectURL(url);
 }
 
 export const SettingsPanel = () => {
@@ -79,6 +94,37 @@ export const SettingsPanel = () => {
   const profileIds = selectedProfiles.map((p) => p.id);
   const sliceIds = selectedSlices.map((s) => s.id);
 
+  const doExport =
+    model && repository
+      ? () => {
+          const kmId: string = "gorc-im";
+          const version: string = "1.0.0";
+          const organizationId: string = "rda";
+          const knowledgeModel = createPackageBundleObject(
+            `Export from GORC RDA: ${repository.info.name}`,
+            [
+              createKMPackage(
+                model,
+                slices,
+                repository.info.name,
+                kmId,
+                version,
+                organizationId
+              ),
+            ],
+            kmId,
+            version,
+            organizationId
+          );
+          const createdAt = new Date().toISOString();
+          downloadData(
+            JSON.stringify(knowledgeModel, undefined, "  "),
+            "application/json",
+            `rda-gorc-im-${createdAt}.json`
+          );
+        }
+      : null;
+
   return (
     <>
       <h2>Select repository</h2>
@@ -111,6 +157,12 @@ export const SettingsPanel = () => {
         onChange={setSliceIds}
         noItemsText="No slices available for this model"
       />
+      <h2>Exports</h2>
+      {doExport ? (
+        <Button onClick={doExport} label="Export Base DSW Knowledge Model" />
+      ) : (
+        <></>
+      )}
     </>
   );
 };

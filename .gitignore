@@ -27,3 +27,4 @@ dist-ssr
 dist-examples
 public/config.json
 public/example-repo/
+public/repos/
