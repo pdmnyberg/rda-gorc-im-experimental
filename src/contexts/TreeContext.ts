@@ -122,6 +122,10 @@ export function getD3Layout(
     y: positions[n.id]?.y || 0,
   }));
 
+  const spreadFactor = 1.2;
+  const collideStrength = 0.5; // needs to be between 0 and 1 according to d3's documentation
+  const numberOfIterations = 500;
+
   const simulation = d3
     .forceSimulation(d3Nodes)
     .force(
@@ -129,18 +133,18 @@ export function getD3Layout(
       d3
         .forceLink(edges)
         .id((d: any) => d.id)
-        .distance(nodeSize * 1.2)
+        .distance(nodeSize * spreadFactor)
     )
     .force("center", d3.forceCenter())
     .force(
       "collide",
       d3
         .forceCollide()
-        .strength(0.5)
-        .radius(nodeSize * 1.2)
+        .strength(collideStrength)
+        .radius(nodeSize * spreadFactor)
     );
 
-  simulation.tick(500);
+  simulation.tick(numberOfIterations);
   simulation.stop();
   const layout: TreeLayout = d3Nodes.reduce((acc, node: any) => {
     acc[node.id] = { x: node.x, y: node.y };
