@@ -116,10 +116,11 @@ export const SettingsPanel = () => {
             version,
             organizationId
           );
+          const createdAt = new Date().toISOString();
           downloadData(
             JSON.stringify(knowledgeModel, undefined, "  "),
             "application/json",
-            "rda-gorc-im.json"
+            `rda-gorc-im-${createdAt}.json`
           );
         }
       : null;
