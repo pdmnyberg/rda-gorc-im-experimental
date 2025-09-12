@@ -1,0 +1,51 @@
+.side-panel-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.side-panel-close:hover {
+  color: #000;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.data-type {
+  text-transform: uppercase;
+  color: #333333;
+  font-family: sans-serif;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  margin-left: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: sans-serif;
+  color: #222;
+  background-color: #999;
+  border-radius: 0.1rem;
+  text-transform: uppercase;
+}
+
+.badge.core {
+  background-color: #deebff;
+}
+
+.badge.desirable {
+  background-color: #f6eade;
+}
+
+.badge.optional {
+  background-color: #dbf7ec;
+}

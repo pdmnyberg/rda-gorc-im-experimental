@@ -1,0 +1,9 @@
+.error-content {
+  padding: 0.25rem;
+}
+
+.error-content > pre {
+  border: solid 1px #ccc;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}

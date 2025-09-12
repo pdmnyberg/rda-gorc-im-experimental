@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project dev files
+dist-examples
+public/config.json
+public/example-repo/
+public/repos/

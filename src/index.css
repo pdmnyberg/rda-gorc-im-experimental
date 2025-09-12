@@ -1,0 +1,13 @@
+:root {
+  --color-bg-light: #f9f9f9;
+  --panel-size: 25rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Inter", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+}
