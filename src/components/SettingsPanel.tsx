@@ -12,10 +12,7 @@ import {
   SliceSelectionContext,
 } from "../contexts/SelectionContexts";
 import { RepositorySource } from "../modules/RepositorySource";
-import {
-  createKMPackage,
-  createPackageBundleObject,
-} from "../modules/DSWExport/export";
+import { KMPackager } from "../modules/DSWExport/export";
 import { Button } from "../components/Button/Button";
 
 function packageToSelectItem(p: Package): SelectItem {
@@ -97,13 +94,14 @@ export const SettingsPanel = () => {
   const doExport =
     model && repository
       ? () => {
+          const packager = new KMPackager()
           const kmId: string = "gorc-im";
           const version: string = "1.0.0";
           const organizationId: string = "rda";
-          const knowledgeModel = createPackageBundleObject(
+          const knowledgeModel = packager.createPackageBundleObject(
             `Export from GORC RDA: ${repository.info.name}`,
             [
-              createKMPackage(
+              packager.createKMPackage(
                 model,
                 slices,
                 repository.info.name,
