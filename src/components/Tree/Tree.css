@@ -1,0 +1,10 @@
+.tree-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    --legend-left-offset: 0rem;
+}
+
+.tree-stage.left-panel-open {
+    --legend-left-offset: var(--panel-size);
+}

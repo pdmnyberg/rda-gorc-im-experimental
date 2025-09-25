@@ -88,13 +88,13 @@
   font-weight: bold;
 }
 .gorc-node-root[data-consideration-level="core"] {
-  --gorc-shape-color: rgb(0, 50, 124);
+  --gorc-shape-color: var(--color-core);
 }
 .gorc-node-root[data-consideration-level="desirable"] {
-  --gorc-shape-color: rgb(152, 97, 41);
+  --gorc-shape-color: var(--color-desirable);
 }
 .gorc-node-root[data-consideration-level="optional"] {
-  --gorc-shape-color: rgb(36, 155, 108);
+  --gorc-shape-color: var(--color-optional);
 }
 
 .gorc-node-root[data-type="category"] {
