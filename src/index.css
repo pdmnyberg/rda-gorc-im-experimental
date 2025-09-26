@@ -1,5 +1,9 @@
 :root {
   --color-bg-light: #f9f9f9;
+  --color-grey-shadow: rgba(0,0,0,.12);
+  --color-core: rgb(0, 50, 124);
+  --color-optional: rgb(36, 155, 108);
+  --color-desirable:  rgb(152, 97, 41);
   --panel-size: 25rem;
 }
 

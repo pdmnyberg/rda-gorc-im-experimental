@@ -1,0 +1,78 @@
+.gorc-legend {
+    position: absolute;
+    bottom: 0.75rem;
+    left: calc(2.8rem + var(--legend-left-offset, 0rem));
+    z-index: 3;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.625rem var(--color-grey-shadow);
+    padding: 0.75rem 0.9rem;
+    max-width: 18rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    transition: left 0.25s ease;
+}
+
+.gorc-legend-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.gorc-legend-section {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.gorc-legend-row {
+    display: grid;
+    grid-template-columns: 1.1rem 1fr;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gorc-legend-label { white-space: nowrap; }
+
+.gorc-legend-dot {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    display: inline-block;
+}
+.dot-core { background-color: var(--color-core); }
+.dot-desirable { background-color: var(--color-desirable); }
+.dot-optional { background-color: var(--color-optional); }
+
+.gorc-legend-icon {
+    --gorc-shape: none;
+    width: 1rem;
+    height: 1rem;
+    background-color: #a9a9a9;
+    mask-image: var(--gorc-shape);
+    mask-mode: alpha;
+    mask-size: contain;
+    mask-position: center;
+    mask-repeat: no-repeat;
+}
+
+.icon-category {
+    --gorc-shape: url("../../img/gorc-icon_category-core.svg");
+}
+.icon-subcategory {
+    --gorc-shape: url("../../img/gorc-icon_subcategory-core.svg");
+}
+.icon-attribute {
+    --gorc-shape: url("../../img/gorc-icon_attribute-core.svg");
+}
+.icon-feature {
+    --gorc-shape: url("../../img/gorc-icon_feature-core.svg");
+}
+.icon-essential-element {
+    --gorc-shape: url("../../img/gorc-icon_essential-element-core.svg");
+}
+
+.gorc-legend hr {
+    border: none;
+    border-top: 1px solid #e5e5e5;
+    margin: 0.5rem 0 0.6rem;
+}

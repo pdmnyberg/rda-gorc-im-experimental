@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
 import "./Home.css";
-import { Tree } from "./../../components/Tree.tsx";
+import { Tree } from "../../components/Tree/Tree";
 import Layout from "./../../components/Layout/Layout";
-import { SettingsPanel } from "./../../components/SettingsPanel.tsx";
+import { SettingsPanel } from "../../components/SettingsPanel";
 import SettingIcon from "./../../img/app-icon_settings.svg";
 import {
   TreeContext,
   createTreeManagerFromModelNodes,
   getD3Layout,
   TreeLayout,
-} from "./../../contexts/TreeContext.ts";
+} from "../../contexts/TreeContext";
 import {
   ModelDefinition,
   getModelNodes,
   applyLayersAndSlices,
-} from "./../../modules/LayeredModel.ts";
-import { createRepositoryManager } from "./../../contexts/RepositoryContext.ts";
-import { HttpRepositorySource } from "./../../modules/RepositorySource.ts";
+} from "../../modules/LayeredModel";
+import { createRepositoryManager } from "../../contexts/RepositoryContext";
+import { HttpRepositorySource } from "../../modules/RepositorySource";
 import {
   useModelSelectionManagers,
   RepositorySelectionContext,
   ModelSelectionContext,
   ProfileSelectionContext,
   SliceSelectionContext,
-} from "./../../contexts/SelectionContexts.ts";
+} from "../../contexts/SelectionContexts";
 import { useConfig } from "../../contexts/ConfigContext.ts";
 import "@xyflow/react/dist/style.css";
 import "./Home.css";

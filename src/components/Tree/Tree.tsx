@@ -6,12 +6,14 @@ import {
   Node,
   useNodesState,
 } from "@xyflow/react";
-import { useTreeContext } from "../contexts/TreeContext";
-import { GORCNodeView } from "./GORCNodeView/GORCNodeView";
-import { SidePanel } from "./SidePanel/SidePanel.tsx";
+import { useTreeContext } from "../../contexts/TreeContext";
+import { GORCNodeView } from "./../GORCNodeView/GORCNodeView";
+import { SidePanel } from "./../SidePanel/SidePanel.tsx";
 
 import "@xyflow/react/dist/style.css";
-import { GORCNode } from "../modules/GORCNodes";
+import { GORCNode } from "../../modules/GORCNodes";
+import { GORCLegend } from "./../Legend/GORCLegend";
+import "./Tree.css"
 
 const nodeTypes = { gorc: GORCNodeView };
 
@@ -43,7 +45,7 @@ export const Tree = () => {
 
   return (
     <>
-      <div style={{ width: "100%", height: "100%" }}>
+      <div className={`tree-stage ${selectedNode ? "left-panel-open" : ""}`}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -57,6 +59,7 @@ export const Tree = () => {
           <MiniMap nodeStrokeWidth={3} />
           <Controls />
         </ReactFlow>
+        <GORCLegend />
         <SidePanel node={selectedNode} onClose={closePanel} />
       </div>
     </>
