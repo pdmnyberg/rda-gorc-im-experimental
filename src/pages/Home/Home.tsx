@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./Home.css";
 import { Tree } from "../../components/Tree/Tree";
 import Layout from "./../../components/Layout/Layout";
@@ -8,7 +8,6 @@ import {
   TreeContext,
   createTreeManagerFromModelNodes,
   getD3Layout,
-  TreeLayout,
 } from "../../contexts/TreeContext";
 import {
   ModelDefinition,
