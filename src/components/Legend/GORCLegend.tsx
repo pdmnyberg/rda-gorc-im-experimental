@@ -25,6 +25,10 @@ export const GORCLegend: React.FC = () => {
 
             <div className="gorc-legend-section">
                 <div className="gorc-legend-row">
+                    <span className="gorc-legend-icon icon-essential-element" />
+                    <span className="gorc-legend-label">Essential Element</span>
+                </div>
+                <div className="gorc-legend-row">
                     <span className="gorc-legend-icon icon-category" />
                     <span className="gorc-legend-label">Category</span>
                 </div>
@@ -39,10 +43,6 @@ export const GORCLegend: React.FC = () => {
                 <div className="gorc-legend-row">
                     <span className="gorc-legend-icon icon-feature" />
                     <span className="gorc-legend-label">Feature</span>
-                </div>
-                <div className="gorc-legend-row">
-                    <span className="gorc-legend-icon icon-essential-element" />
-                    <span className="gorc-legend-label">Essential Element</span>
                 </div>
             </div>
         </aside>
