@@ -1,5 +1,5 @@
 .select {
-  --select-border-color: #ccc;
+  --select-border-color: var(--color-light-silver-grey);
   --select-spacing: 1rem;
   --select-dot-size: 0.7rem;
   border: solid 1px var(--select-border-color);
@@ -24,9 +24,9 @@
   width: var(--select-dot-size);
   height: var(--select-dot-size);
   border-radius: 50%;
-  border: solid 1px #666;
+  border: solid 1px var(--color-dim-medium-grey);
   transform: translateY(-50%);
-  background-color: #fff;
+  background-color: white;
   transition: background-color 0.1s;
 }
 
@@ -36,16 +36,16 @@
 
 .select-button input:disabled + .select-label {
   cursor: not-allowed;
-  color: #888;
+  color: var(--color-battleship-grey);
 }
 
 .select-button input:disabled + .select-label > .text::after {
-  background-color: #eee;
-  border-color: #aaa;
+  background-color: var(--color-anti-flash-white-grey);
+  border-color: var(--color-silver-grey);
 }
 
 .select-button input:checked + .select-label > .text::after {
-  background-color: #369;
+  background-color: var(--theme-blue);
 }
 
 .select-button input[type="checkbox"] + .select-label > .text::after {
@@ -65,8 +65,8 @@
   flex-grow: 0;
   flex-shrink: 0;
   padding: var(--select-spacing);
-  color: #666;
-  background: #eee;
+  color: var(--color-dim-medium-grey);
+  background: var(--theme-blue-light);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -75,8 +75,8 @@
 }
 
 .select > .no-options {
-  color: #666;
-  background: #eee;
+  color: var(--color-dim-medium-grey);
+  background: var(--color-anti-flash-white-grey);
   padding: var(--select-spacing);
 }
 

@@ -2,10 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--color-bg-light);
+  background-color: var(--theme-blue);
   padding: 0 1rem;
   gap: 1rem;
   height: 4rem;
+  color: white;
 }
 
 .header-title {
@@ -30,7 +31,7 @@
 
 .nav-list li a {
   text-decoration: none;
-  color: #333;
+  color: white;
   font-weight: 500;
 }
 
@@ -40,29 +41,35 @@
 
 .panel-button {
   margin: 0.5rem;
+  display: inline-flex;
 }
 
 .panel-button > button {
-  --button-border-color: #ccc;
+  --button-border-color: var(--color-light-silver-grey);
   display: flex;
   padding: 0;
-  background-color: rgba(255, 255, 255, 0);
-  border: solid 1px var(--button-border-color);
+  background-color: var(--theme-navy);
+  color: white;
+  border: solid 1px var(--theme-navy-dark);
   transition: background-color 0.1s;
   align-items: center;
+  box-shadow: 0 2px 4px var(--shadow-medium),
+  0 4px 6px var(--shadow-light);
 }
 
 .panel-button > button > .icon {
   display: flex;
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
 }
 
-.panel-button > button > .label {
-  border-left: solid 1px var(--button-border-color);
+.panel-button > button {
   padding: 0.5rem;
 }
 
-.panel-button:hover {
-  background-color: #fff;
+.panel-button > button:hover {
+  background-color: var(--theme-navy-light);
+  box-shadow: 0 4px 6px var(--shadow-strong),
+  0 6px 8px var(--shadow-light);
+  cursor: pointer;
 }

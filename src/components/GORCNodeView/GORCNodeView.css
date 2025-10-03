@@ -2,7 +2,7 @@
   position: relative;
   --gorc-node-size: 30px;
   --gorc-shape-size: calc(var(--gorc-node-size) * 1);
-  --gorc-shape-color: #999;
+  --gorc-shape-color: var(--color-battleship-grey);
   --gorc-icon-displacement: 0rem;
   --gorc-select-displacement: 0rem;
   --gorc-node-animation-time: 0.1s;
@@ -20,7 +20,7 @@
 }
 
 .gorc-node-root.selected {
-  outline: 3px solid #007bff;
+  outline: 3px solid var(--theme-navy);
   border-radius: 4px;
 }
 
