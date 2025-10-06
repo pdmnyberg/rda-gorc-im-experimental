@@ -22,9 +22,9 @@ export const SidePanel = ({ node, onClose }: Props) => {
 
   const handleClose = () => {
     setIsOpen(false);
+    onClose();
     setTimeout(() => {
       setDisplayedNode(null);
-      onClose();
     }, 100);
   };
 

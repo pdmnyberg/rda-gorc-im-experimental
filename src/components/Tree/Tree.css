@@ -6,5 +6,5 @@
 }
 
 .tree-stage.left-panel-open {
-    --legend-left-offset: var(--panel-size);
+    --legend-left-offset: calc(var(--panel-size) - 41px);
 }

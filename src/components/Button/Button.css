@@ -8,7 +8,7 @@
   padding: var(--button-spacing);
   border: solid 1px var(--button-border-color);
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  transition: background-color 0.1s;
+  transition: background-color var(--transition-time);
 }
 
 .button:hover {
