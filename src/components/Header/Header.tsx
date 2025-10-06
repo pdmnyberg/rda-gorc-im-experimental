@@ -35,7 +35,7 @@ function Header({ panelButtons = [] }: HeaderProps) {
             <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="/documentation">Documentation</NavLink>
+            <NavLink to="/about">About</NavLink>
           </li>
         </ul>
         {panelButtons?.map((btn) => <PanelButton key={btn.id} {...btn} />)}

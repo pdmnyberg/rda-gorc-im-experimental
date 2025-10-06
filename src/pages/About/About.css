@@ -1,0 +1,19 @@
+section div {
+  margin: 1rem 3rem;
+}
+
+.about-container {
+  display: flex;
+  font-family:
+    "Lato", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  text-align: justify;
+}
+
+.reference-container {
+  align-self: center;
+  text-align: left;
+}
+
+.reference {
+  margin-bottom: 0;
+}
