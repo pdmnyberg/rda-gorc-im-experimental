@@ -1,16 +1,15 @@
 .gorc-legend {
     position: absolute;
-    bottom: 0.75rem;
-    left: calc(2.8rem + var(--legend-left-offset, 0rem));
+    bottom: 15px;
+    left: calc(56px + var(--legend-left-offset, 0rem));
     z-index: 3;
     background: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 0.625rem var(--color-grey-shadow);
+    box-shadow: 0px 0px 2px 1px var(--color-grey-shadow);
     padding: 0.75rem 0.9rem;
     max-width: 18rem;
     font-size: 0.75rem;
     line-height: 1.2;
-    transition: left 0.25s ease;
+    transition: left var(--transition-time);
 }
 
 .gorc-legend-title {
