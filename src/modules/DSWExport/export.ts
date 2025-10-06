@@ -41,7 +41,7 @@ export class KMPackager {
     version: string,
     organizationId: string
   ): Package {
-    const createdAt = new Date().toISOString();
+    const createdAt = this.getDateStr();
     const parentUuid = "00000000-0000-0000-0000-000000000000";
     const kmUuid = this.getStableUUID(kmId);
     const nodes = getModelNodes(modelDefintion);
@@ -172,7 +172,7 @@ export class KMPackager {
   }
 
   protected tagFromSlice(slice: ThematicSlice, parentUuid: UUID): Event {
-    const createdAt = new Date().toISOString();
+    const createdAt = this.getDateStr();
     return {
       eventType: "AddTagEvent",
       uuid: this.getEventUUID(slice.id),
@@ -195,7 +195,7 @@ export class KMPackager {
     questionUuid: UUID;
     events: Event[];
   } {
-    const createdAt = new Date().toISOString();
+    const createdAt = this.getDateStr();
 
     const question: Event = {
       annotations: [],
@@ -251,7 +251,7 @@ export class KMPackager {
   }
 
   protected eventFromRootNode(node: GORCNode, parentUuid: string): Event {
-    const createdAt = new Date().toISOString();
+    const createdAt = this.getDateStr();
     return {
       annotations: [],
       createdAt: createdAt,
@@ -286,5 +286,9 @@ export class KMPackager {
 
   protected getTick(id: string): number {
     return this._idTickers[id] = this._idTickers[id] || 0 + 1;
+  }
+
+  protected getDateStr() {
+    return new Date().toISOString()
   }
 }
