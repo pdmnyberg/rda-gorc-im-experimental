@@ -1,0 +1,105 @@
+import Layout from "../../components/Layout/Layout";
+import "./About.css";
+
+export const About = () => {
+  return (
+    <>
+      <Layout>
+        <section className="about-container">
+          <div>
+            <h1>About the project</h1>
+            <p>
+              The GORC IM Working Group (WG) was developed using a large range
+              of resources and expert feedback. The model consists of a number
+              of elements, with associated categories, subcategories, attributes
+              and features, to be considered when undertaking the development of
+              a commons of any kind, at any stage. Although the categories,
+              subcategories, attributes and features are marked as core,
+              desirable or optional, the model does not mandate what should be
+              implemented, or in what way; the decisions on what is relevant,
+              and where resources should be invested will vary depending on the
+              environment and priorities of the implementer. The model is
+              already being used in several contexts that are adapting and
+              testing the model in real world situations. In some cases, the
+              work is being used in the development of commons, while in other
+              cases it is being utilised in other research infrastructure
+              projects.
+            </p>
+            <p>
+              The purpose of the GORC-WG International Model (IM) is to provide
+              a framework and common language to stakeholders around the world
+              who are committed to developing interoperable research services
+              for the public good. The target audience for the model is anyone
+              that is involved in the planning, development, operation, funding
+              or use of a research commons. It is not intended as a prescriptive
+              model, but rather to define and establish a common basis of
+              attributes and features of research commons that users of the
+              model can consider in the context of their own commons as it
+              evolves.
+            </p>
+            <p>
+              The model is based on the GORC-IG typology outlining the essential
+              elements of a commons. Essential elements are high-level concepts
+              that are essential to the composition of an Open Research commons:
+              Governance & Management Structures, Rules of Participation &
+              Access, Engagement, Human Capacity, Sustainability,
+              Interoperability, Standards & Conventions, Services & Tools, and
+              Research Objects.
+            </p>
+            <p>
+              The model breaks down each essential element into a set of
+              categories that provide scope for the broad concepts that each
+              element represents. For example, the Interoperability essential
+              element is broken down into the three categories: Technical
+              Interoperability, Organisational Interoperability, and Legal
+              Interoperability. Categories are in turn sometimes broken down
+              into subcategories that provide a more granular scoping and
+              definition for the concept being described. For example, Technical
+              Interoperability has subcategories of Syntactic Interoperability,
+              Semantic Interoperability, and Other Technical Interoperability.
+              Not all categories have subcategories, in keeping with the
+              complexity of the concept being considered.
+            </p>
+            <p>
+              Each category or subcategory has associated with it one or more
+              attributes. An attribute is a standard, characteristic,
+              functionality or point of reference about an essential element,
+              category or subcategory from which information can be documented,
+              or measurements or comparisons may be made. For example, Syntactic
+              Interoperability has attributes that relate to a research commons
+              planning for interoperability as well as attributes that consider
+              a research commons implementation of syntactic interoperability in
+              the form of file and data formats for syntactic interoperability
+              and APIs that support syntactic interoperability. For concepts
+              that are sufficiently complex, attributes can be further
+              subdivided into sets of features. Attributes and features can be
+              defined for essential elements, categories, and/or subcategories,
+              and are inherited from parent to child in all cases.
+            </p>
+          </div>
+          <div className="reference-container">
+            <h2>References:</h2>
+            <p className="reference">
+              Treloar, A. and Woodford, C.J. (2024). Global Open Research
+              Commons: Creating an International Model for Improved
+              Interoperability and Collaboration. Data Science Journal, 23: 56,
+              pp. 1–9.
+            </p>
+            <a href="https://doi.org/10.5334/dsj-2024-056">
+              DOI: https://doi.org/10.5334/dsj-2024-056
+            </a>
+            <p className="reference">
+              Payne, K., Corrie, B., Crawley, F., Harrower, N., Macneil, R.,
+              Maxwell, L., Sansone, S.-A., Treloar, A., Woodford, C., Åkerström,
+              W. N., & RDA GORC International Model WG. (2023). The Global Open
+              Research Commons International Model Report, Version 1 (1.0).
+            </p>
+            <a href="DOI: https://doi.org/10.15497/RDA00097">
+              DOI: https://doi.org/10.15497/RDA00097
+            </a>
+          </div>
+        </section>
+      </Layout>
+    </>
+  );
+};
