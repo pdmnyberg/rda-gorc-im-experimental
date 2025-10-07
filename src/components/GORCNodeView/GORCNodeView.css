@@ -3,6 +3,7 @@
   --gorc-node-size: 30px;
   --gorc-shape-size: calc(var(--gorc-node-size) * 1);
   --gorc-shape-color: var(--color-battleship-grey);
+  --gorc-node-text-background-color: rgba(255, 255, 255, 0.8);
   --gorc-icon-displacement: 0rem;
   --gorc-select-displacement: 0rem;
   --gorc-node-animation-time: 0.1s;
@@ -144,7 +145,7 @@
   mask-size: contain;
   mask-position: center center;
   mask-repeat: no-repeat;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: var(--shadow-strong);
 }
 
 .gorc-node-icon::after {
@@ -158,5 +159,5 @@
 .gorc-node-text {
   text-align: center;
   padding: calc(var(--gorc-node-size) / 2);
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--gorc-node-text-background-color);
 }
