@@ -4,7 +4,7 @@
     left: calc(56px + var(--legend-left-offset, 0rem));
     z-index: 3;
     background: white;
-    box-shadow: 0px 0px 2px 1px var(--shadow-ultra-light);
+    box-shadow: 0 0 2px 1px var(--shadow-super-light);
     padding: 0.75rem 0.9rem;
     max-width: 18rem;
     font-size: 0.75rem;
