@@ -51,7 +51,7 @@
   background-color: var(--theme-navy);
   color: white;
   border: solid 1px var(--theme-navy-dark);
-  transition: background-color 0.1s;
+  transition: background-color var(--transition-time);
   align-items: center;
   box-shadow: 0 2px 4px var(--shadow-medium),
   0 4px 6px var(--shadow-light);

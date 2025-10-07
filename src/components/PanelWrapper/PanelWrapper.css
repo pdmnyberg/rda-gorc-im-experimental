@@ -6,8 +6,8 @@
   background: white;
   width: var(--panel-size);
   max-width: 100vw;
-  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.25);
-  transition: width 0.1s;
+  box-shadow: 0 0 0.625rem var(--color-grey-shadow);
+  transition: width var(--transition-time);
   overflow-y: auto;
   z-index: 10;
 }

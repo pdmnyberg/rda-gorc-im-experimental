@@ -2,7 +2,7 @@ import { HashRouter, BrowserRouter, Routes, Route } from "react-router";
 import React from "react";
 import "./index.css";
 import Home from "./pages/Home/Home.tsx";
-import { Documentation } from "./pages/Documentation/Documentation.tsx";
+import { About } from "./pages/About/About.tsx";
 import {
   parseAppConfig,
   ConfigContext,
@@ -35,7 +35,7 @@ export const App = () => {
   const routes = (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="documentation" element={<Documentation />} />
+      <Route path="about" element={<About />} />
     </Routes>
   );
   return config ? (

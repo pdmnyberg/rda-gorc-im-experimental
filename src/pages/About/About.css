@@ -1,0 +1,33 @@
+section div {
+  margin: 1rem 3rem;
+  max-width: 40rem;
+}
+
+.about-container {
+  display: flex;
+  font-family:
+    "Lato", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  text-align: justify;
+}
+
+.reference-container {
+  flex: 0 0 20rem;
+  align-self: flex-end;
+  text-align: left;
+  margin-left: -1rem;
+  margin-bottom: 2rem;
+}
+
+.reference {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .about-container {
+    flex-direction: column;
+  }
+
+  .reference-container {
+    margin: 0 3rem;
+  }
+}
