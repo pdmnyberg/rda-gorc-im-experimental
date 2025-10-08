@@ -104,6 +104,7 @@ export const SettingsPanel = () => {
               packager.createKMPackage(
                 model,
                 slices,
+                selectedProfiles,
                 repository.info.name,
                 kmId,
                 version,

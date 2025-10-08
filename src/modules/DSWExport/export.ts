@@ -5,8 +5,8 @@ import {
   Feature,
   Attribute,
 } from "../GORCNodes";
-import { ModelDefinition, ThematicSlice, getModelNodes } from "../LayeredModel";
-import { Package, PackageBundle, Event, UUID } from "./types";
+import { ModelDefinition, ModelLayerDefinition, ThematicSlice, ModelNode, getModelNodes, Nothing } from "../LayeredModel";
+import { Package, PackageBundle, Event, UUID, AddChapterEvent, AddListQuestionEvent, AddItemSelectQuestionEvent, AddAnswerEvent } from "./types";
 import { v5 as uuidv5 } from "uuid";
 
 
@@ -34,8 +34,9 @@ export class KMPackager {
   }
 
   createKMPackage(
-    modelDefintion: ModelDefinition,
+    modelDefinition: ModelDefinition,
     slices: ThematicSlice[],
+    profiles: ModelLayerDefinition[],
     name: string,
     kmId: string,
     version: string,
@@ -44,14 +45,6 @@ export class KMPackager {
     const createdAt = this.getDateStr();
     const parentUuid = "00000000-0000-0000-0000-000000000000";
     const kmUuid = this.getStableUUID(kmId);
-    const nodes = getModelNodes(modelDefintion);
-    const mainChapterEvents = nodes
-      .filter((node): node is GORCNode => node.type !== "question")
-      .filter((node) => !("parentId" in node))
-      .reduce<Record<string, Event>>((acc, n) => {
-        acc[n.id] = this.eventFromRootNode(n, parentUuid);
-        return acc;
-      }, {});
 
     const sliceTags = slices.reduce<
       Record<string, { event: Event; elements: Set<string> }>
@@ -62,6 +55,64 @@ export class KMPackager {
       };
       return acc;
     }, {});
+
+    const nodes = getModelNodes(modelDefinition);
+    const events = this.eventsFromNodes(
+      nodes,
+      sliceTags,
+      parentUuid,
+    )
+
+    const profileEvents = profiles.flatMap(profile => this.eventsFromProfile(
+      profile,
+      sliceTags,
+      parentUuid
+    ))
+
+    return {
+      createdAt: createdAt,
+      forkOfPackageId: null as unknown as undefined,
+      id: `${organizationId}:${kmId}:${version}`,
+      kmId: kmId,
+      license: "Apache 2.0",
+      mergeCheckpointPackageId: null as unknown as undefined,
+      metamodelVersion: 17,
+      name: name,
+      nonEditable: false,
+      organizationId: organizationId,
+      phase: "ReleasedPackagePhase",
+      previousPackageId: null as unknown as undefined,
+      description: `This is an export from the repository ${name}`,
+      readme: `This is an export from the repository ${name}`,
+      version: version,
+      events: [
+        {
+          annotations: [],
+          createdAt: createdAt,
+          entityUuid: kmUuid,
+          eventType: "AddKnowledgeModelEvent",
+          parentUuid: parentUuid,
+          uuid: this.getEventUUID(kmId),
+        },
+        ...Object.values(sliceTags).map((t) => t.event),
+        ...events,
+        ...profileEvents,
+      ],
+    };
+  }
+
+  protected eventsFromNodes(
+    nodes: ModelNode[],
+    sliceTags: Record<string, { event: Event; elements: Set<string> }>,
+    parentUuid: string
+  ): Event[] {
+    const mainChapterEvents = nodes
+      .filter((node): node is GORCNode => node.type !== "question")
+      .filter((node) => !("parentId" in node))
+      .reduce<Record<string, Event>>((acc, n) => {
+        acc[n.id] = this.eventFromRootNode(n, parentUuid);
+        return acc;
+      }, {});
 
     const categoryQuestions = nodes
       .filter((node): node is Category => node.type === "category")
@@ -136,39 +187,13 @@ export class KMPackager {
         {}
       );
 
-    return {
-      createdAt: createdAt,
-      forkOfPackageId: null as unknown as undefined,
-      id: `${organizationId}:${kmId}:${version}`,
-      kmId: kmId,
-      license: "Apache 2.0",
-      mergeCheckpointPackageId: null as unknown as undefined,
-      metamodelVersion: 17,
-      name: name,
-      nonEditable: false,
-      organizationId: organizationId,
-      phase: "ReleasedPackagePhase",
-      previousPackageId: null as unknown as undefined,
-      description: `This is an export from the repository ${name}`,
-      readme: `This is an export from the repository ${name}`,
-      version: version,
-      events: [
-        {
-          annotations: [],
-          createdAt: createdAt,
-          entityUuid: kmUuid,
-          eventType: "AddKnowledgeModelEvent",
-          parentUuid: parentUuid,
-          uuid: this.getEventUUID(kmId),
-        },
-        ...Object.values(sliceTags).map((t) => t.event),
+      return [
         ...Object.values(mainChapterEvents),
         ...Object.values(categoryQuestions).flatMap((d) => d.events),
         ...Object.values(subcategoryQuestions).flatMap((d) => d.events),
         ...Object.values(attributeQuestions).flatMap((d) => d.events),
         ...Object.values(featureQuestions).flatMap((d) => d.events),
-      ],
-    };
+      ]
   }
 
   protected tagFromSlice(slice: ThematicSlice, parentUuid: UUID): Event {
@@ -184,6 +209,142 @@ export class KMPackager {
       color: "",
       annotations: [],
     };
+  }
+
+  protected eventsFromProfile(
+    profile: ModelLayerDefinition,
+    sliceTags: Record<string, { event: Event; elements: Set<string> }>,
+    parentUuid: string
+  ): Event[] {
+    const removals = profile.nodes
+      .filter((node): node is Nothing => node.type === "nothing")
+      .map(node => this.eventFromNothingNode(node, parentUuid));
+
+    const updatedNodes = profile.nodes
+      .filter((node): node is GORCNode => node.type !== "question" && node.type !== "nothing")
+    
+    const baseEvents = this.eventsFromNodes(
+      updatedNodes,
+      sliceTags,
+      parentUuid,
+    )
+
+    const updates = baseEvents.filter((event): event is AddChapterEvent | AddListQuestionEvent | AddItemSelectQuestionEvent | AddAnswerEvent => {
+      return event.eventType === "AddChapterEvent" || event.eventType === "AddAnswerEvent" || event.eventType === "AddQuestionEvent";
+    });
+
+    console.log(removals, updates)
+
+    return [
+      ...removals,
+      ...updates
+    ]
+  }
+
+  protected eventFromNothingNode(node: Nothing, parentUuid: string): Event {
+    return {
+      eventType: "DeleteChapterEvent",
+      uuid: this.getEventUUID(node.id),
+      entityUuid: this.getStableUUID(node.id),
+      parentUuid: parentUuid,
+      createdAt: this.getDateStr()
+    };
+  }
+
+  protected editEventFromAddEvent(
+    event: AddChapterEvent | AddListQuestionEvent | AddItemSelectQuestionEvent | AddAnswerEvent
+  ): Event {
+    switch(event.eventType) {
+      case "AddAnswerEvent": {
+        return {
+          eventType: "EditAnswerEvent",
+          uuid: event.uuid,
+          parentUuid: event.parentUuid,
+          entityUuid: event.entityUuid,
+          createdAt: event.createdAt,
+          label: {
+            changed: true,
+            value: event.label, 
+          },
+          advice: {
+            changed: true,
+            value: event.advice,
+          },
+          followUpUuids: {
+            changed: false,
+          },
+          metricMeasures: {
+            changed: false,
+          },
+          annotations: {
+            changed: true,
+            value: event.annotations,
+          }
+        }
+      }
+      case "AddChapterEvent": {
+        return {
+          annotations: {
+            value: event.annotations,
+            changed: true,
+          },
+          createdAt: event.createdAt,
+          entityUuid: event.entityUuid,
+          eventType: "EditChapterEvent",
+          parentUuid: event.parentUuid,
+          text: {
+            changed: true,
+            value: event.text,
+          },
+          title: {
+            changed: true,
+            value: event.title
+          },
+          questionUuids: {
+            changed: false,
+          },
+          uuid: event.uuid,
+        }
+      }
+      case "AddQuestionEvent": {
+        return {
+          eventType: "EditQuestionEvent",
+          uuid: event.uuid,
+          parentUuid: event.parentUuid,
+          entityUuid: event.entityUuid,
+          createdAt: event.createdAt,
+          questionType: "OptionsQuestion",
+          title: {
+            changed: true,
+            value: event.title,
+          },
+          text: {
+            changed: true,
+            value: event.text,
+          },
+          requiredPhaseUuid: {
+            changed: true,
+            value: event.requiredPhaseUuid,
+          },
+          tagUuids: {
+            changed: false,
+          },
+          expertUuids: {
+            changed: false,
+          },
+          referenceUuids: {
+            changed: false,
+          },
+          answerUuids: {
+            changed: false,
+          },
+          annotations: {
+            changed: true,
+            value: event.annotations,
+          },
+        }
+      }
+    }
   }
 
   protected eventsFromCategoryNode(
@@ -255,12 +416,12 @@ export class KMPackager {
     return {
       annotations: [],
       createdAt: createdAt,
-      entityUuid: this.getEventUUID(node.id),
+      entityUuid: this.getStableUUID(node.id),
       eventType: "AddChapterEvent",
       parentUuid: parentUuid,
       text: node.description,
       title: node.name,
-      uuid: this.getStableUUID(node.id),
+      uuid: this.getEventUUID(node.id),
     };
   }
 
@@ -277,7 +438,7 @@ export class KMPackager {
 
   protected registerUUID(uuid: string) {
     if (this._uuidSet.has(uuid)) {
-      throw new Error(`Duplicate UUID detected: '${uuid}'`)
+      //throw new Error(`Duplicate UUID detected: '${uuid}'`)
     } else {
       this._uuidSet.add(uuid)
     }
