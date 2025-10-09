@@ -63,21 +63,9 @@ export class KMPackager {
       parentUuid,
     )
 
-    const profileEvents = profiles.map<{id: string, profileKmId: string, profile: ModelProfile, events: Event[]}>((profile, index, items) => {
-      const baseId = [kmId, ...items.slice(0, index + 1).map(i => i.id)].join("-wp-")
-      return {
-        id: `${organizationId}:${baseId}:${profile.version}`,
-        profileKmId: baseId,
-        profile: profile,
-        events: this.eventsFromProfile(
-          profile,
-          sliceTags,
-          kmUuid
-        )
-      }
-    }, {});
-
     const mainPackageId = `${organizationId}:${kmId}:${version}`;
+    const profileKmId = [kmId, ...profiles.map(i => i.id)].join("-wp-")
+    const profileName = profiles.map(profile => profile.label).join(" and ")
     return [
       {
         createdAt: createdAt,
@@ -108,28 +96,28 @@ export class KMPackager {
           ...events,
         ],
       },
-      ...profileEvents.map<Package>(({id, profileKmId, profile, events}, index, items) => {
-        const forkOfPackageId = items[index - 1] ? items[index - 1].id : mainPackageId;
-        const profiles = items.slice(0, index + 1).map(i => i.profile.label).join(" and ")
-        return {
-          createdAt: createdAt,
-          forkOfPackageId: forkOfPackageId,
-          id: id,
-          kmId: profileKmId,
-          license: "Apache 2.0",
-          mergeCheckpointPackageId: forkOfPackageId,
-          metamodelVersion: 17,
-          name: `${name} with profile ${profiles}`,
-          nonEditable: false,
-          organizationId: organizationId,
-          phase: "ReleasedPackagePhase",
-          previousPackageId: forkOfPackageId,
-          description: `Profile ${profiles} from repository ${name}`,
-          readme: `Profile ${profiles} from repository ${name}`,
-          version: profile.version,
-          events: events,
-        }
-      })
+      {
+        createdAt: createdAt,
+        forkOfPackageId: mainPackageId,
+        id: `${organizationId}:${profileKmId}:${version}`,
+        kmId: profileKmId,
+        license: "Apache 2.0",
+        mergeCheckpointPackageId: mainPackageId,
+        metamodelVersion: 17,
+        name: `${name} with profile ${profileName}`,
+        nonEditable: false,
+        organizationId: organizationId,
+        phase: "ReleasedPackagePhase",
+        previousPackageId: mainPackageId,
+        description: `${name} with applied profiles ${profileName}`,
+        readme: `${name} with applied profiles ${profileName}`,
+        version: version,
+        events: profiles.flatMap(profile => this.eventsFromProfile(
+          profile,
+          sliceTags,
+          kmUuid
+        )),
+      }
     ];
   }
 
