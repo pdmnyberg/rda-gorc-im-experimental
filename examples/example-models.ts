@@ -4,6 +4,7 @@ export const ossModel: BaseModel = {
     version: "0.1.0",
     id: "oss-base",
     label: "OSS Base Model",
+    updatedAt: new Date().toISOString(),
     nodes: [
         // --- Essential Element: Governance ---
         {
@@ -328,6 +329,7 @@ export const dualLicenseModelProfile: ModelProfile = {
   label: "OSS Dual-License Model",
   version: "0.1.0",
   modelId: "oss-base",
+  updatedAt: new Date().toISOString(),
   nodes: [
     // =========================================================
     // --- Governance (dual-license compliance governance) ---
@@ -609,6 +611,7 @@ export const baseModel: BaseModel = {
     version: "0.1.0",
     id: "gorc-im-base",
     label: "GORC Base Model",
+    updatedAt: new Date().toISOString(),
     nodes: [
         /**
          * These are the essential elements of the base GORC model
@@ -942,6 +945,7 @@ export const onlyGoLProfile: ModelProfile = {
     version: "0.1.0",
     id: "gorc-im-only-gol",
     label: "GORC Only Governance & Leadership",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) !== "governance-and-leadership"
     ).map(node => ({
@@ -955,6 +959,7 @@ export const onlySustainabilityProfile: ModelProfile = {
     version: "0.0.1",
     id: "gorc-im-only-sustainability",
     label: "GORC Only Sustainability",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) !== "sustainability"
     ).map(node => ({
@@ -968,6 +973,7 @@ export const onlyRoPaAProfile: ModelProfile = {
     version: "0.0.1",
     id: "gorc-im-only-ropaa",
     label: "GORC Only Rules of Participation & Access",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) !== "rules-of-participation-and-access"
     ).map(node => ({
@@ -981,6 +987,7 @@ export const onlyGoLSlice: ThematicSlice = {
     version: "0.1.0",
     id: "gorc-im-gol-slice",
     label: "GORC Governance & Leadership Slice",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) === "governance-and-leadership"
     ).map(n => ({ nodeId: n.id }))
@@ -991,6 +998,7 @@ export const onlySustainabilitySlice: ThematicSlice = {
     version: "0.1.0",
     id: "gorc-im-sustainability-slice",
     label: "GORC Sustainability Slice",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) === "sustainability"
     ).map(n => ({ nodeId: n.id }))
@@ -1001,6 +1009,7 @@ export const onlyRoPaASlice: ThematicSlice = {
     version: "0.1.0",
     id: "gorc-im-ropaa-slice",
     label: "GORC Rules of Participation & Access Slice",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) === "rules-of-participation-and-access"
     ).map(n => ({ nodeId: n.id }))
