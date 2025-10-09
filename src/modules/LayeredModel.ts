@@ -26,6 +26,7 @@ export type Package = {
   id: PackageId;
   label: string;
   version: SemanticVersionString;
+  updatedAt?: string;
 };
 
 export type ModelRelation = {

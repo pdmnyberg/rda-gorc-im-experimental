@@ -92,20 +92,21 @@ export const SettingsPanel = () => {
   const sliceIds = selectedSlices.map((s) => s.id);
 
   const doExport =
-    model && repository
+    model
       ? () => {
-          const packager = new KMPackager()
+          const updatedAt = model.updatedAt ? new Date(model.updatedAt) : new Date();
+          const packager = new KMPackager(updatedAt)
           const knowledgeModel = packager.createBundle(
             model,
             selectedSlices,
             selectedProfiles,
             "rda"
           )
-          const createdAt = new Date().toISOString();
+          const createdAt = updatedAt.toISOString();
           downloadData(
             JSON.stringify(knowledgeModel, undefined, "  "),
             "application/json",
-            `rda-gorc-im-${createdAt}.json`
+            `${knowledgeModel.id.replace(/:/g, "-")}-${createdAt}.json`
           );
         }
       : null;

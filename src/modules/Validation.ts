@@ -220,6 +220,7 @@ export function parsePackage<T>(
         id: parseType("string"),
         label: parseType("string"),
         version: parseType("string"),
+        updatedAt: parseOptional(parseType("string")),
       };
       const packageInfo: Package = parseObject(data, parsers, "parsePackage");
       const packageData: T = parser(data);

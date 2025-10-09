@@ -15,6 +15,11 @@ export class KMPackager {
   private _namespace = uuidv5("rda-gorc-im", "00000000-0000-0000-0000-000000000000");
   private _uuidSet = new Set<string>();
   private _useIdChecks = true;
+  private _baseDate;
+
+  constructor(baseDate = new Date()) {
+    this._baseDate = baseDate;
+  }
 
   createBundle(
     model: BaseModel,
@@ -506,6 +511,6 @@ export class KMPackager {
   }
 
   protected getDateStr() {
-    return new Date().toISOString()
+    return this._baseDate.toISOString()
   }
 }
