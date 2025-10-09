@@ -100,17 +100,15 @@ export const SettingsPanel = () => {
           const organizationId: string = "rda";
           const knowledgeModel = packager.createPackageBundleObject(
             `Export from GORC RDA: ${repository.info.name}`,
-            [
-              packager.createKMPackage(
-                model,
-                slices,
-                selectedProfiles,
-                repository.info.name,
-                kmId,
-                version,
-                organizationId
-              ),
-            ],
+            packager.createKMPackages(
+              model,
+              slices,
+              selectedProfiles,
+              repository.info.name,
+              kmId,
+              version,
+              organizationId
+            ),
             kmId,
             version,
             organizationId

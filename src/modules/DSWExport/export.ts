@@ -5,7 +5,7 @@ import {
   Feature,
   Attribute,
 } from "../GORCNodes";
-import { ModelDefinition, ModelLayerDefinition, ThematicSlice, ModelNode, getModelNodes, Nothing } from "../LayeredModel";
+import { ModelDefinition, ModelLayerDefinition, ThematicSlice, ModelNode, getModelNodes, Nothing, ModelProfile } from "../LayeredModel";
 import { Package, PackageBundle, Event, UUID, AddChapterEvent, AddListQuestionEvent, AddItemSelectQuestionEvent, AddAnswerEvent } from "./types";
 import { v5 as uuidv5 } from "uuid";
 
@@ -33,15 +33,15 @@ export class KMPackager {
     };
   }
 
-  createKMPackage(
+  createKMPackages(
     modelDefinition: ModelDefinition,
     slices: ThematicSlice[],
-    profiles: ModelLayerDefinition[],
+    profiles: ModelProfile[],
     name: string,
     kmId: string,
     version: string,
     organizationId: string
-  ): Package {
+  ): Package[] {
     const createdAt = this.getDateStr();
     const parentUuid = "00000000-0000-0000-0000-000000000000";
     const kmUuid = this.getStableUUID(kmId);
@@ -63,42 +63,74 @@ export class KMPackager {
       parentUuid,
     )
 
-    const profileEvents = profiles.flatMap(profile => this.eventsFromProfile(
-      profile,
-      sliceTags,
-      parentUuid
-    ))
+    const profileEvents = profiles.map<{id: string, profileKmId: string, profile: ModelProfile, events: Event[]}>((profile, index, items) => {
+      const baseId = [kmId, ...items.slice(0, index + 1).map(i => i.id)].join("-wp-")
+      return {
+        id: `${organizationId}:${baseId}:${profile.version}`,
+        profileKmId: baseId,
+        profile: profile,
+        events: this.eventsFromProfile(
+          profile,
+          sliceTags,
+          kmUuid
+        )
+      }
+    }, {});
 
-    return {
-      createdAt: createdAt,
-      forkOfPackageId: null as unknown as undefined,
-      id: `${organizationId}:${kmId}:${version}`,
-      kmId: kmId,
-      license: "Apache 2.0",
-      mergeCheckpointPackageId: null as unknown as undefined,
-      metamodelVersion: 17,
-      name: name,
-      nonEditable: false,
-      organizationId: organizationId,
-      phase: "ReleasedPackagePhase",
-      previousPackageId: null as unknown as undefined,
-      description: `This is an export from the repository ${name}`,
-      readme: `This is an export from the repository ${name}`,
-      version: version,
-      events: [
-        {
-          annotations: [],
+    const mainPackageId = `${organizationId}:${kmId}:${version}`;
+    return [
+      {
+        createdAt: createdAt,
+        forkOfPackageId: null as unknown as undefined,
+        id: mainPackageId,
+        kmId: kmId,
+        license: "Apache 2.0",
+        mergeCheckpointPackageId: null as unknown as undefined,
+        metamodelVersion: 17,
+        name: name,
+        nonEditable: false,
+        organizationId: organizationId,
+        phase: "ReleasedPackagePhase",
+        previousPackageId: null as unknown as undefined,
+        description: `The base model from repository ${name}`,
+        readme: `The base model from repository ${name}`,
+        version: version,
+        events: [
+          {
+            annotations: [],
+            createdAt: createdAt,
+            entityUuid: kmUuid,
+            eventType: "AddKnowledgeModelEvent",
+            parentUuid: parentUuid,
+            uuid: this.getEventUUID(kmId),
+          },
+          ...Object.values(sliceTags).map((t) => t.event),
+          ...events,
+        ],
+      },
+      ...profileEvents.map<Package>(({id, profileKmId, profile, events}, index, items) => {
+        const forkOfPackageId = items[index - 1] ? items[index - 1].id : mainPackageId;
+        const profiles = items.slice(0, index + 1).map(i => i.profile.label).join(" and ")
+        return {
           createdAt: createdAt,
-          entityUuid: kmUuid,
-          eventType: "AddKnowledgeModelEvent",
-          parentUuid: parentUuid,
-          uuid: this.getEventUUID(kmId),
-        },
-        ...Object.values(sliceTags).map((t) => t.event),
-        ...events,
-        ...profileEvents,
-      ],
-    };
+          forkOfPackageId: forkOfPackageId,
+          id: id,
+          kmId: profileKmId,
+          license: "Apache 2.0",
+          mergeCheckpointPackageId: forkOfPackageId,
+          metamodelVersion: 17,
+          name: `${name} with profile ${profiles}`,
+          nonEditable: false,
+          organizationId: organizationId,
+          phase: "ReleasedPackagePhase",
+          previousPackageId: forkOfPackageId,
+          description: `Profile ${profiles} from repository ${name}`,
+          readme: `Profile ${profiles} from repository ${name}`,
+          version: profile.version,
+          events: events,
+        }
+      })
+    ];
   }
 
   protected eventsFromNodes(
