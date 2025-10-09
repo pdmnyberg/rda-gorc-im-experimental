@@ -1,7 +1,7 @@
 .button {
-  --button-border-color: #ccc;
-  --button-bg: #eee;
-  --button-bg-hover: #fff;
+  --button-bg: var(--theme-orange);
+  --button-bg-hover: var(--theme-orange-light);
+  --button-border-color: var(--theme-orange-dark);
   --button-spacing: 1rem;
   display: block;
   background-color: var(--button-bg);
@@ -9,8 +9,13 @@
   border: solid 1px var(--button-border-color);
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   transition: background-color var(--transition-time);
+  box-shadow: 0 2px 4px var(--shadow-medium),
+  0 4px 6px var(--shadow-light);
 }
 
 .button:hover {
   background-color: var(--button-bg-hover);
+  box-shadow: 0 4px 6px var(--shadow-strong),
+  0 6px 8px var(--shadow-medium);
+  cursor:pointer;
 }

@@ -10,18 +10,18 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #333;
+  color: var(--color-jet-dark-grey);
   font-size: 1.25rem;
 }
 
 .side-panel-close:hover {
-  color: #000;
-  background-color: rgba(0, 0, 0, 0.05);
+  color: black;
+  background-color: var(--shadow-hyper-light);
 }
 
 .data-type {
   text-transform: uppercase;
-  color: #333333;
+  color: var(--color-jet-dark-grey);
   font-family: sans-serif;
 }
 
@@ -32,20 +32,20 @@
   font-size: 0.75rem;
   font-weight: 600;
   font-family: sans-serif;
-  color: #222;
-  background-color: #999;
+  color: var(--color-jet-dark-grey);
+  background-color: var(--color-battleship-grey);
   border-radius: 0.1rem;
   text-transform: uppercase;
 }
 
 .badge.core {
-  background-color: #deebff;
+  background-color: var(--color-core-light);
 }
 
 .badge.desirable {
-  background-color: #f6eade;
+  background-color: var(--color-desirable-light);
 }
 
 .badge.optional {
-  background-color: #dbf7ec;
+  background-color: var(--color-optional-light);
 }

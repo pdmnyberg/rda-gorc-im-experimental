@@ -4,7 +4,7 @@
     left: calc(56px + var(--legend-left-offset, 0rem));
     z-index: 3;
     background: white;
-    box-shadow: 0px 0px 2px 1px var(--color-grey-shadow);
+    box-shadow: 0 0 2px 1px var(--shadow-super-light);
     padding: 0.75rem 0.9rem;
     max-width: 18rem;
     font-size: 0.75rem;
@@ -46,7 +46,7 @@
     --gorc-shape: none;
     width: 1rem;
     height: 1rem;
-    background-color: #a9a9a9;
+    background-color: var(--color-silver-grey);
     mask-image: var(--gorc-shape);
     mask-mode: alpha;
     mask-size: contain;
@@ -72,6 +72,6 @@
 
 .gorc-legend hr {
     border: none;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--color-silver-grey);
     margin: 0.5rem 0 0.6rem;
 }

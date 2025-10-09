@@ -49,7 +49,7 @@ function PanelButton({ icon, label, onClick }: PanelButton) {
     <div className="panel-button">
       <button title={label} onClick={onClick}>
         <span className="icon">{icon}</span>
-        <span className="label">{label}</span>
+        <span>{label}</span>
       </button>
     </div>
   );

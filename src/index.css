@@ -1,10 +1,36 @@
 :root {
-  --color-bg-light: #f9f9f9;
-  --color-grey-shadow: rgba(0, 0, 0, 0.08);
-  --color-core: rgb(0, 50, 124);
-  --color-optional: rgb(36, 155, 108);
-  --color-desirable:  rgb(152, 97, 41);
   --panel-size: 25rem;
+
+  --theme-blue: rgb(53,115,182);
+  --theme-blue-light: rgb(220,235,250);
+  --theme-navy: rgb(37,34,94);
+  --theme-navy-light: rgb(102,100,142);
+  --theme-navy-dark: rgb(29,27,75);
+  --theme-orange: rgb(232,142,61);
+  --theme-orange-light: rgb(247,177,112);
+  --theme-orange-dark: rgb(194,111,34);
+
+  --color-anti-flash-white-grey: rgb(238, 238,238);
+  --color-light-silver-grey: rgb(204,204,204);
+  --color-silver-grey: rgb(170,170,170);
+  --color-battleship-grey: rgb(136,136,136);
+  --color-dim-medium-grey: rgb(102, 102, 102);
+  --color-jet-dark-grey: rgb(51,51,51);
+
+  --shadow-hyper-light: rgba(0, 0, 0, 0.05);
+  --shadow-super-light: rgba(0,0,0,0.08);
+  --shadow-ultra-light: rgba(0,0,0,.12);
+  --shadow-light: rgba(0,0,0,0.15);
+  --shadow-medium: rgba(0,0,0,0.2);
+  --shadow-strong: rgba(0,0,0,0.25);
+
+  --color-core: rgb(0, 50, 124);
+  --color-core-light: rgb(222, 235, 255);
+  --color-optional: rgb(36, 155, 108);
+  --color-optional-light: rgb(219, 247, 236);
+  --color-desirable:  rgb(152, 97, 41);
+  --color-desirable-light:  rgb(246, 234, 222);
+  
   --transition-time: 0.1s;
 }
 
