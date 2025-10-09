@@ -13,7 +13,8 @@ import { v5 as uuidv5 } from "uuid";
 export class KMPackager {
   private _idTickers: Record<string, number> = {};
   private _namespace = uuidv5("rda-gorc-im", "00000000-0000-0000-0000-000000000000");
-  private _uuidSet = new Set<string>()
+  private _uuidSet = new Set<string>();
+  private _useIdChecks = true;
 
   createPackageBundleObject(
     name: string,
@@ -96,7 +97,7 @@ export class KMPackager {
           ...events,
         ],
       },
-      {
+      this.runWithoutIdChecks(() => ({
         createdAt: createdAt,
         forkOfPackageId: mainPackageId,
         id: `${organizationId}:${profileKmId}:${version}`,
@@ -117,7 +118,7 @@ export class KMPackager {
           sliceTags,
           kmUuid
         )),
-      }
+      }))
     ];
   }
 
@@ -216,6 +217,18 @@ export class KMPackager {
       ]
   }
 
+  protected runWithoutIdChecks<T>(func: () => T): T {
+    this._useIdChecks = false;
+    try {
+      const result = func();
+      this._useIdChecks = true;
+      return result;
+    } catch (e) {
+      this._useIdChecks = true;
+      throw e;
+    }
+  }
+
   protected tagFromSlice(slice: ThematicSlice, parentUuid: UUID): Event {
     const createdAt = this.getDateStr();
     return {
@@ -252,8 +265,6 @@ export class KMPackager {
     const updates = baseEvents.filter((event): event is AddChapterEvent | AddListQuestionEvent | AddItemSelectQuestionEvent | AddAnswerEvent => {
       return event.eventType === "AddChapterEvent" || event.eventType === "AddAnswerEvent" || event.eventType === "AddQuestionEvent";
     });
-
-    console.log(removals, updates)
 
     return [
       ...removals,
@@ -458,7 +469,7 @@ export class KMPackager {
 
   protected registerUUID(uuid: string) {
     if (this._uuidSet.has(uuid)) {
-      //throw new Error(`Duplicate UUID detected: '${uuid}'`)
+      if (this._useIdChecks) throw new Error(`Duplicate UUID detected: '${uuid}'`)
     } else {
       this._uuidSet.add(uuid)
     }
