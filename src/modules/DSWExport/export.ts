@@ -5,7 +5,7 @@ import {
   Feature,
   Attribute,
 } from "../GORCNodes";
-import { ModelDefinition, ModelLayerDefinition, ThematicSlice, ModelNode, getModelNodes, Nothing, ModelProfile } from "../LayeredModel";
+import { BaseModel, ModelDefinition, ModelLayerDefinition, ThematicSlice, ModelNode, getModelNodes, Nothing, ModelProfile } from "../LayeredModel";
 import { Package, PackageBundle, Event, UUID, AddChapterEvent, AddListQuestionEvent, AddItemSelectQuestionEvent, AddAnswerEvent } from "./types";
 import { v5 as uuidv5 } from "uuid";
 
@@ -16,7 +16,32 @@ export class KMPackager {
   private _uuidSet = new Set<string>();
   private _useIdChecks = true;
 
-  createPackageBundleObject(
+  createBundle(
+    model: BaseModel,
+    slices: ThematicSlice[],
+    profiles: ModelProfile[],
+    organizationId: string,
+  ): PackageBundle {
+    const kmId: string = model.id;
+    const version: string = model.version;
+    return this.createPackageBundleObject(
+      model.label,
+      this.createKMPackages(
+        model,
+        slices,
+        profiles,
+        model.label,
+        kmId,
+        version,
+        organizationId
+      ),
+      kmId,
+      version,
+      organizationId
+    );
+  }
+
+  protected createPackageBundleObject(
     name: string,
     packages: Package[],
     kmId: string,
@@ -34,7 +59,7 @@ export class KMPackager {
     };
   }
 
-  createKMPackages(
+  protected createKMPackages(
     modelDefinition: ModelDefinition,
     slices: ThematicSlice[],
     profiles: ModelProfile[],
@@ -264,7 +289,7 @@ export class KMPackager {
 
     const updates = baseEvents.filter((event): event is AddChapterEvent | AddListQuestionEvent | AddItemSelectQuestionEvent | AddAnswerEvent => {
       return event.eventType === "AddChapterEvent" || event.eventType === "AddAnswerEvent" || event.eventType === "AddQuestionEvent";
-    });
+    }).map(event => this.editEventFromAddEvent(event));
 
     return [
       ...removals,

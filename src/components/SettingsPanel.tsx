@@ -95,24 +95,12 @@ export const SettingsPanel = () => {
     model && repository
       ? () => {
           const packager = new KMPackager()
-          const kmId: string = "gorc-im";
-          const version: string = "1.0.0";
-          const organizationId: string = "rda";
-          const knowledgeModel = packager.createPackageBundleObject(
-            `Export from GORC RDA: ${repository.info.name}`,
-            packager.createKMPackages(
-              model,
-              slices,
-              selectedProfiles,
-              repository.info.name,
-              kmId,
-              version,
-              organizationId
-            ),
-            kmId,
-            version,
-            organizationId
-          );
+          const knowledgeModel = packager.createBundle(
+            model,
+            selectedSlices,
+            selectedProfiles,
+            "rda"
+          )
           const createdAt = new Date().toISOString();
           downloadData(
             JSON.stringify(knowledgeModel, undefined, "  "),
