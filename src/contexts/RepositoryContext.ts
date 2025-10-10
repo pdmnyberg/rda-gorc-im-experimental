@@ -17,7 +17,7 @@ export const RepositoryContext = React.createContext<RepositoryManager>({
   removeRepository: () => {},
 });
 
-export function createRepositoryManager(
+export function useRepositoryManager(
   initialRepos: (RepositorySource & OptionalIndicator)[]
 ): RepositoryManager {
   const [repositories, setRepositories] = React.useState(initialRepos);

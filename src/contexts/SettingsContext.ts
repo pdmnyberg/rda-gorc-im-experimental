@@ -28,7 +28,7 @@ function replaceSets(_key: string, value: unknown) {
   return value instanceof Set ? Array.from(value) : value;
 }
 
-export function createLocalStorageSettings(id: string) {
+export function useLocalStorageSettings(id: string) {
   const storeSettings = React.useCallback(
     (updatedSettingsData: SettingsData) => {
       localStorage.setItem(
@@ -58,7 +58,7 @@ export function createLocalStorageSettings(id: string) {
         });
       },
     };
-  }, [id, settingsData, setSettingsData]);
+  }, [settingsData, setSettingsData, storeSettings]);
   return settings;
 }
 

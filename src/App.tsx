@@ -9,7 +9,7 @@ import {
   AppConfig,
 } from "./contexts/ConfigContext.ts";
 import {
-  createLocalStorageSettings,
+  useLocalStorageSettings,
   SettingsContext,
 } from "./contexts/SettingsContext.ts";
 
@@ -17,8 +17,9 @@ async function loadConfig(url: string): Promise<AppConfig | null> {
   try {
     const appConfigData = await (await fetch(url)).json();
     return parseAppConfig(appConfigData);
-  } catch (_e) {
+  } catch (e) {
     console.warn(`No config found at: ${url}`);
+    console.warn(e)
     return null;
   }
 }
@@ -29,8 +30,8 @@ export const App = () => {
     loadConfig("config.json").then((loadedConfig) => {
       setConfig(loadedConfig);
     });
-  }, [setConfig, loadConfig]);
-  const settings = createLocalStorageSettings("rda-user-settings");
+  }, [setConfig]);
+  const settings = useLocalStorageSettings("rda-user-settings");
 
   const routes = (
     <Routes>

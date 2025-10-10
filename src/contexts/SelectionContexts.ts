@@ -34,8 +34,8 @@ export const SliceSelectionContext = React.createContext<
 export function useSelected<T, S, D>(
   context: React.Context<SelectionManager<T, S, D>>
 ) {
-  const [selected, ..._rest] = React.useContext(context);
-  return selected;
+  const allItems = React.useContext(context);
+  return allItems[0];
 }
 
 type SelectionState = {
