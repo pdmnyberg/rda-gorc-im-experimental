@@ -4,6 +4,7 @@ export const ossModel: BaseModel = {
     version: "0.1.0",
     id: "oss-base",
     label: "OSS Base Model",
+    updatedAt: new Date().toISOString(),
     nodes: [
         // --- Essential Element: Governance ---
         {
@@ -323,10 +324,294 @@ export const ossModel: BaseModel = {
     ]
 }
 
+export const dualLicenseModelProfile: ModelProfile = {
+  id: "oss-dual-license",
+  label: "OSS Dual-License Model",
+  version: "0.1.0",
+  modelId: "oss-base",
+  updatedAt: new Date().toISOString(),
+  nodes: [
+    // =========================================================
+    // --- Governance (dual-license compliance governance) ---
+    // =========================================================
+    {
+      id: "ee1",
+      type: "essential-element",
+      icon: "icons/compass.png",
+      shortName: "Governance",
+      name: "Project Governance (Dual-License)",
+      description:
+        "Decision-making and oversight for both open and enterprise editions, ensuring license boundary integrity.",
+      considerationLevel: "core",
+    },
+    {
+      id: "cat1",
+      parentId: "ee1",
+      type: "category",
+      shortName: "Oversight",
+      name: "Governance and Licensing Oversight",
+      description:
+        "Structures that ensure transparent separation and coordination of open and enterprise components.",
+      considerationLevel: "core",
+    },
+    {
+      id: "attr1",
+      parentId: "cat1",
+      type: "attribute",
+      shortName: "License Policy",
+      name: "License Governance Policy",
+      description:
+        "Defines clear policies that specify which modules are open-source and which are proprietary.",
+      considerationLevel: "core",
+    },
+    {
+      id: "feat1",
+      parentId: "attr1",
+      type: "feature",
+      shortName: "License Map",
+      name: "License Mapping System",
+      description:
+        "Maintains traceability between source code modules and their applicable licenses.",
+      considerationLevel: "core",
+    },
+    {
+      id: "kpi-lic1",
+      parentId: "feat1",
+      type: "kpi",
+      shortName: "Compliance Coverage",
+      name: "License Compliance Coverage",
+      description:
+        "Percentage of code modules with verified and up-to-date license mappings.",
+      considerationLevel: "core",
+    },
+    {
+      id: "kpi-lic2",
+      parentId: "feat1",
+      type: "kpi",
+      shortName: "Violation Rate",
+      name: "License Violation Incidents",
+      description:
+        "Number of license violations detected per release cycle.",
+      considerationLevel: "optional",
+    },
+
+    // Remove unrelated base KPIs
+    { id: "kpi1", type: "nothing" },
+    { id: "kpi1b", type: "nothing" },
+
+    // =========================================================
+    // --- Community Engagement (transparent dual engagement) ---
+    // =========================================================
+    {
+      id: "ee2",
+      type: "essential-element",
+      icon: "icons/two-guys.png",
+      shortName: "Community",
+      name: "Community Engagement (Dual-License)",
+      description:
+        "How community contributors interact under dual-license conditions, ensuring clarity and inclusiveness.",
+      considerationLevel: "core",
+    },
+    {
+      id: "attr2",
+      parentId: "ee2",
+      type: "attribute",
+      shortName: "Transparency",
+      name: "Transparency of Licensing Boundaries",
+      description:
+        "How clearly the project communicates what is open-source versus enterprise-only.",
+      considerationLevel: "desirable",
+    },
+    {
+      id: "feat2",
+      parentId: "attr2",
+      type: "feature",
+      shortName: "Disclosure",
+      name: "Public License Disclosure",
+      description:
+        "Publicly accessible documentation of module-level license boundaries.",
+      considerationLevel: "core",
+    },
+    {
+      id: "kpi2",
+      parentId: "feat2",
+      type: "kpi",
+      shortName: "Transparency Index",
+      name: "License Transparency Index",
+      description:
+        "Community-rated clarity of open vs. proprietary component distinctions.",
+      considerationLevel: "optional",
+    },
+
+    // Remove onboarding-related base elements
+    { id: "kpi2b", type: "nothing" },
+    { id: "attr2b", type: "nothing" },
+    { id: "feat2b", type: "nothing" },
+
+    // =========================================================
+    // --- Sustainability (monetization and funding mix) ---
+    // =========================================================
+    {
+      id: "ee3",
+      type: "essential-element",
+      icon: "icons/money-bag.png",
+      shortName: "Sustainability",
+      name: "Project Sustainability (Dual-License)",
+      description:
+        "Ensuring long-term viability through a balanced open-source and enterprise revenue model.",
+      considerationLevel: "core",
+    },
+    {
+      id: "cat2",
+      parentId: "ee3",
+      type: "category",
+      shortName: "Monetization",
+      name: "Monetization Strategy",
+      description:
+        "How the project sustains itself financially using open-core and enterprise licensing.",
+      considerationLevel: "core",
+    },
+    {
+      id: "attr3",
+      parentId: "cat2",
+      type: "attribute",
+      shortName: "Revenue Mix",
+      name: "Revenue Composition",
+      description:
+        "Distribution of revenue sources across support, hosting, and proprietary licensing.",
+      considerationLevel: "desirable",
+    },
+    {
+      id: "feat3",
+      parentId: "attr3",
+      type: "feature",
+      shortName: "Dual Streams",
+      name: "Dual Revenue Streams",
+      description:
+        "Revenue mechanisms supporting both open community and enterprise customer bases.",
+      considerationLevel: "core",
+    },
+    {
+      id: "kpi3",
+      parentId: "feat3",
+      type: "kpi",
+      shortName: "Open/Enterprise Ratio",
+      name: "Open vs Enterprise Revenue Ratio",
+      description:
+        "Percentage of revenue derived from open vs. enterprise offerings.",
+      considerationLevel: "optional",
+    },
+
+    // Remove grants/sponsor related base data
+    { id: "subcat1", type: "nothing" },
+    { id: "attr3b", type: "nothing" },
+    { id: "kpi3b", type: "nothing" },
+
+    // =========================================================
+    // --- Interoperability (ensuring fair access) ---
+    // =========================================================
+    {
+      id: "ee4",
+      type: "essential-element",
+      icon: "icons/chain-link.png",
+      shortName: "Interop",
+      name: "Interoperability (Dual-License)",
+      description:
+        "Ensures that open and enterprise editions interoperate cleanly and respect open API commitments.",
+      considerationLevel: "core",
+    },
+    {
+      id: "cat3",
+      parentId: "ee4",
+      type: "category",
+      shortName: "Interfaces",
+      name: "Open Integration Interfaces",
+      description:
+        "Guaranteeing open access through stable, versioned APIs even when enterprise modules exist.",
+      considerationLevel: "core",
+    },
+    {
+      id: "attr4",
+      parentId: "cat3",
+      type: "attribute",
+      shortName: "API Openness",
+      name: "Public API Commitment",
+      description:
+        "Proportion of interfaces guaranteed to remain open-source accessible.",
+      considerationLevel: "core",
+    },
+    {
+      id: "kpi4",
+      parentId: "attr4",
+      type: "kpi",
+      shortName: "API Openness",
+      name: "Public API Ratio",
+      description:
+        "Percentage of APIs that remain open and stable across enterprise releases.",
+      considerationLevel: "core",
+    },
+
+    // Remove irrelevant break metrics
+    { id: "attr4b", type: "nothing" },
+    { id: "kpi4b", type: "nothing" },
+
+    // =========================================================
+    // --- Adoption (dual-edition adoption metrics) ---
+    // =========================================================
+    {
+      id: "ee5",
+      type: "essential-element",
+      icon: "icons/rocket.png",
+      shortName: "Adoption",
+      name: "Adoption and Market Reach (Dual-License)",
+      description:
+        "Tracks uptake of both open and enterprise variants to inform business and community health.",
+      considerationLevel: "core",
+    },
+    {
+      id: "cat4",
+      parentId: "ee5",
+      type: "category",
+      shortName: "Usage Segments",
+      name: "Usage Segmentation",
+      description:
+        "Understanding adoption across open-source users and enterprise customers.",
+      considerationLevel: "core",
+    },
+    {
+      id: "attr5",
+      parentId: "cat4",
+      type: "attribute",
+      shortName: "Adoption Mix",
+      name: "Adoption Composition",
+      description:
+        "Differentiation between community and enterprise adoption rates.",
+      considerationLevel: "core",
+    },
+    {
+      id: "kpi5",
+      parentId: "attr5",
+      type: "kpi",
+      shortName: "Adoption Split",
+      name: "Community vs Enterprise Adoption Ratio",
+      description:
+        "Proportion of open vs enterprise users, measured by installations or usage telemetry.",
+      considerationLevel: "core",
+    },
+
+    // Remove localization-related base nodes
+    { id: "subcat3", type: "nothing" },
+    { id: "attr5b", type: "nothing" },
+    { id: "kpi5b", type: "nothing" },
+  ],
+};
+
+
 export const baseModel: BaseModel = {
     version: "0.1.0",
     id: "gorc-im-base",
     label: "GORC Base Model",
+    updatedAt: new Date().toISOString(),
     nodes: [
         /**
          * These are the essential elements of the base GORC model
@@ -660,6 +945,7 @@ export const onlyGoLProfile: ModelProfile = {
     version: "0.1.0",
     id: "gorc-im-only-gol",
     label: "GORC Only Governance & Leadership",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) !== "governance-and-leadership"
     ).map(node => ({
@@ -673,6 +959,7 @@ export const onlySustainabilityProfile: ModelProfile = {
     version: "0.0.1",
     id: "gorc-im-only-sustainability",
     label: "GORC Only Sustainability",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) !== "sustainability"
     ).map(node => ({
@@ -686,6 +973,7 @@ export const onlyRoPaAProfile: ModelProfile = {
     version: "0.0.1",
     id: "gorc-im-only-ropaa",
     label: "GORC Only Rules of Participation & Access",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) !== "rules-of-participation-and-access"
     ).map(node => ({
@@ -699,6 +987,7 @@ export const onlyGoLSlice: ThematicSlice = {
     version: "0.1.0",
     id: "gorc-im-gol-slice",
     label: "GORC Governance & Leadership Slice",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) === "governance-and-leadership"
     ).map(n => ({ nodeId: n.id }))
@@ -709,6 +998,7 @@ export const onlySustainabilitySlice: ThematicSlice = {
     version: "0.1.0",
     id: "gorc-im-sustainability-slice",
     label: "GORC Sustainability Slice",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) === "sustainability"
     ).map(n => ({ nodeId: n.id }))
@@ -719,6 +1009,7 @@ export const onlyRoPaASlice: ThematicSlice = {
     version: "0.1.0",
     id: "gorc-im-ropaa-slice",
     label: "GORC Rules of Participation & Access Slice",
+    updatedAt: new Date().toISOString(),
     nodes: baseModel.nodes.filter(
         node => getRoot(node, baseModel.nodes) === "rules-of-participation-and-access"
     ).map(n => ({ nodeId: n.id }))
@@ -732,7 +1023,8 @@ export const models = {
 export const profiles = {
     onlyGoLProfile,
     onlySustainabilityProfile,
-    onlyRoPaAProfile
+    onlyRoPaAProfile,
+    dualLicenseModelProfile,
 }
 
 export const slices = {

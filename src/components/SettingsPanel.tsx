@@ -12,10 +12,7 @@ import {
   SliceSelectionContext,
 } from "../contexts/SelectionContexts";
 import { RepositorySource } from "../modules/RepositorySource";
-import {
-  createKMPackage,
-  createPackageBundleObject,
-} from "../modules/DSWExport/export";
+import { KMPackager } from "../modules/DSWExport/export";
 import { Button } from "../components/Button/Button";
 
 function packageToSelectItem(p: Package): SelectItem {
@@ -95,32 +92,21 @@ export const SettingsPanel = () => {
   const sliceIds = selectedSlices.map((s) => s.id);
 
   const doExport =
-    model && repository
+    model
       ? () => {
-          const kmId: string = "gorc-im";
-          const version: string = "1.0.0";
-          const organizationId: string = "rda";
-          const knowledgeModel = createPackageBundleObject(
-            `Export from GORC RDA: ${repository.info.name}`,
-            [
-              createKMPackage(
-                model,
-                slices,
-                repository.info.name,
-                kmId,
-                version,
-                organizationId
-              ),
-            ],
-            kmId,
-            version,
-            organizationId
-          );
-          const createdAt = new Date().toISOString();
+          const updatedAt = model.updatedAt ? new Date(model.updatedAt) : new Date();
+          const packager = new KMPackager(updatedAt)
+          const knowledgeModel = packager.createBundle(
+            model,
+            selectedSlices,
+            selectedProfiles,
+            "rda"
+          )
+          const createdAt = updatedAt.toISOString();
           downloadData(
             JSON.stringify(knowledgeModel, undefined, "  "),
             "application/json",
-            `rda-gorc-im-${createdAt}.json`
+            `${knowledgeModel.id.replace(/:/g, "-")}-${createdAt}.json`
           );
         }
       : null;
