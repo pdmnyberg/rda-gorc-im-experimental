@@ -6,7 +6,7 @@ import { SettingsPanel } from "../../components/SettingsPanel";
 import SettingIcon from "./../../img/app-icon_settings.svg";
 import {
   TreeContext,
-  createTreeManagerFromModelNodes,
+  useTreeManagerFromModelNodes,
   getD3Layout,
 } from "../../contexts/TreeContext";
 import {
@@ -14,7 +14,7 @@ import {
   getModelNodes,
   applyLayersAndSlices,
 } from "../../modules/LayeredModel";
-import { createRepositoryManager } from "../../contexts/RepositoryContext";
+import { useRepositoryManager } from "../../contexts/RepositoryContext";
 import { HttpRepositorySource } from "../../modules/RepositorySource";
 import {
   useModelSelectionManagers,
@@ -55,7 +55,7 @@ const HomeBase = () => {
 
 const Home = () => {
   const { repositories } = useConfig();
-  const repositoryManager = createRepositoryManager(
+  const repositoryManager = useRepositoryManager(
     repositories.map((r) => new HttpRepositorySource(r))
   );
   const [repoSelection, modelSelection, profileSelection, sliceSelection] =
@@ -78,7 +78,7 @@ const Home = () => {
     () => getD3Layout(nodes, nodeSize),
     [nodes, nodeSize]
   );
-  const treeManager = createTreeManagerFromModelNodes(nodes, layout);
+  const treeManager = useTreeManagerFromModelNodes(nodes, layout);
   return (
     <RepositorySelectionContext.Provider value={repoSelection}>
       <ModelSelectionContext.Provider value={modelSelection}>

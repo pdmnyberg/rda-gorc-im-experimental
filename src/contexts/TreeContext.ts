@@ -132,7 +132,7 @@ export function getD3Layout(
       "link",
       d3
         .forceLink(edges)
-        .id((d: any) => d.id)
+        .id((d: unknown) => (d as {id: string | number}).id)
         .distance(nodeSize * spreadFactor)
     )
     .force("center", d3.forceCenter())
@@ -146,7 +146,7 @@ export function getD3Layout(
 
   simulation.tick(numberOfIterations);
   simulation.stop();
-  const layout: TreeLayout = d3Nodes.reduce((acc, node: any) => {
+  const layout: TreeLayout = d3Nodes.reduce((acc, node) => {
     acc[node.id] = { x: node.x, y: node.y };
     return acc;
   }, {} as TreeLayout);
@@ -154,7 +154,7 @@ export function getD3Layout(
   return layout;
 }
 
-export function createTreeManagerFromModelNodes(
+export function useTreeManagerFromModelNodes(
   nodes: (GORCNode | QuestionNode)[],
   layout: TreeLayout = {}
 ): TreeManager<GORCNode> {
@@ -164,7 +164,7 @@ export function createTreeManagerFromModelNodes(
   );
   const treeNodes = React.useMemo(
     () => useNodes.map<Node<GORCNode>>((n) => nodeFromGORCNode(n, layout)),
-    [useNodes]
+    [useNodes, layout]
   );
   const treeEdges = React.useMemo(
     () =>
