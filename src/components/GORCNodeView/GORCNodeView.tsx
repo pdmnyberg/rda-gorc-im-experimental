@@ -24,7 +24,7 @@ export function GORCNodeView({ data }: Props) {
           <div
             className="gorc-node-icon"
             style={
-              { "--gorc-icon": `url(${data.icon})` } as React.CSSProperties
+              data.icon ? { "--gorc-icon": `url(${data.icon})` } as React.CSSProperties : undefined
             }
           />
         </div>
