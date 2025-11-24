@@ -1,8 +1,9 @@
 import type { Node } from "@xyflow/react";
-import { GORCNode } from "../../modules/GORCNodes";
+import { GORCNode, KPI } from "../../modules/GORCNodes";
 import "./SidePanel.css";
 import { PanelWrapper } from "../PanelWrapper/PanelWrapper";
 import React from "react";
+import { useModel } from "../../contexts/ModelContext";
 
 type Props = {
   node: Node<GORCNode> | null;
@@ -12,6 +13,7 @@ type Props = {
 export const SidePanel = ({ node, onClose }: Props) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [displayedNode, setDisplayedNode] = React.useState<typeof node>(null);
+  const modelDefintion = useModel();
 
   React.useEffect(() => {
     if (node) {
@@ -29,6 +31,9 @@ export const SidePanel = ({ node, onClose }: Props) => {
   };
 
   const data = displayedNode?.data;
+  const kpiNodes = React.useMemo(() => (
+    data ? modelDefintion.nodes.filter((n): n is KPI => ["kpi", "metric"].includes(n.type)).filter(kpi => kpi.measurementOf === data.id || kpi.indicatorOf === data.id) : []
+  ), [modelDefintion, data])
 
   return (
     <PanelWrapper position="left" visible={isOpen}>
@@ -52,6 +57,12 @@ export const SidePanel = ({ node, onClose }: Props) => {
                 {data.considerationLevel}
               </span>
             </p>
+            <h3>KPI & Metrics</h3>
+            <ul>
+              {kpiNodes.map(n => (
+                <li key={n.id}>{n.name}</li>
+              ))}
+            </ul>
           </>
         ) : (
           "No data available"

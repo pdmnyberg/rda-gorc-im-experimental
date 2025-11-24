@@ -93,12 +93,15 @@ type HierarchyNode = { id: string } | { id: string; childOf: string };
 
 export type TreeLayout = { [x: string]: XYPosition };
 
+function getTreeNodes(nodes: GORCNode[]) {
+  return nodes.filter((n): n is GORCNode => n.type !== "kpi" && n.type !== "metric")
+}
+
 export function getD3Layout(
   nodes: GORCNode[],
   nodeSize: number = 120
 ): TreeLayout {
-  const useNodes = nodes
-    .filter((n): n is GORCNode => n.type !== "kpi")
+  const useNodes = getTreeNodes(nodes)
     .map<HierarchyNode>((n) =>
       "childOf" in n
         ? {
@@ -159,7 +162,7 @@ export function useTreeManagerFromModelNodes(
   layout: TreeLayout = {}
 ): TreeManager<GORCNode> {
   const useNodes = React.useMemo(
-    () => nodes.filter((n): n is GORCNode => n.type !== "kpi"),
+    () => getTreeNodes(nodes),
     [nodes]
   );
   const treeNodes = React.useMemo(

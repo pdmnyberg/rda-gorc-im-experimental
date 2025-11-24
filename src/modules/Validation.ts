@@ -156,7 +156,8 @@ export function* validateModelHierarchy(model: ModelDefinition) {
     subcategory: ["category"],
     attribute: ["essential-element", "category", "subcategory"],
     feature: ["attribute"],
-    kpi: ["attribute", "feature"],
+    kpi: [],
+    metric: []
   };
   for (const node of model.nodes) {
     const parentNode = "childOf" in node ? nodeMap[node.childOf] : null;
@@ -346,11 +347,11 @@ export function parseNode(data: unknown): ModelNode {
         >(["core", "desirable", "optional"]),
       };
       return parseObject(data, parsers, "parseNode:EssentialElement");
-    } else if (data.type === "kpi") {
+    } else if (data.type === "kpi" || data.type === "metric") {
       const parsers: Parsers<KPI> = {
-        type: parseEnumeration<KPI["type"]>(["kpi"]),
-        measurementOf: parseArray(parseType("string")),
-        indicatorOf: parseArray(parseType("string")),
+        type: parseEnumeration<KPI["type"]>(["kpi", "metric"]),
+        measurementOf: parseType("string"),
+        indicatorOf: parseType("string"),
         id: parseType("string"),
         icon: parseOptional(parseType("string", "undefined")),
         name: parseType("string"),
@@ -365,7 +366,7 @@ export function parseNode(data: unknown): ModelNode {
           "optional",
         ]),
       };
-      return parseObject(data, parsers, "parseNode:EssentialElement");
+      return parseObject(data, parsers, "parseNode:KPI or Metric");
     } else {
       const parsers: Parsers<Omit<OtherNodes, "type">> = {
         childOf: parseType("string"),
@@ -479,7 +480,9 @@ export function parseObject<T extends object>(
     }
   }
   if (errors.length > 0) {
-    throw new ErrorGroup(errors, context);
+    const id = "id" in maybeObject ? maybeObject.id : null;
+    console.log("error", maybeObject)
+    throw new ErrorGroup(errors, id ? `${context} in '${id}'` : context);
   }
   return parsed;
 }
