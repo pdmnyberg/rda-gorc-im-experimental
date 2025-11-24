@@ -18,7 +18,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "cat1",
-            parentId: "ee1",
+            childOf: "ee1",
             type: "category",
             shortName: "Leadership",
             name: "Leadership Structure",
@@ -27,7 +27,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr1",
-            parentId: "cat1",
+            childOf: "cat1",
             type: "attribute",
             shortName: "Decisions",
             name: "Decision-Making Process",
@@ -36,7 +36,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "feat1",
-            parentId: "attr1",
+            childOf: "attr1",
             type: "feature",
             shortName: "Voting",
             name: "Voting Mechanisms",
@@ -45,7 +45,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "feat1b",
-            parentId: "attr1",
+            childOf: "attr1",
             type: "feature",
             shortName: "Transparency",
             name: "Decision Transparency",
@@ -54,7 +54,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi1",
-            parentId: "feat1",
+            indicatorOf: ["feat1"],
+            measurementOf: ["feat1"],
             type: "kpi",
             shortName: "Participation",
             name: "Governance Participation Rate",
@@ -63,7 +64,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi1b",
-            parentId: "feat1",
+            indicatorOf: ["feat1"],
+            measurementOf: ["feat1"],
             type: "kpi",
             shortName: "Timeliness",
             name: "Average Decision Time",
@@ -83,7 +85,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr2",
-            parentId: "ee2",
+            childOf: "ee2",
             type: "attribute",
             shortName: "Onboarding",
             name: "Contributor Onboarding",
@@ -92,7 +94,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "feat2",
-            parentId: "attr2",
+            childOf: "attr2",
             type: "feature",
             shortName: "Guide",
             name: "Contributor Guide",
@@ -101,7 +103,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "feat2b",
-            parentId: "attr2",
+            childOf: "attr2",
             type: "feature",
             shortName: "Mentorship",
             name: "Mentorship Program",
@@ -110,7 +112,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi2",
-            parentId: "feat2",
+            indicatorOf: ["feat2"],
+            measurementOf: ["feat2"],
             type: "kpi",
             shortName: "Retention",
             name: "New Contributor Retention Rate",
@@ -119,7 +122,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi2b",
-            parentId: "feat2",
+            indicatorOf: ["feat2"],
+            measurementOf: ["feat2"],
             type: "kpi",
             shortName: "Guide Usage",
             name: "Contributor Guide Access Rate",
@@ -139,7 +143,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "cat2",
-            parentId: "ee3",
+            childOf: "ee3",
             type: "category",
             shortName: "Finance",
             name: "Financial Health",
@@ -148,7 +152,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "subcat1",
-            parentId: "cat2",
+            childOf: "cat2",
             type: "subcategory",
             shortName: "Funding",
             name: "Funding Sources",
@@ -157,7 +161,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr3",
-            parentId: "subcat1",
+            childOf: "subcat1",
             type: "attribute",
             shortName: "Grants",
             name: "Dependency on Grant Funding",
@@ -166,7 +170,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr3b",
-            parentId: "subcat1",
+            childOf: "subcat1",
             type: "attribute",
             shortName: "Sponsors",
             name: "Sponsor Engagement",
@@ -175,7 +179,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi3",
-            parentId: "attr3",
+            indicatorOf: ["attr3"],
+            measurementOf: ["attr3"],
             type: "kpi",
             shortName: "Funding $",
             name: "Annual Funding Amount",
@@ -184,7 +189,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi3b",
-            parentId: "attr3b",
+            indicatorOf: ["attr3b"],
+            measurementOf: ["attr3b"],
             type: "kpi",
             shortName: "Sponsorship Count",
             name: "Number of Active Sponsors",
@@ -204,7 +210,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "cat3",
-            parentId: "ee4",
+            childOf: "ee4",
             type: "category",
             shortName: "Standards",
             name: "Standards and Protocols",
@@ -213,7 +219,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "subcat2",
-            parentId: "cat3",
+            childOf: "cat3",
             type: "subcategory",
             shortName: "APIs",
             name: "API Design",
@@ -222,7 +228,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr4",
-            parentId: "subcat2",
+            childOf: "subcat2",
             type: "attribute",
             shortName: "API Docs",
             name: "API Documentation Quality",
@@ -231,7 +237,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr4b",
-            parentId: "subcat2",
+            childOf: "subcat2",
             type: "attribute",
             shortName: "Versioning",
             name: "API Versioning Strategy",
@@ -240,7 +246,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi4",
-            parentId: "attr4",
+            indicatorOf: ["attr4"],
+            measurementOf: ["attr4"],
             type: "kpi",
             shortName: "API Usage",
             name: "External API Usage Count",
@@ -249,7 +256,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi4b",
-            parentId: "attr4b",
+            indicatorOf: ["attr4b"],
+            measurementOf: ["attr4b"],
             type: "kpi",
             shortName: "API Breaks",
             name: "Backward Compatibility Breaks",
@@ -269,7 +277,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "cat4",
-            parentId: "ee5",
+            childOf: "ee5",
             type: "category",
             shortName: "Reach",
             name: "Community and Market Reach",
@@ -278,7 +286,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "subcat3",
-            parentId: "cat4",
+            childOf: "cat4",
             type: "subcategory",
             shortName: "Localization",
             name: "Internationalization and Localization",
@@ -287,7 +295,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr5",
-            parentId: "subcat3",
+            childOf: "subcat3",
             type: "attribute",
             shortName: "Lang Support",
             name: "Language Support Breadth",
@@ -296,7 +304,7 @@ export const ossModel: BaseModel = {
         },
         {
             id: "attr5b",
-            parentId: "subcat3",
+            childOf: "subcat3",
             type: "attribute",
             shortName: "Docs i18n",
             name: "Translated Documentation Availability",
@@ -305,7 +313,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi5",
-            parentId: "attr5",
+            indicatorOf: ["attr5"],
+            measurementOf: ["attr5"],
             type: "kpi",
             shortName: "Locales",
             name: "Number of Supported Locales",
@@ -314,7 +323,8 @@ export const ossModel: BaseModel = {
         },
         {
             id: "kpi5b",
-            parentId: "attr5b",
+            indicatorOf: ["attr5b"],
+            measurementOf: ["attr5b"],
             type: "kpi",
             shortName: "Docs Translated",
             name: "Percentage of Docs Translated",
@@ -346,7 +356,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "cat1",
-      parentId: "ee1",
+      childOf: "ee1",
       type: "category",
       shortName: "Oversight",
       name: "Governance and Licensing Oversight",
@@ -356,7 +366,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "attr1",
-      parentId: "cat1",
+      childOf: "cat1",
       type: "attribute",
       shortName: "License Policy",
       name: "License Governance Policy",
@@ -366,7 +376,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "feat1",
-      parentId: "attr1",
+      childOf: "attr1",
       type: "feature",
       shortName: "License Map",
       name: "License Mapping System",
@@ -376,7 +386,8 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "kpi-lic1",
-      parentId: "feat1",
+      indicatorOf: ["feat1"],
+      measurementOf: ["feat1"],
       type: "kpi",
       shortName: "Compliance Coverage",
       name: "License Compliance Coverage",
@@ -386,7 +397,9 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "kpi-lic2",
-      parentId: "feat1",
+      
+      indicatorOf: ["feat1"],
+      measurementOf: ["feat1"],
       type: "kpi",
       shortName: "Violation Rate",
       name: "License Violation Incidents",
@@ -414,7 +427,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "attr2",
-      parentId: "ee2",
+      childOf: "ee2",
       type: "attribute",
       shortName: "Transparency",
       name: "Transparency of Licensing Boundaries",
@@ -424,7 +437,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "feat2",
-      parentId: "attr2",
+      childOf: "attr2",
       type: "feature",
       shortName: "Disclosure",
       name: "Public License Disclosure",
@@ -434,7 +447,9 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "kpi2",
-      parentId: "feat2",
+      
+      indicatorOf: ["feat2"],
+      measurementOf: ["feat2"],
       type: "kpi",
       shortName: "Transparency Index",
       name: "License Transparency Index",
@@ -463,7 +478,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "cat2",
-      parentId: "ee3",
+      childOf: "ee3",
       type: "category",
       shortName: "Monetization",
       name: "Monetization Strategy",
@@ -473,7 +488,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "attr3",
-      parentId: "cat2",
+      childOf: "cat2",
       type: "attribute",
       shortName: "Revenue Mix",
       name: "Revenue Composition",
@@ -483,7 +498,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "feat3",
-      parentId: "attr3",
+      childOf: "attr3",
       type: "feature",
       shortName: "Dual Streams",
       name: "Dual Revenue Streams",
@@ -493,7 +508,8 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "kpi3",
-      parentId: "feat3",
+      indicatorOf: ["feat3"],
+      measurementOf: ["feat3"],
       type: "kpi",
       shortName: "Open/Enterprise Ratio",
       name: "Open vs Enterprise Revenue Ratio",
@@ -522,7 +538,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "cat3",
-      parentId: "ee4",
+      childOf: "ee4",
       type: "category",
       shortName: "Interfaces",
       name: "Open Integration Interfaces",
@@ -532,7 +548,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "attr4",
-      parentId: "cat3",
+      childOf: "cat3",
       type: "attribute",
       shortName: "API Openness",
       name: "Public API Commitment",
@@ -542,7 +558,8 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "kpi4",
-      parentId: "attr4",
+      indicatorOf: ["attr4"],
+      measurementOf: ["attr4"],
       type: "kpi",
       shortName: "API Openness",
       name: "Public API Ratio",
@@ -570,7 +587,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "cat4",
-      parentId: "ee5",
+      childOf: "ee5",
       type: "category",
       shortName: "Usage Segments",
       name: "Usage Segmentation",
@@ -580,7 +597,7 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "attr5",
-      parentId: "cat4",
+      childOf: "cat4",
       type: "attribute",
       shortName: "Adoption Mix",
       name: "Adoption Composition",
@@ -590,7 +607,8 @@ export const dualLicenseModelProfile: ModelProfile = {
     },
     {
       id: "kpi5",
-      parentId: "attr5",
+      indicatorOf: ["attr5"],
+      measurementOf: ["attr5"],
       type: "kpi",
       shortName: "Adoption Split",
       name: "Community vs Enterprise Adoption Ratio",
@@ -651,7 +669,7 @@ export const baseModel: BaseModel = {
         {
             id: "commons-strategic-planning",
             type: "category",
-            parentId: "governance-and-leadership",
+            childOf: "governance-and-leadership",
             name: "Commons Strategic Planning",
             shortName: "CSP",
             considerationLevel: "core",
@@ -660,7 +678,7 @@ export const baseModel: BaseModel = {
         {
             id: "commons-intent-and-definition",
             type: "category",
-            parentId: "governance-and-leadership",
+            childOf: "governance-and-leadership",
             name: "Commons intent and definition",
             shortName: "CID",
             considerationLevel: "core",
@@ -669,7 +687,7 @@ export const baseModel: BaseModel = {
         {
             id: "governance-of-quality-research",
             type: "category",
-            parentId: "governance-and-leadership",
+            childOf: "governance-and-leadership",
             name: "Governance* rules, principles, and enforcement of quality for Research Object*s and Services* & Tools*",
             shortName: "Governance of quality Research",
             considerationLevel: "core",
@@ -678,7 +696,7 @@ export const baseModel: BaseModel = {
         {
             id: "internal-commons-policy",
             type: "category",
-            parentId: "governance-and-leadership",
+            childOf: "governance-and-leadership",
             name: "Internal Commons* Policy Development, implementation, and review",
             shortName: "Internal Commons Policy",
             considerationLevel: "core",
@@ -687,7 +705,7 @@ export const baseModel: BaseModel = {
         {
             id: "organizational-structure",
             type: "category",
-            parentId: "governance-and-leadership",
+            childOf: "governance-and-leadership",
             name: "Organizational structures, designs, ways of working, and capability maturity level for the aims and context of the commons",
             shortName: "Organizational structure",
             considerationLevel: "core",
@@ -701,7 +719,7 @@ export const baseModel: BaseModel = {
         {
             id: "community-relations",
             type: "attribute",
-            parentId: "commons-strategic-planning",
+            childOf: "commons-strategic-planning",
             name: "Development and implementation of community* relations",
             shortName: "",
             considerationLevel: "core",
@@ -710,7 +728,7 @@ export const baseModel: BaseModel = {
         {
             id: "development-strategy",
             type: "attribute",
-            parentId: "commons-strategic-planning",
+            childOf: "commons-strategic-planning",
             name: "Development of strategy",
             shortName: "",
             considerationLevel: "core",
@@ -719,7 +737,7 @@ export const baseModel: BaseModel = {
         {
             id: "risk-management",
             type: "subcategory",
-            parentId: "commons-strategic-planning",
+            childOf: "commons-strategic-planning",
             name: "Risk Management Frameworks",
             shortName: "",
             considerationLevel: "optional",
@@ -728,7 +746,7 @@ export const baseModel: BaseModel = {
         {
             id: "policy-advocacy",
             type: "subcategory",
-            parentId: "commons-strategic-planning",
+            childOf: "commons-strategic-planning",
             name: "Policy advocacy, and recommendations",
             shortName: "",
             considerationLevel: "optional",
@@ -737,7 +755,7 @@ export const baseModel: BaseModel = {
         {
             id: "funding-and-resourcing",
             type: "subcategory",
-            parentId: "commons-strategic-planning",
+            childOf: "commons-strategic-planning",
             name: "Funding and Resourcing Frameworks",
             shortName: "",
             considerationLevel: "core",
@@ -746,7 +764,7 @@ export const baseModel: BaseModel = {
         {
             id: "relevant-roadmaps",
             type: "feature",
-            parentId: "development-strategy",
+            childOf: "development-strategy",
             name: "Development of relevant roadmaps",
             shortName: "",
             considerationLevel: "core",
@@ -755,7 +773,7 @@ export const baseModel: BaseModel = {
         {
             id: "strategic-review",
             type: "feature",
-            parentId: "development-strategy",
+            childOf: "development-strategy",
             name: "Regular strategic review and alignment exercises",
             shortName: "",
             considerationLevel: "core",
@@ -764,7 +782,7 @@ export const baseModel: BaseModel = {
         {
             id: "strategic-planning",
             type: "feature",
-            parentId: "development-strategy",
+            childOf: "development-strategy",
             name: "Strategic planning influences and approaches",
             shortName: "",
             considerationLevel: "core",
@@ -773,7 +791,7 @@ export const baseModel: BaseModel = {
         {
             id: "performance-metrics",
             type: "feature",
-            parentId: "development-strategy",
+            childOf: "development-strategy",
             name: "Development of organizational performance and capability metrics*",
             shortName: "",
             considerationLevel: "core",
@@ -782,7 +800,7 @@ export const baseModel: BaseModel = {
         {
             id: "organizational-monitoring",
             type: "feature",
-            parentId: "development-strategy",
+            childOf: "development-strategy",
             name: "A monitoring organizational design or organizational performance system to gather qualitative and quantitative metrics*",
             shortName: "",
             considerationLevel: "core",
@@ -791,7 +809,7 @@ export const baseModel: BaseModel = {
         {
             id: "develop-risk-management",
             type: "attribute",
-            parentId: "risk-management",
+            childOf: "risk-management",
             name: "Development of risk management frameworks",
             shortName: "",
             considerationLevel: "core",
@@ -800,7 +818,7 @@ export const baseModel: BaseModel = {
         {
             id: "implement-risk-management",
             type: "attribute",
-            parentId: "risk-management",
+            childOf: "risk-management",
             name: "Implementation and operationalization of risk management frameworks",
             shortName: "",
             considerationLevel: "core",
@@ -809,7 +827,7 @@ export const baseModel: BaseModel = {
         {
             id: "risk-identification",
             type: "attribute",
-            parentId: "risk-management",
+            childOf: "risk-management",
             name: "Identification of risks and issues",
             shortName: "",
             considerationLevel: "core",
@@ -818,7 +836,7 @@ export const baseModel: BaseModel = {
         {
             id: "financial-requirements",
             type: "attribute",
-            parentId: "funding-and-resourcing",
+            childOf: "funding-and-resourcing",
             name: "Identification of the financial and resource requirements for commons* activities",
             shortName: "",
             considerationLevel: "core",
@@ -827,7 +845,7 @@ export const baseModel: BaseModel = {
         {
             id: "added-value",
             type: "attribute",
-            parentId: "funding-and-resourcing",
+            childOf: "funding-and-resourcing",
             name: "Demonstration of added value",
             shortName: "",
             considerationLevel: "core",
@@ -836,7 +854,7 @@ export const baseModel: BaseModel = {
         {
             id: "business-continuity",
             type: "feature",
-            parentId: "develop-risk-management",
+            childOf: "develop-risk-management",
             name: "Business continuity planning",
             shortName: "",
             considerationLevel: "core",
@@ -845,7 +863,7 @@ export const baseModel: BaseModel = {
         {
             id: "human-rights",
             type: "feature",
-            parentId: "develop-risk-management",
+            childOf: "develop-risk-management",
             name: "Human rights risk identification and management",
             shortName: "",
             considerationLevel: "optional",
@@ -854,7 +872,7 @@ export const baseModel: BaseModel = {
         {
             id: "technology-planning",
             type: "feature",
-            parentId: "develop-risk-management",
+            childOf: "develop-risk-management",
             name: "Technology and information governance* planning",
             shortName: "",
             considerationLevel: "core",
@@ -863,7 +881,7 @@ export const baseModel: BaseModel = {
         {
             id: "health-planning",
             type: "feature",
-            parentId: "develop-risk-management",
+            childOf: "develop-risk-management",
             name: "Health and safety governance* planning",
             shortName: "",
             considerationLevel: "core",
@@ -872,7 +890,7 @@ export const baseModel: BaseModel = {
         {
             id: "environmental-considerations",
             type: "feature",
-            parentId: "financial-requirements",
+            childOf: "financial-requirements",
             name: "Environmental considerations",
             shortName: "",
             considerationLevel: "core",
@@ -881,7 +899,7 @@ export const baseModel: BaseModel = {
         {
             id: "governance-considerations",
             type: "feature",
-            parentId: "financial-requirements",
+            childOf: "financial-requirements",
             name: "Governance* considerations",
             shortName: "",
             considerationLevel: "core",
@@ -890,7 +908,7 @@ export const baseModel: BaseModel = {
         {
             id: "social-considerations",
             type: "feature",
-            parentId: "financial-requirements",
+            childOf: "financial-requirements",
             name: "Social considerations",
             shortName: "",
             considerationLevel: "core",
@@ -899,7 +917,7 @@ export const baseModel: BaseModel = {
         /*
         "": {
             type: "feature",
-            parentId: "",
+            childOf: "",
             name: "",
             shortName: "",
             considerationLevel: "core",
@@ -913,7 +931,7 @@ export const baseModel: BaseModel = {
         {
             id: "minimal-set-of-rights-and-obligations",
             type: "category",
-            parentId: "rules-of-participation-and-access",
+            childOf: "rules-of-participation-and-access",
             name: "A set of policies defining a minimal set of rights and obligations for the commons* community",
             shortName: "A minimal set of rights and obligations definition",
             considerationLevel: "core",
@@ -922,7 +940,7 @@ export const baseModel: BaseModel = {
         {
             id: "minimal-accountability",
             type: "category",
-            parentId: "rules-of-participation-and-access",
+            childOf: "rules-of-participation-and-access",
             name: "A set of policies defining minimal accountability for the commons* community",
             shortName: "Minimal accountability defintion",
             considerationLevel: "core",
@@ -934,8 +952,8 @@ export const baseModel: BaseModel = {
 function getRoot(node: ModelNode, nodes: ModelNode[]) {
     const nodeMap = nodes.reduce<Record<string, ModelNode>>((acc, n) => { acc[n.id] = n; return acc; }, {});
     let currentNode = node;
-    while ("parentId" in currentNode) {
-        currentNode = nodeMap[currentNode.parentId]
+    while ("childOf" in currentNode) {
+        currentNode = nodeMap[currentNode.childOf]
     }
     return currentNode.id;
 }

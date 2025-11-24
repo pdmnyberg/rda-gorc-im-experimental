@@ -6,31 +6,26 @@ export type GORCNode =
   | Feature
   | KPI;
 
-export type EssentialElement = Omit<IdentifiableEntity, "parentId"> & {
+export type EssentialElement = IdentifiableEntity & {
   type: "essential-element";
 };
 
-export type Category = IdentifiableEntity & { type: "category" };
+export type Category = IdentifiableEntity & Child & { type: "category" };
 
-export type Subcategory = IdentifiableEntity & { type: "subcategory" };
+export type Subcategory = IdentifiableEntity & Child & { type: "subcategory" };
 
-export type Attribute = IdentifiableEntity & { type: "attribute" };
+export type Attribute = IdentifiableEntity & Child & { type: "attribute" };
 
-export type Feature = IdentifiableEntity & { type: "feature" };
+export type Feature = IdentifiableEntity & Child & { type: "feature" };
 
-export type KPI = IdentifiableEntity & { type: "kpi" };
-
-export type QuestionNode = {
-  type: "question";
-  id: NodeId;
-  parentId: NodeId;
-  text: string;
-  description: string;
+export type KPI = IdentifiableEntity & {
+  type: "kpi";
+  measurementOf: NodeId[];
+  indicatorOf: NodeId[];
 };
 
 type IdentifiableEntity = {
   id: NodeId;
-  parentId: NodeId;
   icon?: string;
   name: string;
   shortName?: string;
@@ -41,6 +36,10 @@ type IdentifiableEntity = {
   considerationLevel: ConsiderationLevel;
   implementation?: Implementation;
 };
+
+type Child = {
+  childOf: NodeId;
+}
 
 type Source = {
   name: string;

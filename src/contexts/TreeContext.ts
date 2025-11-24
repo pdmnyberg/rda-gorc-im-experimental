@@ -1,6 +1,6 @@
 import React from "react";
 import { Node, Edge, XYPosition, MarkerType } from "@xyflow/react";
-import { GORCNode, QuestionNode, NodeId } from "../modules/GORCNodes";
+import { GORCNode, NodeId } from "../modules/GORCNodes";
 import * as d3 from "d3";
 
 export interface TreeManager<T extends Record<string, unknown> = GORCNode> {
@@ -30,7 +30,7 @@ function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): TreeLayout {
     while (currentNode) {
       depth += 1;
       currentNode =
-        "parentId" in currentNode ? nodeMap[currentNode.parentId] : null;
+        "childOf" in currentNode ? nodeMap[currentNode.childOf] : null;
     }
     acc[node.id] = depth;
     return acc;
@@ -43,7 +43,7 @@ function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): TreeLayout {
       depth += 1;
       acc[currentNode.id] = Math.max(acc[currentNode.id] || 0, depth);
       currentNode =
-        "parentId" in currentNode ? nodeMap[currentNode.parentId] : null;
+        "childOf" in currentNode ? nodeMap[currentNode.childOf] : null;
     }
     return acc;
   }, {});
@@ -56,11 +56,11 @@ function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): TreeLayout {
   const positions = levels.reduce<{ [x: string]: XYPosition }>((acc, level) => {
     const levelNodes = nodes.filter((node) => nodeDepthMap[node.id] === level);
     const groups = Array.from(
-      new Set(levelNodes.map((n) => ("parentId" in n ? n.parentId : null)))
+      new Set(levelNodes.map((n) => ("childOf" in n ? n.childOf : null)))
     );
     for (const group of groups) {
       const groupNodes = levelNodes.filter((n) =>
-        "parentId" in n ? n.parentId === group : true
+        "childOf" in n ? n.childOf === group : true
       );
       const levelSize = groupNodes.map(getNodeSize).reduce((a, b) => a + b);
       const levelRadius = levelSize / (2 * Math.PI);
@@ -70,7 +70,7 @@ function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): TreeLayout {
       let lastPosition = 0;
       for (const node of groupNodes) {
         const parentPosition: XYPosition =
-          "parentId" in node ? acc[node.parentId] : { x: 0, y: 0 };
+          "childOf" in node ? acc[node.childOf] : { x: 0, y: 0 };
         const currentNodeSize = getNodeSize(node);
         const radialPosition =
           parentRadialPosition +
@@ -89,31 +89,31 @@ function getBaseLayout(nodes: HierarchyNode[], nodeSize: number): TreeLayout {
   return positions;
 }
 
-type HierarchyNode = { id: string } | { id: string; parentId: string };
+type HierarchyNode = { id: string } | { id: string; childOf: string };
 
 export type TreeLayout = { [x: string]: XYPosition };
 
 export function getD3Layout(
-  nodes: (GORCNode | QuestionNode)[],
+  nodes: GORCNode[],
   nodeSize: number = 120
 ): TreeLayout {
   const useNodes = nodes
-    .filter((n): n is GORCNode => n.type !== "question")
+    .filter((n): n is GORCNode => n.type !== "kpi")
     .map<HierarchyNode>((n) =>
-      "parentId" in n
+      "childOf" in n
         ? {
             id: n.id,
-            parentId: n.parentId,
+            childOf: n.childOf,
           }
-        : { id: n.id, parentId: "__root" }
+        : { id: n.id, childOf: "__root" }
     );
   useNodes.push({
     id: "__root",
   });
 
   const edges = useNodes
-    .filter((n): n is HierarchyNode & { parentId: NodeId } => "parentId" in n)
-    .map(({ id, parentId }) => ({ source: parentId, target: id }));
+    .filter((n): n is HierarchyNode & { childOf: NodeId } => "childOf" in n)
+    .map(({ id, childOf }) => ({ source: childOf, target: id }));
 
   const positions = getBaseLayout(useNodes, nodeSize);
   const d3Nodes = useNodes.map((n) => ({
@@ -155,11 +155,11 @@ export function getD3Layout(
 }
 
 export function useTreeManagerFromModelNodes(
-  nodes: (GORCNode | QuestionNode)[],
+  nodes: GORCNode[],
   layout: TreeLayout = {}
 ): TreeManager<GORCNode> {
   const useNodes = React.useMemo(
-    () => nodes.filter((n): n is GORCNode => n.type !== "question"),
+    () => nodes.filter((n): n is GORCNode => n.type !== "kpi"),
     [nodes]
   );
   const treeNodes = React.useMemo(
@@ -169,7 +169,7 @@ export function useTreeManagerFromModelNodes(
   const treeEdges = React.useMemo(
     () =>
       useNodes
-        .filter((n): n is GORCNode & { parentId: NodeId } => "parentId" in n)
+        .filter((n): n is GORCNode & { childOf: NodeId } => "childOf" in n)
         .map<Edge>(edgeFromGORCNode),
     [useNodes]
   );
@@ -196,10 +196,10 @@ function nodeFromGORCNode(node: GORCNode, layout: TreeLayout): Node<GORCNode> {
   };
 }
 
-function edgeFromGORCNode(node: GORCNode & { parentId: NodeId }): Edge {
+function edgeFromGORCNode(node: GORCNode & { childOf: NodeId }): Edge {
   return {
-    id: `${node.parentId}<->${node.id}`,
-    source: node.parentId,
+    id: `${node.childOf}<->${node.id}`,
+    source: node.childOf,
     target: node.id,
     type: "straight",
     markerEnd: {
