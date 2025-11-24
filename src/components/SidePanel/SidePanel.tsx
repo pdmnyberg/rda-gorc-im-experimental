@@ -57,12 +57,19 @@ export const SidePanel = ({ node, onClose }: Props) => {
                 {data.considerationLevel}
               </span>
             </p>
-            <h3>KPI & Metrics</h3>
-            <ul>
-              {kpiNodes.map(n => (
-                <li key={n.id}>{n.name}</li>
-              ))}
-            </ul>
+            {[{type: "kpi", label: "KPIs"}, {type: "metric", label: "Metrics"}].map(({type, label}) => {
+              const filteredNodes = kpiNodes.filter(n => n.type === type)
+              return filteredNodes.length > 0 ? (
+                <React.Fragment key={type}>
+                  <h3>{label}</h3>
+                  <ul>
+                    {filteredNodes.map(n => (
+                      <li key={n.id}>{n.name} <span className={`badge ${n.considerationLevel}`}>{n.considerationLevel}</span></li>
+                    ))}
+                  </ul>
+                </React.Fragment>
+              ) : <React.Fragment key={type}></React.Fragment>
+            })}
           </>
         ) : (
           "No data available"
