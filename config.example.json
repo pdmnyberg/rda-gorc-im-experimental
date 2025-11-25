@@ -8,7 +8,7 @@
       "name": "Example Repo"
     },
     {
-      "url": "https://raw.githubusercontent.com/pdmnyberg/gorc-example-repo/refs/heads/main/gorc-and-oss/root.json",
+      "url": "https://pdmnyberg.github.io/gorc-example-repo/root.json",
       "id": "gorc-and-oss",
       "name": "GORC and OSS"
     }
