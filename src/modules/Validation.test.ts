@@ -17,6 +17,7 @@ import {
   parseModelSlice,
   parseNode,
   parseEnumeration,
+  validateModelRelations,
 } from "././Validation";
 
 import {
@@ -55,27 +56,18 @@ test("validateRelations for missing model", () => {
 test("validateModelHierarchy for correct model", () => {
   const baseNodes: ModelNode[] = [
     mockNode({ id: "a", type: "essential-element" }),
-    mockNode({ id: "b", type: "category", parentId: "a" }),
-    mockNode({ id: "c", type: "subcategory", parentId: "b" }),
+    mockNode({ id: "b", type: "category", childOf: "a" }),
+    mockNode({ id: "c", type: "subcategory", childOf: "b" }),
     ...["a", "b", "c"].map((pid) =>
-      mockNode({ id: `${pid}-attr`, type: "attribute", parentId: pid })
+      mockNode({ id: `${pid}-attr`, type: "attribute", childOf: pid })
     ),
     ...["a", "b", "c"].map((pid) =>
-      mockNode({ id: `${pid}-feat`, type: "feature", parentId: `${pid}-attr` })
-    ),
-    ...["a", "b", "c"].map((pid) =>
-      mockNode({ id: `${pid}-attr-kpi`, type: "kpi", parentId: `${pid}-attr` })
-    ),
-    ...["a", "b", "c"].map((pid) =>
-      mockNode({ id: `${pid}-feat-kpi`, type: "kpi", parentId: `${pid}-feat` })
-    ),
+      mockNode({ id: `${pid}-feat`, type: "feature", childOf: `${pid}-attr` })
+    )
   ];
   const model: ModelDefinition = {
     nodes: [
       ...baseNodes,
-      ...baseNodes.map((n) =>
-        mockNode({ id: `${n.id}-question`, type: "question", parentId: n.id })
-      ),
     ],
   };
   expect(Array.from(validateModelHierarchy(model))).toStrictEqual([]);
@@ -84,126 +76,70 @@ test("validateModelHierarchy for correct model", () => {
 test("validateModelHierarchy with incorrect parent types", () => {
   const baseNodes: ModelNode[] = [
     mockNode({ id: "a", type: "essential-element" }),
-    mockNode({ id: "b", type: "category", parentId: "a" }),
-    mockNode({ id: "c", type: "subcategory", parentId: "b" }),
-    mockNode({ id: "a-attr", type: "attribute", parentId: "a" }),
-    mockNode({ id: "a-attr-feat", type: "feature", parentId: "a-attr" }),
-    mockNode({ id: "a-attr-kpi", type: "kpi", parentId: "a-attr" }),
-    mockNode({ id: "a-question", type: "question", parentId: "a" }),
+    mockNode({ id: "b", type: "category", childOf: "a" }),
+    mockNode({ id: "c", type: "subcategory", childOf: "b" }),
+    mockNode({ id: "a-attr", type: "attribute", childOf: "a" }),
+    mockNode({ id: "a-attr-feat", type: "feature", childOf: "a-attr" }),
   ];
   const combinations: { node: ModelNode; parentType: ModelNode["type"] }[] = [
     // Test category parents
     {
-      node: mockNode({ id: "t", type: "category", parentId: "b" }),
+      node: mockNode({ id: "t", type: "category", childOf: "b" }),
       parentType: "category",
     },
     {
-      node: mockNode({ id: "t", type: "category", parentId: "c" }),
+      node: mockNode({ id: "t", type: "category", childOf: "c" }),
       parentType: "subcategory",
     },
     {
-      node: mockNode({ id: "t", type: "category", parentId: "a-attr" }),
+      node: mockNode({ id: "t", type: "category", childOf: "a-attr" }),
       parentType: "attribute",
     },
     {
-      node: mockNode({ id: "t", type: "category", parentId: "a-attr-feat" }),
+      node: mockNode({ id: "t", type: "category", childOf: "a-attr-feat" }),
       parentType: "feature",
-    },
-    {
-      node: mockNode({ id: "t", type: "category", parentId: "a-attr-kpi" }),
-      parentType: "kpi",
-    },
-    {
-      node: mockNode({ id: "t", type: "category", parentId: "a-question" }),
-      parentType: "question",
     },
 
     // Test subcategory parents
     {
-      node: mockNode({ id: "t", type: "subcategory", parentId: "c" }),
+      node: mockNode({ id: "t", type: "subcategory", childOf: "c" }),
       parentType: "subcategory",
     },
     {
-      node: mockNode({ id: "t", type: "subcategory", parentId: "a-attr" }),
+      node: mockNode({ id: "t", type: "subcategory", childOf: "a-attr" }),
       parentType: "attribute",
     },
     {
-      node: mockNode({ id: "t", type: "subcategory", parentId: "a-attr-feat" }),
+      node: mockNode({ id: "t", type: "subcategory", childOf: "a-attr-feat" }),
       parentType: "feature",
-    },
-    {
-      node: mockNode({ id: "t", type: "subcategory", parentId: "a-attr-kpi" }),
-      parentType: "kpi",
-    },
-    {
-      node: mockNode({ id: "t", type: "subcategory", parentId: "a-question" }),
-      parentType: "question",
     },
 
     // Test attribute parents
     {
-      node: mockNode({ id: "t", type: "attribute", parentId: "a-attr" }),
+      node: mockNode({ id: "t", type: "attribute", childOf: "a-attr" }),
       parentType: "attribute",
     },
     {
-      node: mockNode({ id: "t", type: "attribute", parentId: "a-attr-feat" }),
+      node: mockNode({ id: "t", type: "attribute", childOf: "a-attr-feat" }),
       parentType: "feature",
-    },
-    {
-      node: mockNode({ id: "t", type: "attribute", parentId: "a-attr-kpi" }),
-      parentType: "kpi",
-    },
-    {
-      node: mockNode({ id: "t", type: "attribute", parentId: "a-question" }),
-      parentType: "question",
     },
 
     // Test feature parents
     {
-      node: mockNode({ id: "t", type: "feature", parentId: "a" }),
+      node: mockNode({ id: "t", type: "feature", childOf: "a" }),
       parentType: "essential-element",
     },
     {
-      node: mockNode({ id: "t", type: "feature", parentId: "b" }),
+      node: mockNode({ id: "t", type: "feature", childOf: "b" }),
       parentType: "category",
     },
     {
-      node: mockNode({ id: "t", type: "feature", parentId: "c" }),
+      node: mockNode({ id: "t", type: "feature", childOf: "c" }),
       parentType: "subcategory",
     },
     {
-      node: mockNode({ id: "t", type: "feature", parentId: "a-attr-feat" }),
+      node: mockNode({ id: "t", type: "feature", childOf: "a-attr-feat" }),
       parentType: "feature",
-    },
-    {
-      node: mockNode({ id: "t", type: "feature", parentId: "a-attr-kpi" }),
-      parentType: "kpi",
-    },
-    {
-      node: mockNode({ id: "t", type: "feature", parentId: "a-question" }),
-      parentType: "question",
-    },
-
-    // Test kpi parents
-    {
-      node: mockNode({ id: "t", type: "kpi", parentId: "a" }),
-      parentType: "essential-element",
-    },
-    {
-      node: mockNode({ id: "t", type: "kpi", parentId: "b" }),
-      parentType: "category",
-    },
-    {
-      node: mockNode({ id: "t", type: "kpi", parentId: "c" }),
-      parentType: "subcategory",
-    },
-    {
-      node: mockNode({ id: "t", type: "kpi", parentId: "a-attr-kpi" }),
-      parentType: "kpi",
-    },
-    {
-      node: mockNode({ id: "t", type: "kpi", parentId: "a-question" }),
-      parentType: "question",
     },
   ];
   for (const combination of combinations) {
@@ -220,19 +156,57 @@ test("validateModelHierarchy with incorrect parent types", () => {
 });
 
 test("validateModelHierarchy with missing parents", () => {
-  const node = mockNode({ id: "b", type: "category", parentId: "c" });
-  if ("parentId" in node) {
+  const node = mockNode({ id: "b", type: "category", childOf: "c" });
+  if ("childOf" in node) {
     expect(
       Array.from(
         validateModelHierarchy({
           nodes: [node],
         })
       )
-    ).toStrictEqual([new ParentReferenceError(node)]);
+    ).toStrictEqual([new ParentReferenceError(node, "childOf", node.childOf)]);
   } else {
-    throw new Error("Missing parentId in test node");
+    throw new Error("Missing childOf in test node");
   }
 });
+
+test("validateModelRelations for correct model", () => {
+  const baseNodes: ModelNode[] = [
+    mockNode({ id: "a", type: "essential-element" }),
+    mockNode({ id: "b", type: "category", childOf: "a" }),
+    mockNode({ id: "c", type: "subcategory", childOf: "b" }),
+    ...["a", "b", "c"].map((pid) =>
+      mockNode({ id: `${pid}-metric`, type: "metric", childOf: pid })
+    ),
+    ...["a", "b", "c"].map((pid) =>
+      mockNode({ id: `${pid}-kpi`, type: "kpi", childOf: pid })
+    ),
+  ];
+  const model: ModelDefinition = {
+    nodes: [
+      ...baseNodes,
+    ],
+  };
+  expect(Array.from(validateModelRelations(model))).toStrictEqual([]);
+});
+
+test("validateModelRelations with missing relatives", () => {
+  const node = mockNode({ id: "b", type: "kpi", childOf: "c" });
+  if (node.type === "kpi" || node.type === "metric") {
+    expect(
+      Array.from(
+        validateModelRelations({
+          nodes: [node],
+        })
+      )
+    ).toStrictEqual([
+      new ParentReferenceError(node, "indicatorOf", node.indicatorOf[0]),
+      new ParentReferenceError(node, "measurementOf", node.measurementOf[0]),
+    ]);
+  } else {
+    throw new Error(`Incorrect node type for test (expected 'kpi' or 'metric'): ${node.type}`);
+  }
+})
 
 test("parsePackage with simple package", () => {
   const data: Package & { mock: string } = {
@@ -383,12 +357,11 @@ test("parseModel with simple data", () => {
   const model: ModelDefinition = {
     nodes: [
       mockNode({ id: "a", type: "essential-element" }),
-      mockNode({ id: "b", type: "category", parentId: "a" }),
-      mockNode({ id: "c", type: "subcategory", parentId: "b" }),
-      mockNode({ id: "a-attr", type: "attribute", parentId: "a" }),
-      mockNode({ id: "a-attr-feat", type: "feature", parentId: "a-attr" }),
-      mockNode({ id: "a-attr-kpi", type: "kpi", parentId: "a-attr" }),
-      mockNode({ id: "a-question", type: "question", parentId: "a" }),
+      mockNode({ id: "b", type: "category", childOf: "a" }),
+      mockNode({ id: "c", type: "subcategory", childOf: "b" }),
+      mockNode({ id: "a-attr", type: "attribute", childOf: "a" }),
+      mockNode({ id: "a-attr-feat", type: "feature", childOf: "a-attr" }),
+      mockNode({ id: "a-attr-kpi", type: "kpi", childOf: "a-attr" }),
     ],
   };
   const result = parseModel(model);
@@ -419,12 +392,11 @@ test("parseModelSlice with simple data", () => {
 test("parseNode with simple data", () => {
   const variants = [
     mockNode({ id: "a", type: "essential-element" }),
-    mockNode({ id: "b", type: "category", parentId: "a" }),
-    mockNode({ id: "c", type: "subcategory", parentId: "b" }),
-    mockNode({ id: "a-attr", type: "attribute", parentId: "a" }),
-    mockNode({ id: "a-attr-feat", type: "feature", parentId: "a-attr" }),
-    mockNode({ id: "a-attr-kpi", type: "kpi", parentId: "a-attr" }),
-    mockNode({ id: "a-question", type: "question", parentId: "a" }),
+    mockNode({ id: "b", type: "category", childOf: "a" }),
+    mockNode({ id: "c", type: "subcategory", childOf: "b" }),
+    mockNode({ id: "a-attr", type: "attribute", childOf: "a" }),
+    mockNode({ id: "a-attr-feat", type: "feature", childOf: "a-attr" }),
+    mockNode({ id: "a-attr-kpi", type: "kpi", childOf: "a-attr" }),
   ];
 
   for (const data of variants) {
@@ -464,14 +436,14 @@ function mockNode(
   base:
     | {
         id: NodeId;
-        parentId: NodeId;
+        childOf: NodeId;
         type:
           | "category"
           | "subcategory"
           | "attribute"
           | "feature"
           | "kpi"
-          | "question";
+          | "metric"
       }
     | { id: NodeId; type: "essential-element" }
 ): ModelNode {
@@ -480,11 +452,23 @@ function mockNode(
     case "category":
     case "subcategory":
     case "attribute":
-    case "feature":
+    case "feature": {
+      return {
+        id: id,
+        childOf: base.childOf,
+        type: base.type,
+        icon: `icons/${id}.png`,
+        name: `Name of ${id}`,
+        description: `Description of ${id}`,
+        considerationLevel: "core",
+      };
+    }
+    case "metric":
     case "kpi": {
       return {
         id: id,
-        parentId: base.parentId,
+        measurementOf: [base.childOf],
+        indicatorOf: [base.childOf],
         type: base.type,
         icon: `icons/${id}.png`,
         name: `Name of ${id}`,
@@ -500,15 +484,6 @@ function mockNode(
         name: `Name of ${id}`,
         description: `Description of ${id}`,
         considerationLevel: "core",
-      };
-    }
-    case "question": {
-      return {
-        type: base.type,
-        id: id,
-        description: `Description of ${id}`,
-        text: `Text of ${id}`,
-        parentId: base.parentId,
       };
     }
   }
