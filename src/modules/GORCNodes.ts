@@ -20,8 +20,8 @@ export type Feature = IdentifiableEntity & Child & { type: "feature" };
 
 export type KPI = IdentifiableEntity & {
   type: "kpi" | "metric";
-  measurementOf: NodeId;
-  indicatorOf: NodeId;
+  measurementOf: NodeId[];
+  indicatorOf: NodeId[];
 };
 
 type IdentifiableEntity = {

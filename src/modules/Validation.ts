@@ -48,14 +48,18 @@ export class IdConflictError extends Error {
 }
 
 export class ParentReferenceError extends Error {
-  public readonly item: { id: NodeId; childOf: NodeId };
-  constructor(item: { id: NodeId; childOf: NodeId }) {
+  public readonly item: { id: NodeId };
+  public readonly relation: string;
+  public readonly targetId: string;
+  constructor(item: { id: NodeId}, relation: string, targetId: string) {
     super();
     this.item = item;
+    this.relation = relation;
+    this.targetId = targetId;
     this.message = this.toString();
   }
   toString() {
-    return `Parent reference '${this.item.childOf}', used by '${this.item.id}', could not be found.`;
+    return `Parent reference '${this.targetId}', used by '${this.item.id}' with relation ${this.relation}, could not be found.`;
   }
 }
 
@@ -167,7 +171,32 @@ export function* validateModelHierarchy(model: ModelDefinition) {
       if (parentType !== null) {
         yield new ParentTypeError(node, parentType);
       } else if ("childOf" in node) {
-        yield new ParentReferenceError(node);
+        yield new ParentReferenceError(node, "childOf", node.childOf);
+      }
+    }
+  }
+}
+
+export function* validateModelRelations(model: ModelDefinition) {
+  const nodeMap = model.nodes.reduce<{ [x: NodeId]: ModelNode }>(
+    (acc, node) => {
+      acc[node.id] = node;
+      return acc;
+    },
+    {}
+  );
+  for (const node of model.nodes.filter((n): n is KPI => ["kpi", "metric"].includes(n.type))) {
+    for (const indicatedId of node["indicatorOf"]) {
+      const indicatedNode = "indicatorOf" in node ? nodeMap[indicatedId] : null;
+      if (!indicatedNode) {
+        yield new ParentReferenceError(node, "indicatorOf", indicatedId);
+      }
+    }
+
+    for (const measuredId of node["measurementOf"]) {
+      const measuredNode = "measurementOf" in node ? nodeMap[measuredId] : null;
+      if (!measuredNode) {
+        yield new ParentReferenceError(node, "measurementOf", measuredId);
       }
     }
   }
@@ -350,8 +379,8 @@ export function parseNode(data: unknown): ModelNode {
     } else if (data.type === "kpi" || data.type === "metric") {
       const parsers: Parsers<KPI> = {
         type: parseEnumeration<KPI["type"]>(["kpi", "metric"]),
-        measurementOf: parseType("string"),
-        indicatorOf: parseType("string"),
+        measurementOf: parseArray(parseType("string")),
+        indicatorOf: parseArray(parseType("string")),
         id: parseType("string"),
         icon: parseOptional(parseType("string", "undefined")),
         name: parseType("string"),

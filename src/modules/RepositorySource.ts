@@ -12,6 +12,7 @@ import {
   validateProfile,
   validateThematicSlice,
   validateUniqueIds,
+  validateModelRelations,
 } from "./Validation";
 
 export type RepositoryInfo = {
@@ -134,6 +135,7 @@ export class HttpRepositorySource implements RepositorySource {
           chain<GroupedError>([
             validateUniqueIds(model.nodes),
             validateModelHierarchy(model),
+            validateModelRelations(model),
           ]),
           `validateModel: ${model.id}`
         );

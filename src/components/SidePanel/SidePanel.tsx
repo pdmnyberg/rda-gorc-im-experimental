@@ -40,7 +40,7 @@ export const SidePanel = ({ node, onClose }: Props) => {
 
   const data = displayedNode?.data;
   const kpiNodes = React.useMemo(() => (
-    data ? modelDefintion.nodes.filter((n): n is KPI => ["kpi", "metric"].includes(n.type)).filter(kpi => kpi.measurementOf === data.id || kpi.indicatorOf === data.id) : []
+    data ? modelDefintion.nodes.filter((n): n is KPI => ["kpi", "metric"].includes(n.type)).filter(kpi => kpi.measurementOf.includes(data.id) || kpi.indicatorOf.includes(data.id)) : []
   ), [modelDefintion, data])
 
   return (
