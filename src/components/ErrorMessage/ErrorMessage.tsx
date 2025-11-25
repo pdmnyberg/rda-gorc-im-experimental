@@ -8,7 +8,10 @@ export const ErrorMessage = ({ message }: { message: string }) => {
         We couldn't fetch data from the chosen repository. <br></br> Please
         choose a different one.
       </p>
-      <pre>{message}</pre>
+      
+      <div className="error-message">
+        <pre>{message}</pre>
+      </div>
     </div>
   );
 };
