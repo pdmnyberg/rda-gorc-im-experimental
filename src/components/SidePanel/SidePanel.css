@@ -71,3 +71,13 @@
 .badge.optional {
   background-color: var(--color-optional-light);
 }
+
+.node-link {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.0);
+  transition: background-color 0.1s;
+}
+
+.node-link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

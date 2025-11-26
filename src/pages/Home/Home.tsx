@@ -22,6 +22,8 @@ import {
   ModelSelectionContext,
   ProfileSelectionContext,
   SliceSelectionContext,
+  useNodeSelectionManager,
+  NodeSelectionManager,
 } from "../../contexts/SelectionContexts";
 import { useConfig } from "../../contexts/ConfigContext.ts";
 import "@xyflow/react/dist/style.css";
@@ -80,6 +82,7 @@ const Home = () => {
     [nodes, nodeSize]
   );
   const treeManager = useTreeManagerFromModelNodes(nodes, layout);
+  const nodeSelectionManager = useNodeSelectionManager();
   return (
     <RepositorySelectionContext.Provider value={repoSelection}>
       <ModelSelectionContext.Provider value={modelSelection}>
@@ -87,7 +90,9 @@ const Home = () => {
           <SliceSelectionContext.Provider value={sliceSelection}>
             <TreeContext.Provider value={treeManager}>
               <ModelContext.Provider value={modelDefintion}>
-                <HomeBase />
+                <NodeSelectionManager.Provider value={nodeSelectionManager}>
+                  <HomeBase />
+                </NodeSelectionManager.Provider>
               </ModelContext.Provider>
             </TreeContext.Provider>
           </SliceSelectionContext.Provider>

@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import {
   ReactFlow,
   MiniMap,
@@ -14,34 +14,26 @@ import "@xyflow/react/dist/style.css";
 import { GORCNode } from "../../modules/GORCNodes";
 import { GORCLegend } from "./../Legend/GORCLegend";
 import "./Tree.css"
+import { useNodeSelection } from "../../contexts/SelectionContexts.ts";
 
 const nodeTypes = { gorc: GORCNodeView };
 
 export const Tree = () => {
   const treeManager = useTreeContext();
-  const [selectedNode, setSelectedNode] = useState<Node<GORCNode> | null>(null);
   const treeNodes = treeManager.getNodes();
-  const initialNodes = useMemo(() => {
-    return treeNodes.map((node) => ({
-      ...node,
-      data: {
-        ...node.data,
-        isSelected: selectedNode?.id === node.id,
-      },
-    }));
-  }, [treeNodes, selectedNode]);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(treeNodes);
   const edges = treeManager.getEdges();
+  const [selectedNode, setSelectedNode] = useNodeSelection();
 
   useEffect(() => {
-    setNodes(initialNodes);
-  }, [initialNodes, setNodes]);
+    setNodes(treeNodes);
+  }, [treeNodes, setNodes]);
 
   const onNodeClick = useCallback((_event: unknown, node: Node<GORCNode>) => {
-    setSelectedNode(node);
-  }, []);
+    setSelectedNode(node.data);
+  }, [setSelectedNode]);
 
-  const closePanel = () => setSelectedNode(null);
+  const closePanel = useCallback(() => setSelectedNode(null), [setSelectedNode]);
 
   return (
     <>
@@ -60,7 +52,7 @@ export const Tree = () => {
           <Controls />
         </ReactFlow>
         <GORCLegend />
-        <SidePanel node={selectedNode} onClose={closePanel} />
+        <SidePanel onClose={closePanel} />
       </div>
     </>
   );
