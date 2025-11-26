@@ -28,7 +28,16 @@ The id and name of the root.json file are used when linking the repository to th
 the [read me](../README.md) file.
 
 ## Structure of baseModels, profiles and slices
+Some fields, such as type and considerationLevel have specific values. The values of type and considerationLevel 
+are referenced in [this code file](src/modules/GORCNodes.ts). The values for type are:
+- EssentialElement
+- Category
+- Subcategory
+- Attribute
+- Feature
+- KPI
 
+The values of considerationLevel can be "core", "desirable" or "optional".
 ### Base model
 A base model describes the full conceptual model — nodes, relationships, and supporting metadata.
 Create and place the file in your repository, for example:
@@ -45,7 +54,7 @@ The model in the json file should contain information about the model and the no
   "nodes": [
     {
       "id": "my-id-1",
-      "type": "type",
+      "type": "essential-element",
       "icon": "https://example.org/path/to/icons/icon.png",
       "shortName": "Short name",
       "name": "Name",
@@ -55,11 +64,11 @@ The model in the json file should contain information about the model and the no
     {
       "id": "my-id-2",
       "parentId": "some-parent-id",
-      "type": "type",
+      "type": "core",
       "shortName": "Short name",
       "name": "Name",
       "description": "Some description",
-      "considerationLevel": "level"
+      "considerationLevel": "desirable"
     }
   ]
 }
@@ -72,17 +81,6 @@ The baseModels array in the root.json contains references to the models:
    {
   "baseModels": [
     { "ref": "models/my-base-model.json" }
-  ]
-}
-```
-
-Multiple base models are allowed:
-
-```json
-{
-  "baseModels": [
-    { "ref": "models/model-a.json" },
-    { "ref": "models/model-b.json" }
   ]
 }
 ```
@@ -107,16 +105,16 @@ A profile could be formatted like this, connected to one of the models by an id 
   "nodes": [
     {
       "id": "my-id-1",
-      "type": "type",
+      "type": "attribute",
       "icon": "https://example.org/path/to/icons/icon.png",
       "shortName": "Short name",
       "name": "Name",
       "description": "Some description",
-      "considerationLevel": "level"
+      "considerationLevel": "core"
     },
     {
       "id": "my-id-2",
-      "type": "nothing"
+      "type": "category"
     }
   ]
 }
@@ -134,7 +132,6 @@ Add it under `profiles` in `root.json`:
   ]
 }
 ```
-Multiple profiles can be added after each other, comma separated.
 
 ### Adding a thematic slice
 
@@ -211,7 +208,8 @@ After creating and adding the references to the `root.json` the file could look 
   ]
 }
 ```
-Now add the url for this file with its id and name to the config file in the project described in the [read me](../README.md) file.
+Now add the url for this file with its id and name to the config file in the project described 
+in the [read me](../README.md) file.
 
 ---
 

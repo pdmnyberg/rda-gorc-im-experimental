@@ -50,12 +50,18 @@ The application only needs the URL to a single file with
 [json formatting](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), 
 for example `root.json`; from there it follows the references to load the models,
 profiles and slices. When you have the correct format in the repository, you should add it to the file `public/config.json` 
-which should contain the following:
+and there is an example file for this [config.example.json](config.example.json) in the project.
+The file `public/config.json`  should contain the following:
+
 ```json
 {
-"url": "https://raw.githubusercontent.com/<github-user-or-org>/<repository>/refs/heads/<branch>/<repository-folder>/root.json",
-"id": "id-of-the-root-json-file",
-"name": "name-of-the-root-json-file"
+  "repositories": [
+    {
+      "url": "https://raw.githubusercontent.com/<github-user-or-org>/<repository>/refs/heads/<branch>/<repository-folder>/root.json",
+      "id": "id-of-the-root-json-file",
+      "name": "name-of-the-root-json-file"
+    }  
+  ]  
 }
 ```
 Make sure to replace the url, name and id with the ones according to your repository.
