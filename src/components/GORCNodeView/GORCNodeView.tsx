@@ -1,15 +1,18 @@
 import { Handle, Position } from "@xyflow/react";
 import { GORCNode } from "../../modules/GORCNodes";
 import "./GORCNodeView.css";
+import { useNodeSelection } from "../../contexts/SelectionContexts";
 
 type Props = {
-  data: GORCNode & { isSelected?: boolean };
+  data: GORCNode;
 };
 
 export function GORCNodeView({ data }: Props) {
+  const nodeSelection = useNodeSelection();
+  const selectedNode = nodeSelection[0]
   return (
     <div
-      className={`gorc-node-root${data.isSelected ? " selected" : ""}`}
+      className={`gorc-node-root${selectedNode && data.id === selectedNode.id ? " selected" : ""}`}
       data-type={data.type}
       data-consideration-level={data.considerationLevel}
     >
