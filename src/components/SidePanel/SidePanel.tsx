@@ -41,7 +41,14 @@ export const SidePanel = ({ node, onClose }: Props) => {
   const data = displayedNode?.data;
   const kpiNodes = React.useMemo(() => (
     data ? modelDefintion.nodes.filter((n): n is KPI => ["kpi", "metric"].includes(n.type)).filter(kpi => kpi.measurementOf.includes(data.id) || kpi.indicatorOf.includes(data.id)) : []
-  ), [modelDefintion, data])
+  ), [modelDefintion.nodes, data]);
+
+  const parent = React.useMemo(() => (
+    data && "childOf" in data ? modelDefintion.nodes.filter((n) => n.id === data.childOf)[0] : null
+  ), [modelDefintion.nodes, data])
+  const childNodes = React.useMemo(() => (
+    data ? modelDefintion.nodes.filter((n) => "childOf" in n && n.childOf === data.id) : []
+  ), [modelDefintion.nodes, data])
 
   return (
     <PanelWrapper position="left" visible={isOpen}>
@@ -60,6 +67,24 @@ export const SidePanel = ({ node, onClose }: Props) => {
             <p className="data-type">{data.type}</p>
             {data.description && <p>{data.description}</p>}
             <BadgeGroup type="Consideration Level" value={data.considerationLevel} />
+
+            <hr />
+            {parent ? <>
+              <h3>Parent</h3>
+              <ul>
+                <li>{parent.name} <BadgeGroup type="Consideration Level" value={parent.considerationLevel} /></li>
+              </ul>
+            </> : <></>}
+            {childNodes.length ? <>
+              <h3>Children</h3>
+              <ul>
+                {childNodes.map(n => (
+                    <li key={n.id}>{n.name} <BadgeGroup type="Consideration Level" value={n.considerationLevel} /></li>
+                  ))}
+              </ul>
+            </> : <></>}
+
+            <hr />
             {[{type: "kpi", label: "KPIs"}, {type: "metric", label: "Metrics"}].map(({type, label}) => {
               const filteredNodes = kpiNodes.filter(n => n.type === type)
               return filteredNodes.length > 0 ? (

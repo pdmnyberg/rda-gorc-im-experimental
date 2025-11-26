@@ -46,3 +46,15 @@ body {
 ul {
   padding-left: 1.5rem;
 }
+
+li {
+  margin: 0.5rem 0;
+}
+
+hr {
+  display: block;
+  height: 0.25rem;
+  background-color: var(--color-anti-flash-white-grey);
+  border: none;
+  margin: 1.5rem 0;
+}
