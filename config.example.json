@@ -3,12 +3,7 @@
   "useHashRouter": true,
   "repositories": [
     {
-      "url": "repos/example-repo/root.json",
-      "id": "example-repo",
-      "name": "Example Repo"
-    },
-    {
-      "url": "https://pdmnyberg.github.io/gorc-example-repo/root.json",
+      "url": "https://nbisweden.github.io/gorc-im-example-repo/root.json",
       "id": "gorc-and-oss",
       "name": "GORC and OSS"
     }
