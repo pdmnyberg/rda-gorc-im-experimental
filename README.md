@@ -17,7 +17,14 @@ The project is meant to be run locally in a docker environment, visit the [Docke
 
 ### Initial setup
 
-In order for the system to work you need to make sure that you have a repository available. Start by running:
+In order for the system to work you need to make sure that you have a repository available. Repositories can be:
+
+- generated locally (the built-in example repository), or
+- hosted anywhere that is reachable over HTTP(S), e.g. on GitHub using
+  *raw* URLs.
+
+#### Step 1: Generate the local example files
+Start by running:
 
 ```
 docker compose run vite npm run build-examples
@@ -37,6 +44,28 @@ Then you should add the file `public/config.json` which should contain the follo
   ]
 }
 ```
+
+#### Step 2: Add your repository to the application
+The application only needs the URL to a single file with
+[json formatting](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), 
+for example `root.json`; from there it follows the references to load the models,
+profiles and slices. When you have the correct format in the repository, you should add it to the file `public/config.json` 
+and there is an example file for this [config.example.json](config.example.json) in the project.
+The file `public/config.json`  should contain the following:
+
+```json
+{
+  "repositories": [
+    {
+      "url": "https://raw.githubusercontent.com/<github-user-or-org>/<repository>/refs/heads/<branch>/<repository-folder>/root.json",
+      "id": "id-of-the-root-json-file",
+      "name": "name-of-the-root-json-file"
+    }  
+  ]  
+}
+```
+Make sure to replace the url, name and id with the ones according to your repository.
+Learn more about how to set up a repository with the GORC IM, [documentation about repositories](docs/repositories.md).
 
 ### Executing program
 
