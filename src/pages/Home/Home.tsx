@@ -27,6 +27,7 @@ import { useConfig } from "../../contexts/ConfigContext.ts";
 import "@xyflow/react/dist/style.css";
 import "./Home.css";
 import { ErrorMessage } from "../../components/ErrorMessage/ErrorMessage.tsx";
+import { ModelContext } from "../../contexts/ModelContext.ts";
 
 const HomeBase = () => {
   const [selectedRepo] = React.useContext(RepositorySelectionContext);
@@ -85,7 +86,9 @@ const Home = () => {
         <ProfileSelectionContext.Provider value={profileSelection}>
           <SliceSelectionContext.Provider value={sliceSelection}>
             <TreeContext.Provider value={treeManager}>
-              <HomeBase />
+              <ModelContext.Provider value={modelDefintion}>
+                <HomeBase />
+              </ModelContext.Provider>
             </TreeContext.Provider>
           </SliceSelectionContext.Provider>
         </ProfileSelectionContext.Provider>

@@ -25,17 +25,39 @@
   font-family: sans-serif;
 }
 
-.badge {
+.badge, .badge-type {
   display: inline-block;
   padding: 0.25rem 0.6rem;
-  margin-left: 0.2rem;
+  margin: 0 0.2rem;
   font-size: 0.75rem;
   font-weight: 600;
   font-family: sans-serif;
   color: var(--color-jet-dark-grey);
   background-color: var(--color-battleship-grey);
-  border-radius: 0.1rem;
+  border-radius: 0.5rem;
   text-transform: uppercase;
+}
+
+.badge-group {
+  white-space: nowrap;
+}
+
+.badge-type {
+  color: var(--color-jet-dark-grey);
+  background-color: var(--color-anti-flash-white-grey);
+  text-transform: none;
+  margin-right: 0;
+}
+
+.badge-group > .badge-type + .badge {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: 0;
+}
+
+.badge-group > .badge-type:has(+ .badge) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .badge.core {

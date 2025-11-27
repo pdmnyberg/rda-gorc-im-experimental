@@ -158,8 +158,8 @@ export class KMPackager {
     parentUuid: string
   ): Event[] {
     const mainChapterEvents = nodes
-      .filter((node): node is GORCNode => node.type !== "question")
-      .filter((node) => !("parentId" in node))
+      .filter((node): node is GORCNode => node.type !== "kpi")
+      .filter((node) => !("childOf" in node))
       .reduce<Record<string, Event>>((acc, n) => {
         acc[n.id] = this.eventFromRootNode(n, parentUuid);
         return acc;
@@ -171,7 +171,7 @@ export class KMPackager {
         (acc, node) => {
           acc[node.id] = this.eventsFromCategoryNode(
             node,
-            mainChapterEvents[node.parentId].entityUuid,
+            mainChapterEvents[node.childOf].entityUuid,
             Object.values(sliceTags)
               .filter((t) => t.elements.has(node.id))
               .map((t) => t.event.entityUuid)
@@ -187,7 +187,7 @@ export class KMPackager {
         (acc, node) => {
           acc[node.id] = this.eventsFromCategoryNode(
             node,
-            categoryQuestions[node.parentId].elaborateUuid,
+            categoryQuestions[node.childOf].elaborateUuid,
             Object.values(sliceTags)
               .filter((t) => t.elements.has(node.id))
               .map((t) => t.event.entityUuid)
@@ -202,9 +202,9 @@ export class KMPackager {
       .reduce<Record<string, ReturnType<typeof this.eventsFromCategoryNode>>>(
         (acc, node) => {
           const parentUuid =
-            mainChapterEvents[node.parentId]?.entityUuid ||
-            categoryQuestions[node.parentId]?.elaborateUuid ||
-            subcategoryQuestions[node.parentId]?.elaborateUuid;
+            mainChapterEvents[node.childOf]?.entityUuid ||
+            categoryQuestions[node.childOf]?.elaborateUuid ||
+            subcategoryQuestions[node.childOf]?.elaborateUuid;
           if (parentUuid) {
             acc[node.id] = this.eventsFromCategoryNode(
               node,
@@ -223,7 +223,7 @@ export class KMPackager {
       .filter((node): node is Feature => node.type === "feature")
       .reduce<Record<string, ReturnType<typeof this.eventsFromCategoryNode>>>(
         (acc, node) => {
-          const parentUuid = attributeQuestions[node.parentId]?.elaborateUuid;
+          const parentUuid = attributeQuestions[node.childOf]?.elaborateUuid;
           if (parentUuid) {
             acc[node.id] = this.eventsFromCategoryNode(
               node,
@@ -284,7 +284,7 @@ export class KMPackager {
       .map(node => this.eventFromNothingNode(node, parentUuid));
 
     const updatedNodes = profile.nodes
-      .filter((node): node is GORCNode => node.type !== "question" && node.type !== "nothing")
+      .filter((node): node is GORCNode => node.type !== "kpi" && node.type !== "nothing")
     
     const baseEvents = this.eventsFromNodes(
       updatedNodes,

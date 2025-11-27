@@ -13,7 +13,6 @@ import {
 import {
   NodeId,
   EssentialElement,
-  QuestionNode,
   Category,
   Subcategory,
   Attribute,
@@ -22,7 +21,7 @@ import {
 } from "./GORCNodes";
 import { RepositoryRoot } from "./RepositorySource";
 
-type OtherNodes = Category | Subcategory | Attribute | Feature | KPI;
+type OtherNodes = Category | Subcategory | Attribute | Feature;
 
 export class ModelReferenceError extends Error {
   public readonly item: Package & ModelRelation;
@@ -49,14 +48,18 @@ export class IdConflictError extends Error {
 }
 
 export class ParentReferenceError extends Error {
-  public readonly item: { id: NodeId; parentId: NodeId };
-  constructor(item: { id: NodeId; parentId: NodeId }) {
+  public readonly item: { id: NodeId };
+  public readonly relation: string;
+  public readonly targetId: string;
+  constructor(item: { id: NodeId}, relation: string, targetId: string) {
     super();
     this.item = item;
+    this.relation = relation;
+    this.targetId = targetId;
     this.message = this.toString();
   }
   toString() {
-    return `Parent reference '${this.item.parentId}', used by '${this.item.id}', could not be found.`;
+    return `Parent reference '${this.targetId}', used by '${this.item.id}' with relation ${this.relation}, could not be found.`;
   }
 }
 
@@ -157,25 +160,43 @@ export function* validateModelHierarchy(model: ModelDefinition) {
     subcategory: ["category"],
     attribute: ["essential-element", "category", "subcategory"],
     feature: ["attribute"],
-    kpi: ["attribute", "feature"],
-    question: [
-      "essential-element",
-      "category",
-      "subcategory",
-      "attribute",
-      "feature",
-      "kpi",
-    ],
+    kpi: [],
+    metric: []
   };
   for (const node of model.nodes) {
-    const parentNode = "parentId" in node ? nodeMap[node.parentId] : null;
+    const parentNode = "childOf" in node ? nodeMap[node.childOf] : null;
     const parentType = parentNode ? parentNode.type : null;
     const allowedParents = allowedParentsMap[node.type];
     if (!allowedParents.includes(parentType)) {
       if (parentType !== null) {
         yield new ParentTypeError(node, parentType);
-      } else if ("parentId" in node) {
-        yield new ParentReferenceError(node);
+      } else if ("childOf" in node) {
+        yield new ParentReferenceError(node, "childOf", node.childOf);
+      }
+    }
+  }
+}
+
+export function* validateModelRelations(model: ModelDefinition) {
+  const nodeMap = model.nodes.reduce<{ [x: NodeId]: ModelNode }>(
+    (acc, node) => {
+      acc[node.id] = node;
+      return acc;
+    },
+    {}
+  );
+  for (const node of model.nodes.filter((n): n is KPI => ["kpi", "metric"].includes(n.type))) {
+    for (const indicatedId of node["indicatorOf"]) {
+      const indicatedNode = "indicatorOf" in node ? nodeMap[indicatedId] : null;
+      if (!indicatedNode) {
+        yield new ParentReferenceError(node, "indicatorOf", indicatedId);
+      }
+    }
+
+    for (const measuredId of node["measurementOf"]) {
+      const measuredNode = "measurementOf" in node ? nodeMap[measuredId] : null;
+      if (!measuredNode) {
+        yield new ParentReferenceError(node, "measurementOf", measuredId);
       }
     }
   }
@@ -355,18 +376,29 @@ export function parseNode(data: unknown): ModelNode {
         >(["core", "desirable", "optional"]),
       };
       return parseObject(data, parsers, "parseNode:EssentialElement");
-    } else if (data.type === "question") {
-      const parsers: Parsers<QuestionNode> = {
-        type: parseEnumeration<QuestionNode["type"]>(["question"]),
+    } else if (data.type === "kpi" || data.type === "metric") {
+      const parsers: Parsers<KPI> = {
+        type: parseEnumeration<KPI["type"]>(["kpi", "metric"]),
+        measurementOf: parseArray(parseType("string")),
+        indicatorOf: parseArray(parseType("string")),
         id: parseType("string"),
-        parentId: parseType("string"),
-        text: parseType("string"),
+        icon: parseOptional(parseType("string", "undefined")),
+        name: parseType("string"),
+        shortName: parseOptional(parseType("string", "undefined")),
         description: parseType("string"),
+        shortDescription: parseOptional(parseType("string", "undefined")),
+        examples: parseOptional(parseArray(parseType("string"))),
+        sources: parseOptional(parseArray(parseType("object"))),
+        considerationLevel: parseEnumeration<OtherNodes["considerationLevel"]>([
+          "core",
+          "desirable",
+          "optional",
+        ]),
       };
-      return parseObject(data, parsers, "parseNode:Question");
+      return parseObject(data, parsers, "parseNode:KPI or Metric");
     } else {
       const parsers: Parsers<Omit<OtherNodes, "type">> = {
-        parentId: parseType("string"),
+        childOf: parseType("string"),
         id: parseType("string"),
         icon: parseOptional(parseType("string", "undefined")),
         name: parseType("string"),
@@ -388,7 +420,6 @@ export function parseNode(data: unknown): ModelNode {
           "subcategory",
           "attribute",
           "feature",
-          "kpi",
         ])(data.type),
         ...obj,
       };
@@ -478,7 +509,9 @@ export function parseObject<T extends object>(
     }
   }
   if (errors.length > 0) {
-    throw new ErrorGroup(errors, context);
+    const id = "id" in maybeObject ? maybeObject.id : null;
+    console.log("error", maybeObject)
+    throw new ErrorGroup(errors, id ? `${context} in '${id}'` : context);
   }
   return parsed;
 }

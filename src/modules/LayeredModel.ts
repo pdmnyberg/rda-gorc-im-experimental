@@ -1,6 +1,6 @@
-import { GORCNode, QuestionNode, NodeId } from "./GORCNodes";
+import { GORCNode, NodeId } from "./GORCNodes";
 
-export type ModelNode = GORCNode | QuestionNode;
+export type ModelNode = GORCNode;
 
 export type BaseModel = Package & ModelDefinition;
 
