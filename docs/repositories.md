@@ -3,6 +3,11 @@
 This guide aims to give more detailed instructions on how to add your own GORC IM to the application. The read me file
 contains information on how to link the application with the created repository.
 
+Currently there are two existing examples of generating repositories using code:
+
+- [Local examples](../examples/example-models.ts): Builds examples using `Typescript` and instruction on how to run it can be found in the [read me](../README.md).
+- [External full example](https://github.com/NBISweden/gorc-im-example-repo): Builds an example repository using static data and en exported `xlsx` GORC IM model description (This can be used as a template for setting up github actions to host custom repositories)
+
 ## How to create a json repository
 
 Each repository should expose a single file at its top level. Create a file in the root of the repository, for example:
@@ -27,150 +32,178 @@ The basic structure looks like this:
 The id and name of the root.json file are used when linking the repository to the application, see
 the [read me](../README.md) file.
 
-## Structure of baseModels, profiles and slices
-Some fields, such as type and considerationLevel have specific values. The values of type and considerationLevel 
-are referenced in [this code file](src/modules/GORCNodes.ts). The values for type are:
-- EssentialElement
-- Category
-- Subcategory
-- Attribute
-- Feature
-- KPI
+## Using base models, profiles and thematic slices
+The data for base models, profiles and thematic slices are all contained within separate json files. These files are references by the root json file.
 
-The values of considerationLevel can be "core", "desirable" or "optional".
-### Base model
-A base model describes the full conceptual model — nodes, relationships, and supporting metadata.
-Create and place the file in your repository, for example:
-
-`models/my-base-model.json`
-
-The model in the json file should contain information about the model and the nodes it contains:
+A base model json file can be included by adding it to the `baseModels` list as follows:
 ```json
 {
-  "version": "0.1.0",
-  "id": "my-model",
-  "label": "My Model name",
-  "updatedAt": "2025-10-09T14:16:27.732Z",
-  "nodes": [
-    {
-      "id": "my-id-1",
-      "type": "essential-element",
-      "icon": "https://example.org/path/to/icons/icon.png",
-      "shortName": "Short name",
-      "name": "Name",
-      "description": "Some description",
-      "considerationLevel": "core"
-    },
-    {
-      "id": "my-id-2",
-      "parentId": "some-parent-id",
-      "type": "category",
-      "shortName": "Short name",
-      "name": "Name",
-      "description": "Some description",
-      "considerationLevel": "desirable"
-    }
-  ]
-}
-```  
-
-Connect the base model json file to the root.json file by adding it to the baseModels array.
-The baseModels array in the root.json contains references to the models:
-
-```json
-   {
   "baseModels": [
     { "ref": "models/my-base-model.json" }
   ]
 }
 ```
 
-### Profiles
+A profile json file can be included by adding it to the `profiles` list as follows:
+```json
+{
+  "profiles": [
+    { "ref": "models/my-base-model-profile.json", "modelId": "my-base-model" }
+  ]
+}
+```
 
-A profile provides a filtered or adjusted view of a specific base model.
+A thematic slice can be included by adding it to the `thematicSlices` list as follows:
+```json
+{
+  "thematicSlices": [
+    { "ref": "models/my-base-model-slice.json", "modelId": "my-base-model" }
+  ]
+}
+```
 
-Create the profile JSON file and add it to your repository, for example:
+### Strucutre of the base model
+A base model describes the full conceptual model — nodes, relationships, and supporting metadata.
+Create and place the file in your repository, for example: `models/my-base-model.json`
 
-`profiles/my-profile.json`
+The fields of a model json file can be described as follows:
 
-A profile could be formatted like this, connected to one of the models by an id and containing the nodes:
+- `version`: A semantic version number
+- `id`: A repository level unique id for the model
+- `label`: The label of the model shown in the UI
+- `updatedAt`: The date at which the model was updated
+- `nodes`: A list of model nodes. Either a Hierarchical node (EssentialElement, Category, Subcategory, Attribute or Feature) or a KPI/Metric node
+
+An example of an empty model can look as follows:
 
 ```json
 {
-  "id": "my-profile",
+  "version": "0.1.0",
+  "id": "my-model",
+  "label": "My Model name",
+  "updatedAt": "2025-10-09T14:16:27.732Z",
+  "nodes": []
+}
+```
+
+#### Shared node properties
+The nodes of a model have a number of shared properties which can be described as follows:
+
+- `id`: A model level unique id for the node
+- `shortName`: A short name describing the node to situations where space is limited in the UI
+- `name`: A longer name for situations with enough space in the UI
+- `description`: A description of the node
+- `considerationLevel`: Can be "core", "desirable" or "optional"
+
+
+#### Hierarchical nodes
+Hierarchical nodes are either EssentialElement, Category, Subcategory, Attribute or Feature nodes. The unique properties for hierarchical nodes can be described as follows:
+
+- `childOf`: A reference to anther node `id` in the same model (Note that EssentialElement does not have this property)
+- `type`: Can be "essential-element", "category", "subcategory", "attribute" or "feature" depending on which node is being represented
+
+An example of a hierarchical node can look as follows:
+
+```json
+{
+  "id": "example-category",
+  "childOf": "example-ee",
+  "type": "category",
+  "shortName": "An example category",
+  "name": "An example category demonstrating nodes",
+  "description": "This example category demonstrates the use of a category node",
+  "considerationLevel": "desirable"
+}
+```
+
+#### KPI/Metric nodes
+KPI/Metric nodes are of the type KPI. The unique properties of these nodes can be described as follows:
+
+- `measurementOf`: A reference to anther node `id` in the same model
+- `indicatorOf`: A reference to anther node `id` in the same model
+- `type`: Can be "metric", "kpi" depending on which node is being represented
+
+An example of a KPI/Metric node looks as follows:
+
+```json
+{
+  "id": "example-metric",
+  "measurementOf": "example-ee1",
+  "indicatorOf": "example-ee2",
+  "type": "metric",
+  "shortName": "An example metric",
+  "name": "An example metric demonstrating nodes",
+  "description": "This example metric demonstrates the use of a metric node",
+  "considerationLevel": "core"
+}
+```
+
+### Structure of profiles
+
+A profile provides a filtered or adjusted view of a specific base model.
+
+Create the profile JSON file and add it to your repository, for example: `profiles/my-base-model-profile.json`
+
+A profile has a similar structure as a base model but with the addition of a `modelId` and an expectation of the nodes
+to be applied as changes to exisiting nodes. The rules applies for `nodes` in a profile as what would apply for `nodes` in a base model.
+The main difference is that a profile allows for one additional node type which is the `Nothing` node.
+
+A profile could be formatted like this, connected to one of the models by an id and containing the node changes:
+
+```json
+{
+  "id": "my-base-model-profile",
   "label": "My profile",
   "version": "0.1.0",
   "modelId": "my-model",
   "updatedAt": "2025-10-09T14:16:27.732Z",
   "nodes": [
     {
-      "id": "my-id-1",
-      "type": "attribute",
-      "icon": "https://example.org/path/to/icons/icon.png",
-      "shortName": "Short name",
-      "name": "Name",
-      "description": "Some description",
-      "considerationLevel": "core"
+      "id": "example-category",
+      "childOf": "example-ee",
+      "type": "category",
+      "shortName": "An example category",
+      "name": "An example category demonstrating nodes",
+      "description": "This example category demonstrates the use of a category node",
+      "considerationLevel": "desirable"
     },
-    {
-      "id": "my-id-2",
-      "type": "category"
-    }
+    {"type": "nothing", "nodeId": "example-metric"}
   ]
 }
 ```
 
-Add it under `profiles` in `root.json`:
+#### Nothing node
+The nothing node has the following properties:
 
-```json
-{
-  "profiles": [
-    {
-      "ref": "profiles/my-profile.json",
-      "modelId": "my-base-model"
-    }
-  ]
-}
-```
+- `type`: Can only be "nothing"
+- `nodeId`: A reference to a node id, in the base model, which should be removed when the profile is applied
 
-### Adding a thematic slice
+
+### Structure of thematic slices
 
 A slice groups a set of nodes around a shared theme or concept.
 
-Create the slice JSON and place it in the repository for example:
+Create the slice JSON and place it in the repository for example: `slices/my-base-model-slice.json`
 
-`slices/my-slice.json`
+The properties of the `nodes` of a thematic slice can be described as follows:
+
+- `nodeId`: A reference to a node `id`, in the base model, which should be included when the slice is applied.
 
 A slice contains a reference to a model:
-
 
 ```json
 {
   "modelId": "my-base-model",
   "version": "0.1.0",
-  "id": "my-thematic-slice",
+  "id": "my-base-model-slice",
   "label": "Thematic Slice A",
   "updatedAt": "2025-10-09T14:16:27.732Z",
   "nodes": [
-    { "nodeId": "some-node-id" },
-    { "nodeId": "some-other-node-id" }
+    { "nodeId": "example-ee" },
+    { "nodeId": "example-category" }
   ]
 }
 ```
-
-Register the slice in the root.json file by adding it to `thematicSlices`:
-
-```json
-{
-  "thematicSlices": [
-    {
-      "ref": "slices/my-slice.json",
-      "modelId": "my-base-model"
-    }
-  ]
-}
-```
-Multiple slices can be added after each other. 
 
 ### Results
 
@@ -188,7 +221,7 @@ After creating and adding the references to the `root.json` the file could look 
   ],
   "profiles": [
     {
-      "ref": "profiles/my-profile.json",
+      "ref": "profiles/my-base-model-profile.json",
       "modelId": "my-base-model"
     },
     {
@@ -198,7 +231,7 @@ After creating and adding the references to the `root.json` the file could look 
   ],
   "thematicSlices": [
     {
-      "ref": "slices/my-slice.json",
+      "ref": "slices/my-base-model-slice.json",
       "modelId": "my-base-model"
     },
     {
