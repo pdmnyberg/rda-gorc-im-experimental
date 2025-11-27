@@ -9,10 +9,11 @@ type Props = {
   onClose: () => void;
 };
 
-function BadgeGroup({type, value}: {type: string, value: string}) {
+function BadgeGroup({type, value, badgeType}: {type: string, value: string, badgeType?: string}) {
+  badgeType = badgeType || value
   return (
     <span className="badge-group">
-      <span className="badge-type">{type}</span><span className={`badge ${value}`}>{value}</span>
+      <span className="badge-type">{type}</span><span className={`badge ${badgeType}`}>{value}</span>
     </span>
   )
 }
@@ -71,14 +72,22 @@ export const SidePanel = ({ onClose }: Props) => {
           {parent ? <>
             <h3>Parent</h3>
             <ul>
-              <li><a className="node-link" onClick={() => setNode(parent)}>{parent.name}</a> <BadgeGroup type="Consideration Level" value={parent.considerationLevel} /></li>
+              <li>
+                <a className="node-link" onClick={() => setNode(parent)}>{parent.name}</a>
+                <BadgeGroup type="Type" value={parent.type} badgeType={parent.considerationLevel} />
+                <BadgeGroup type="Consideration Level" value={parent.considerationLevel} />
+              </li>
             </ul>
           </> : <></>}
           {childNodes.length ? <>
             <h3>Children</h3>
             <ul>
               {childNodes.map(n => (
-                  <li key={n.id}><a className="node-link" onClick={() => setNode(n)}>{n.name}</a> <BadgeGroup type="Consideration Level" value={n.considerationLevel} /></li>
+                  <li key={n.id}>
+                    <a className="node-link" onClick={() => setNode(n)}>{n.name}</a>
+                    <BadgeGroup type="Type" value={n.type} badgeType={n.considerationLevel} />
+                    <BadgeGroup type="Consideration Level" value={n.considerationLevel} />
+                  </li>
                 ))}
             </ul>
           </> : <></>}

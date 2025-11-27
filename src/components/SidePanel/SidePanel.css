@@ -39,7 +39,8 @@
 }
 
 .badge-group {
-  white-space: nowrap;
+  display: inline-block;
+  margin: 0.25rem 0;
 }
 
 .badge-type {
@@ -70,6 +71,15 @@
 
 .badge.optional {
   background-color: var(--color-optional-light);
+}
+
+.badge.essential-element, 
+.badge.category, 
+.badge.subcategory, 
+.badge.attribute, 
+.badge.feature
+{
+  background-color: var(--color-core-light);
 }
 
 .node-link {
