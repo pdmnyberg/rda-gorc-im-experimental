@@ -59,12 +59,12 @@ The model in the json file should contain information about the model and the no
       "shortName": "Short name",
       "name": "Name",
       "description": "Some description",
-      "considerationLevel": "level"
+      "considerationLevel": "core"
     },
     {
       "id": "my-id-2",
       "parentId": "some-parent-id",
-      "type": "core",
+      "type": "category",
       "shortName": "Short name",
       "name": "Name",
       "description": "Some description",
