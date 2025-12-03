@@ -27,7 +27,7 @@ In order for the system to work you need to make sure that you have a repository
 Start by running:
 
 ```
-docker compose run vite npm run build-examples
+./compose-dev.sh run --rm vite npm run build-examples
 ```
 
 Then you should add the file `public/config.json` which should contain the following:
@@ -72,19 +72,19 @@ Learn more about how to set up a repository with the GORC IM, [documentation abo
 After cloning the repository you can run the project with:
 
 ```
-docker-compose up
+./compose-dev.sh up
 ```
 
 Rebuild the container:
 
 ```
-docker-compose build
+./compose-dev.sh build
 ```
 
 Stopping the app:
 
 ```
-docker-compose stop
+./compose-dev.sh stop
 ```
 
 ### Unit testing
@@ -94,7 +94,7 @@ This project uses `vitest` for unit testing. Additional information on how to ge
 Run tests:
 
 ```sh
-docker compose exec vite npm run test
+./compose-dev.sh exec vite npm run test
 ```
 
 ### Formatting the code

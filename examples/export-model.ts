@@ -48,7 +48,7 @@ function updateIcons<T extends ModelDefinition | ModelLayerDefinition>(model: T,
     return {
         ...model,
         nodes: model.nodes.map(node => {
-            if (node.icon) {
+            if ("icon" in node && node.icon) {
                 return {
                     ...node,
                     icon: `${relativeCssPath}${node.icon}`
