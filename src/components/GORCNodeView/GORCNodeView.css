@@ -162,4 +162,7 @@
   padding: calc(var(--gorc-node-size) / 2);
   background-color: var(--gorc-node-text-background-color);
   border-radius: 0.5rem;
+  transition: 
+    background-color var(--gorc-node-animation-time),
+    color var(--gorc-node-animation-time);
 }
