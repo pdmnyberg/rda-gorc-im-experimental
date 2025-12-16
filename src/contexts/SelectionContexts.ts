@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { RepositorySource } from "../modules/RepositorySource";
 import {
   BaseModel,
@@ -7,6 +7,7 @@ import {
 } from "../modules/LayeredModel";
 import { RepositoryManager } from "./RepositoryContext";
 import { useSettings, SettingsData } from "../contexts/SettingsContext";
+import { GORCNode } from "../modules/GORCNodes";
 
 type SelectionManager<T, S = T, D = null> = [
   S | D,
@@ -14,6 +15,10 @@ type SelectionManager<T, S = T, D = null> = [
   (selection: S) => void,
 ];
 type MultiSelectionManager<T> = SelectionManager<T, T[], T[]>;
+
+export const NodeSelectionManager = React.createContext<
+  SelectionManager<GORCNode, GORCNode | null>
+>([null, [], () => {console.log("Bad manager")}]);
 
 export const RepositorySelectionContext = React.createContext<
   SelectionManager<RepositorySource>
@@ -174,4 +179,22 @@ export function useModelSelectionManagers(
       (ss) => update({ sliceIds: new Set(ss.map((s) => s.id)) }),
     ],
   ];
+}
+
+export function useNodeSelectionManager() {
+  const [selectedNode, setSelectedNode] = React.useState<GORCNode | null>(null);
+  const selectionManager = React.useMemo<SelectionManager<GORCNode, GORCNode | null>>(() => {
+    return [
+      selectedNode,
+      [],
+      setSelectedNode
+    ]
+  }, [selectedNode, setSelectedNode]);
+  return selectionManager;
+}
+
+
+export function useNodeSelection(): [GORCNode | null, (selection: GORCNode | null) => void] {
+  const manager = useContext(NodeSelectionManager);
+  return [manager[0], manager[2]]
 }
