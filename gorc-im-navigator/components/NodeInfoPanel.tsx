@@ -50,57 +50,52 @@ export const NodeInfoPanel = ({node, setNode}: {node: GORCNode | null, setNode: 
     node ? modelDefintion.nodes.filter((n) => "childOf" in n && n.childOf === node.id) : []
   ), [modelDefintion.nodes, node])
 
-  return (
+  return node ? (
     <>
-      {node ? (
-        <>
-          {node.name !== node.shortName ? <h6>{node.name}</h6> : <></>}
-          <p className="data-type">{node.type}</p>
-          {node.description && <p>{node.description}</p>}
-          <BadgeGroup type="Consideration Level" value={node.considerationLevel} color={colorFromConsiderationLevel(node.considerationLevel)} />
-
-          <hr />
-          {parent ? <>
-            <h6>Parent</h6>
-            <ul>
-              <li>
-                <a className="node-link" onClick={() => setNode(parent)}>{parent.name}</a>
-                <BadgeGroup type="Type" value={parent.type} color="success" />
-                <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(parent.considerationLevel)} value={parent.considerationLevel} />
+      {node.name !== node.shortName ? <h6>{node.name}</h6> : <></>}
+      <p className="data-type">{node.type}</p>
+      {node.description && <p>{node.description}</p>}
+      <BadgeGroup type="Consideration Level" value={node.considerationLevel} color={colorFromConsiderationLevel(node.considerationLevel)} />
+      <hr />
+      {parent ? <>
+        <h6>Parent</h6>
+        <ul>
+          <li>
+            <a className="node-link" onClick={() => setNode(parent)}>{parent.name}</a>
+            <BadgeGroup type="Type" value={parent.type} color="success" />
+            <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(parent.considerationLevel)} value={parent.considerationLevel} />
+          </li>
+        </ul>
+      </> : <></>}
+      {childNodes.length ? <>
+        <h6>Children</h6>
+        <ul>
+          {childNodes.map(n => (
+              <li key={n.id}>
+                <a className="node-link" onClick={() => setNode(n)}>{n.name}</a>
+                <BadgeGroup type="Type" value={n.type} color="success" />
+                <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(n.considerationLevel)} value={n.considerationLevel} />
               </li>
-            </ul>
-          </> : <></>}
-          {childNodes.length ? <>
-            <h6>Children</h6>
-            <ul>
-              {childNodes.map(n => (
-                  <li key={n.id}>
-                    <a className="node-link" onClick={() => setNode(n)}>{n.name}</a>
-                    <BadgeGroup type="Type" value={n.type} color="success" />
-                    <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(n.considerationLevel)} value={n.considerationLevel} />
-                  </li>
-                ))}
-            </ul>
-          </> : <></>}
+            ))}
+        </ul>
+      </> : <></>}
 
-          <hr />
-          {[{type: "kpi", label: "KPIs"}, {type: "metric", label: "Metrics"}].map(({type, label}) => {
-            const filteredNodes = kpiNodes.filter(n => n.type === type)
-            return filteredNodes.length > 0 ? (
-              <React.Fragment key={type}>
-                <h6>{label}</h6>
-                <ul>
-                  {filteredNodes.map(n => (
-                    <li key={n.id}>{n.name} <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(n.considerationLevel)} value={n.considerationLevel} /></li>
-                  ))}
-                </ul>
-              </React.Fragment>
-            ) : <React.Fragment key={type}></React.Fragment>
-          })}
-        </>
-      ) : (
-        (null as React.ReactNode)
-      )}
+      <hr />
+      {[{type: "kpi", label: "KPIs"}, {type: "metric", label: "Metrics"}].map(({type, label}) => {
+        const filteredNodes = kpiNodes.filter(n => n.type === type)
+        return filteredNodes.length > 0 ? (
+          <React.Fragment key={type}>
+            <h6>{label}</h6>
+            <ul>
+              {filteredNodes.map(n => (
+                <li key={n.id}>{n.name} <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(n.considerationLevel)} value={n.considerationLevel} /></li>
+              ))}
+            </ul>
+          </React.Fragment>
+        ) : <React.Fragment key={type}></React.Fragment>
+      })}
     </>
-  );
+  ) : (
+    <></>
+  )
 };
