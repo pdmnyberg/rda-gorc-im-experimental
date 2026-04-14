@@ -14,7 +14,8 @@ export function Panels() {
   const config = useConfig();
   const navItems = useMemo(() => [
     {label: "Settings", action: () => setActivePanel((current) => current === "settings" ? null : "settings"), id: "settings"},
-    {label: "Info", href: "", id: "info"}
+    {label: "Home", href: "/", id: "home"},
+    {label: "About", href: "/about", id: "about"}
   ], [setActivePanel])
   return (
     <>

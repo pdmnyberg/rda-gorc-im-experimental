@@ -17,11 +17,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const basePath = process.env.NEXT_PUBLIC_API_URL || "";
   return (
     <html lang="en">
       <body>
         <LocalStorageSettings id="gorc-im-navigator">
-          <JSONConfigProvider src="config.json">
+          <JSONConfigProvider src={`${basePath}/config.json`}>
             <AppContext>{children}</AppContext>
           </JSONConfigProvider>
         </LocalStorageSettings>
