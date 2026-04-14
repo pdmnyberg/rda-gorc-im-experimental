@@ -47,8 +47,8 @@ export const NodeInfoPanel = ({node, setNode}: {node: GORCNode | null, setNode: 
   return node ? (
     <>
       {node.name !== node.shortName ? <h6>{node.name}</h6> : <></>}
-      <p className="data-type">{node.type}</p>
       {node.description && <p>{node.description}</p>}
+      <BadgeGroup type="Type" value={node.type} color="info" />
       <BadgeGroup type="Consideration Level" value={node.considerationLevel} color={node.considerationLevel} />
       <hr />
       {parent ? <>
