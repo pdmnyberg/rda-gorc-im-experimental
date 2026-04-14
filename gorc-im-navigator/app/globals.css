@@ -69,3 +69,15 @@ hr {
   box-sizing: border-box;
   overflow: hidden;
 }
+
+.text-bg-core {
+  background-color: var(--color-core);
+}
+
+.text-bg-desirable {
+  background-color: var(--color-desirable);
+}
+
+.text-bg-optional {
+  background-color: var(--color-optional);
+}

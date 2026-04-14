@@ -10,7 +10,10 @@ type UIColor = (
   "warning" |
   "info" |
   "light" |
-  "dark"
+  "dark" |
+  "core" |
+  "desirable" |
+  "optional"
 )
 
 type BadgeGroupProps = {
@@ -26,15 +29,6 @@ function BadgeGroup({type, value, color}: BadgeGroupProps) {
       <span className="text-capitalize">{type}</span>: <span className="text-capitalize">{value}</span>
     </span>
   )
-}
-
-function colorFromConsiderationLevel(level: GORCNode["considerationLevel"]): UIColor {
-  const map: Record<GORCNode["considerationLevel"], UIColor> = {
-    "core": "primary",
-    "desirable": "secondary",
-    "optional": "info",
-  };
-  return map[level];
 }
 
 export const NodeInfoPanel = ({node, setNode}: {node: GORCNode | null, setNode: (n: GORCNode | null) => void}) => {
@@ -55,15 +49,15 @@ export const NodeInfoPanel = ({node, setNode}: {node: GORCNode | null, setNode: 
       {node.name !== node.shortName ? <h6>{node.name}</h6> : <></>}
       <p className="data-type">{node.type}</p>
       {node.description && <p>{node.description}</p>}
-      <BadgeGroup type="Consideration Level" value={node.considerationLevel} color={colorFromConsiderationLevel(node.considerationLevel)} />
+      <BadgeGroup type="Consideration Level" value={node.considerationLevel} color={node.considerationLevel} />
       <hr />
       {parent ? <>
         <h6>Parent</h6>
         <ul>
           <li>
             <a className="node-link" onClick={() => setNode(parent)}>{parent.name}</a>
-            <BadgeGroup type="Type" value={parent.type} color="success" />
-            <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(parent.considerationLevel)} value={parent.considerationLevel} />
+            <BadgeGroup type="Type" value={parent.type} color="info" />
+            <BadgeGroup type="Consideration Level" color={parent.considerationLevel} value={parent.considerationLevel} />
           </li>
         </ul>
       </> : <></>}
@@ -73,8 +67,8 @@ export const NodeInfoPanel = ({node, setNode}: {node: GORCNode | null, setNode: 
           {childNodes.map(n => (
               <li key={n.id}>
                 <a className="node-link" onClick={() => setNode(n)}>{n.name}</a>
-                <BadgeGroup type="Type" value={n.type} color="success" />
-                <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(n.considerationLevel)} value={n.considerationLevel} />
+                <BadgeGroup type="Type" value={n.type} color="info" />
+                <BadgeGroup type="Consideration Level" color={n.considerationLevel} value={n.considerationLevel} />
               </li>
             ))}
         </ul>
@@ -88,7 +82,7 @@ export const NodeInfoPanel = ({node, setNode}: {node: GORCNode | null, setNode: 
             <h6>{label}</h6>
             <ul>
               {filteredNodes.map(n => (
-                <li key={n.id}>{n.name} <BadgeGroup type="Consideration Level" color={colorFromConsiderationLevel(n.considerationLevel)} value={n.considerationLevel} /></li>
+                <li key={n.id}>{n.name} <BadgeGroup type="Consideration Level" color={n.considerationLevel} value={n.considerationLevel} /></li>
               ))}
             </ul>
           </React.Fragment>
