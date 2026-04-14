@@ -31,15 +31,17 @@ function replaceSets(_key: string, value: unknown) {
 export function useLocalStorageSettings(id: string) {
   const storeSettings = React.useCallback(
     (updatedSettingsData: SettingsData) => {
-      localStorage.setItem(
-        id,
-        JSON.stringify(updatedSettingsData, replaceSets)
-      );
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(
+          id,
+          JSON.stringify(updatedSettingsData, replaceSets)
+        );
+      }
     },
     [id]
   );
   const [settingsData, setSettingsData] = React.useState<SettingsData>(() => {
-    const data = localStorage.getItem(id);
+    const data = typeof localStorage !== "undefined" ? localStorage.getItem(id) : null;
     const s = parseSettingsData(data);
     storeSettings(s);
     return s;

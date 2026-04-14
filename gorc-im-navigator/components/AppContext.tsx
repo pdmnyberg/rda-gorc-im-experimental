@@ -1,3 +1,4 @@
+"use client"
 import { useConfig } from "@/contexts/ConfigContext";
 import { ModelContext } from "@/contexts/ModelContext";
 import { useRepositoryManager } from "@/contexts/RepositoryContext";
