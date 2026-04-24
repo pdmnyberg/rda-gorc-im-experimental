@@ -3,8 +3,8 @@ import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { AppContext } from "@/components/AppContext";
-import { LocalStorageSettings } from "@/components/LocalStorageSettings";
 import { JSONConfigProvider } from "@/components/JSONConfigProvider";
+import { UrlSettings } from "@/components/UrlSettings";
 
 
 export const metadata: Metadata = {
@@ -21,11 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LocalStorageSettings id="gorc-im-navigator">
+        <UrlSettings>
           <JSONConfigProvider src={`${basePath}/config.json`}>
             <AppContext>{children}</AppContext>
           </JSONConfigProvider>
-        </LocalStorageSettings>
+        </UrlSettings>
       </body>
     </html>
   );
