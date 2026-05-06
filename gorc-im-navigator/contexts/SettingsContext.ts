@@ -65,55 +65,49 @@ export function useLocalStorageSettings(id: string) {
   return settings;
 }
 
-
 export function useUrlSettings() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const settingsData = useMemo(() => parseSettingsDataFromParams(searchParams), [searchParams]);
+
   const storeSettings = React.useCallback(
     (updatedSettingsData: SettingsData) => {
-      
+      const params = settingsToParams(updatedSettingsData, searchParams)
+
+      router.push(`${pathname}?${params.toString()}`)
     },
     [searchParams, pathname, router]
   );
-  const [settingsData, setSettingsData] = React.useState<SettingsData>(() => {
-    return parseSettingsDataFromParams(searchParams)
-  });
-  useEffect(() => {
-    setSettingsData(parseSettingsDataFromParams(searchParams));
-  }, [searchParams]);
-  const nextUrl = useMemo(() => {
-    const params = Object.entries(settingsData).reduce((acc, [key, value]) => {
-      if (typeof value === "undefined") {
-        acc.delete(key)
-      } else if (typeof value === "string") {
-        acc.set(key, value)
-      } else {
-        acc.set(key, Array.from(value).join(","))
-      }
-      return acc;
-    }, new URLSearchParams(searchParams));
-    return `${pathname}?${params.toString()}`;
-  }, [settingsData, router, pathname, searchParams])
-  useEffect(() => {
-    router.push(nextUrl);
-  }, [nextUrl])
+
   const settings: Settings = React.useMemo(() => {
     return {
       ...settingsData,
       update(data) {
-        setSettingsData((sd) => {
-          const updatedSettingsData = {
-            ...sd,
-            ...data,
-          };
-          return updatedSettingsData;
+        storeSettings({
+          ...settingsData,
+          ...data,
         });
       },
     };
-  }, [settingsData, setSettingsData, storeSettings]);
+  }, [settingsData, storeSettings]);
   return settings;
+}
+
+function settingsToParams(settingsData: SettingsData, initialParams?: URLSearchParams): URLSearchParams {
+  return Object.entries(settingsData).reduce((acc, [key, value]) => {
+    if (typeof value === "undefined") {
+      acc.delete(key)
+    } else if (typeof value === "string") {
+      acc.set(key, value)
+    } else if (value.size > 0) {
+      acc.set(key, Array.from(value).join(","))
+    } else if (value.size === 0) {
+      acc.delete(key)
+    }
+    return acc;
+  }, new URLSearchParams(initialParams));
 }
 
 function parseSettingsDataFromParams(params: ReadonlyURLSearchParams) {
