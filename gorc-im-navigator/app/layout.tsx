@@ -5,6 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { AppContext } from "@/components/AppContext";
 import { JSONConfigProvider } from "@/components/JSONConfigProvider";
 import { UrlSettings } from "@/components/UrlSettings";
+import { Panels } from "@/components/Panels";
 
 
 export const metadata: Metadata = {
@@ -23,7 +24,14 @@ export default function RootLayout({
       <body>
         <UrlSettings>
           <JSONConfigProvider src={`${basePath}/config.json`}>
-            <AppContext>{children}</AppContext>
+            <AppContext>
+              <main>
+                <div className="tree-container d-flex flex-column align-self-stretch">
+                  <Panels />
+                  {children}
+                </div>
+              </main>
+            </AppContext>
           </JSONConfigProvider>
         </UrlSettings>
       </body>

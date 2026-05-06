@@ -1,3 +1,4 @@
+"use client"
 import { useConfig } from "@/contexts/ConfigContext";
 import { useNodeSelection } from "@/contexts/SelectionContexts";
 import { useDeferredValue, useMemo, useState } from "react";
@@ -13,8 +14,8 @@ export function Panels() {
   const deferredNode = useDeferredValue(selectedNode);
   const config = useConfig();
   const navItems = useMemo(() => [
-    {label: "Settings", action: () => setActivePanel((current) => current === "settings" ? null : "settings"), id: "settings"},
-    {label: "Home", href: "/", id: "home"},
+    {label: "Model", action: () => setActivePanel((current) => current === "settings" ? null : "settings"), id: "settings"},
+    {label: "Viewer", href: "/", id: "home"},
     {label: "About", href: "/about", id: "about"}
   ], [setActivePanel])
   return (
@@ -29,7 +30,7 @@ export function Panels() {
       <OffCanvas title={(selectedNode || deferredNode)?.shortName || "Node information" } position="start" isOpen={!!selectedNode} onClose={() => setSelectedNode(null)}>
         <NodeInfoPanel node={selectedNode || deferredNode} setNode={setSelectedNode}/>
       </OffCanvas>
-      <OffCanvas title="Settings" position="end" isOpen={activePanel === "settings"} onClose={() => setActivePanel(null)}>
+      <OffCanvas title="Model" position="end" isOpen={activePanel === "settings"} onClose={() => setActivePanel(null)}>
         <SettingsPanel />
       </OffCanvas>
     </>

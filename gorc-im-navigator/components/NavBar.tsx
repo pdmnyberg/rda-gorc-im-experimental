@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useId, useState } from "react";
 
-type NavItem = ({
+export type NavItem = ({
   id: string;
   label: string;
 }) & (
