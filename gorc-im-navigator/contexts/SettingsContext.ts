@@ -95,7 +95,7 @@ export function useUrlSettings() {
   return settings;
 }
 
-function settingsToParams(settingsData: SettingsData, initialParams?: URLSearchParams): URLSearchParams {
+export function settingsToParams(settingsData: SettingsData, initialParams?: URLSearchParams): URLSearchParams {
   return Object.entries(settingsData).reduce((acc, [key, value]) => {
     if (typeof value === "undefined") {
       acc.delete(key)

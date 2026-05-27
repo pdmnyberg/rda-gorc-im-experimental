@@ -7,17 +7,22 @@ import { OffCanvas } from "./OffCanvas";
 import { NodeInfoPanel } from "./NodeInfoPanel";
 import { SettingsPanel } from "./SettingsPanel";
 import gorcLogo from '../img/gorc-im-icon.png'
+import { settingsToParams, useSettings } from "@/contexts/SettingsContext";
+import { usePathname } from "next/navigation";
 
 export function Panels() {
   const [selectedNode, setSelectedNode] = useNodeSelection();
   const [activePanel, setActivePanel] = useState<"settings" | null>(null);
   const deferredNode = useDeferredValue(selectedNode);
   const config = useConfig();
+  const settings = useSettings();
+  const params = settingsToParams(settings);
+  const pathname = usePathname();
   const navItems = useMemo(() => [
     {label: "Model", action: () => setActivePanel((current) => current === "settings" ? null : "settings"), id: "settings"},
-    {label: "Viewer", href: "/", id: "home"},
-    {label: "About", href: "/about", id: "about"}
-  ], [setActivePanel])
+    {label: "Viewer", href: `/?${String(params)}`, id: "/"},
+    {label: "About", href: `/about/?${String(params)}`, id: "/about/"}
+  ], [setActivePanel, params])
   return (
     <>
       <NavBar
@@ -25,7 +30,7 @@ export function Panels() {
         subtitle={config.subtitle}
         logo={{src: gorcLogo.src, width: 199, height: 229}}
         items={navItems}
-        activeId={activePanel || undefined}
+        activeId={activePanel || pathname || undefined}
       />
       <OffCanvas title={(selectedNode || deferredNode)?.shortName || "Node information" } position="start" isOpen={!!selectedNode} onClose={() => setSelectedNode(null)}>
         <NodeInfoPanel node={selectedNode || deferredNode} setNode={setSelectedNode}/>
