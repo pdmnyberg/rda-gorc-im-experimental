@@ -153,13 +153,11 @@ export const SettingsPanel = () => {
       </form>
       <hr />
       <h6>Exports</h6>
-      <form>
-        {doExport ? (
-          <Button onClick={doExport} label={`Export ${model?.label}`} />
-        ) : (
-          <></>
-        )}
-      </form>
+      {doExport ? (
+        <Button onClick={doExport} label={`Export ${model?.label}`} />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
