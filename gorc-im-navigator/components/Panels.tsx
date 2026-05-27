@@ -28,7 +28,7 @@ export function Panels() {
       <NavBar
         title={config.title}
         subtitle={config.subtitle}
-        logo={{src: gorcLogo.src, width: 199, height: 229}}
+        logo={{src: gorcLogo.src, width: gorcLogo.width, height: gorcLogo.height}}
         items={navItems}
         activeId={activePanel || pathname || undefined}
       />
