@@ -1,5 +1,5 @@
 import { usePathname, useSearchParams, useRouter, ReadonlyURLSearchParams } from "next/navigation";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 
 export type SettingsData = {
   repositoryId?: string;

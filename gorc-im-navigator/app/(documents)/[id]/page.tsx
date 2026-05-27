@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import fm from "front-matter";
-import { Suspense } from "react";
 import Markdown from "react-markdown";
 
 const dataDir = "public/documents";

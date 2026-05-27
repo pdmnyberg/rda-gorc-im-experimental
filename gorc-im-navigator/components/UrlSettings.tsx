@@ -3,7 +3,7 @@ import { SettingsContext, useUrlSettings } from "@/contexts/SettingsContext";
 import { PropsWithChildren, Suspense } from "react";
 
 
-export function UrlSettingsBase({children}: PropsWithChildren<{}>) {
+export function UrlSettingsBase({children}: PropsWithChildren) {
   const settings = useUrlSettings();
 
   return (
@@ -13,7 +13,7 @@ export function UrlSettingsBase({children}: PropsWithChildren<{}>) {
   )
 }
 
-export function UrlSettings({children}: PropsWithChildren<{}>) {
+export function UrlSettings({children}: PropsWithChildren) {
   return (
     <Suspense>
       <UrlSettingsBase>

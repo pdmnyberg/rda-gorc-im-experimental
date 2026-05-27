@@ -111,7 +111,6 @@ type SelectButtonProps = SelectItem & {
 const SelectButton: React.FC<SelectButtonProps> = ({
   groupId,
   label,
-  info,
   id,
   selected,
   type,

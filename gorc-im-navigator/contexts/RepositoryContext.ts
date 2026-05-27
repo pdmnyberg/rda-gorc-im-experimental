@@ -22,13 +22,11 @@ export function useRepositoryManager(
 ): RepositoryManager {
   const getRepositories = React.useCallback(() => repositories, [repositories]);
   const addRepository = React.useCallback(
-    (repo: RepositorySource & OptionalIndicator) => {
-    },
+    () => {},
     []
   );
   const removeRepository = React.useCallback(
-    (repo: Pick<RepositorySource, "id">) => {
-    },
+    () => {},
     []
   );
   return React.useMemo(() => {
