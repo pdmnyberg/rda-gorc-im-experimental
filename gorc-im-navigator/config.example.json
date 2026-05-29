@@ -1,5 +1,5 @@
 {
-  "title": "Development Demo for GORC IM",
+  "title": "GORC IM Viewer",
   "useHashRouter": true,
   "repositories": [
     {
