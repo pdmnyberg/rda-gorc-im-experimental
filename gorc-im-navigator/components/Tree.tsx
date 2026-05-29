@@ -14,6 +14,7 @@ import "@xyflow/react/dist/style.css";
 import { GORCNode } from "../modules/GORCNodes";
 import { useNodeSelection } from "../contexts/SelectionContexts";
 import Image from "next/image";
+import { GORCLegend } from "./Legend/GORCLegend";
 
 const nodeTypes = { gorc: GORCNodeView };
 
@@ -35,19 +36,24 @@ export const Tree = () => {
   return (
     <>
       {nodes.length > 0 ? (
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodeClick={onNodeClick}
-          fitView
-          nodeTypes={nodeTypes}
-          nodesDraggable={false}
-          onNodesChange={onNodesChange}
-          minZoom={0.1}
-        >
-          <MiniMap nodeStrokeWidth={3} />
-          <Controls />
-        </ReactFlow>
+        <>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodeClick={onNodeClick}
+            fitView
+            nodeTypes={nodeTypes}
+            nodesDraggable={false}
+            onNodesChange={onNodesChange}
+            minZoom={0.1}
+          >
+            <MiniMap nodeStrokeWidth={3} />
+            <Controls />
+          </ReactFlow>
+          <span>
+            <GORCLegend style={{position: "absolute", bottom: "134px", left: "15px"}}/>
+          </span>
+        </>
       ) : (
         <div className="align-middle h-100 w-100 d-flex justify-content-center align-items-center opacity-25 overflow-hidden flex-column">
           <Image
