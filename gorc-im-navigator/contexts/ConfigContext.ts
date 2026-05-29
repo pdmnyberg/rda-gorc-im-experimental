@@ -4,7 +4,6 @@ export type AppConfig = {
   repositories: { url: string; id: string; name: string }[];
   title: string;
   subtitle?: string;
-  useHashRouter: boolean;
 };
 
 export const ConfigContext = React.createContext<AppConfig>(parseAppConfig());
@@ -17,7 +16,6 @@ export function parseAppConfig(data?: unknown): AppConfig {
   const defaults: AppConfig = {
     title: "RDA Visualisation App",
     repositories: [],
-    useHashRouter: false,
   };
   if (data && typeof data === "object") {
     return {
@@ -33,10 +31,6 @@ export function parseAppConfig(data?: unknown): AppConfig {
         "repositories" in data && Array.isArray(data.repositories)
           ? data.repositories.map<AppConfig["repositories"][number]>((r) => r)
           : defaults.repositories,
-      useHashRouter:
-        "useHashRouter" in data && typeof data.useHashRouter === "boolean"
-          ? data.useHashRouter
-          : defaults.useHashRouter,
     };
   } else {
     return defaults;

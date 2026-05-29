@@ -1,7 +1,6 @@
 {
   "title": "GORC IM Viewer",
   "subtitle": "Development demo",
-  "useHashRouter": true,
   "repositories": [
     {
       "url": "https://nbisweden.github.io/gorc-im-example-repo/root.json",

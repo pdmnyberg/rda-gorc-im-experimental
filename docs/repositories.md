@@ -3,10 +3,9 @@
 This guide aims to give more detailed instructions on how to add your own GORC IM to the application. The read me file
 contains information on how to link the application with the created repository.
 
-Currently there are two existing examples of generating repositories using code:
+Currently there is one existing example of generating repositories using code:
 
-- [Local examples](../examples/example-models.ts): Builds examples using `Typescript` and instruction on how to run it can be found in the [read me](../README.md).
-- [External full example](https://github.com/NBISweden/gorc-im-example-repo): Builds an example repository using static data and en exported `xlsx` GORC IM model description (This can be used as a template for setting up github actions to host custom repositories)
+- [External full example](https://github.com/NBISweden/gorc-im-example-repo): Builds an example repository using static data and an exported `xlsx` GORC IM model description (This can be used as a template for setting up github actions to host custom repositories)
 
 ## How to create a json repository
 
