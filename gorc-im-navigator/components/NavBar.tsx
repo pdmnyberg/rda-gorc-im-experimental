@@ -5,6 +5,8 @@ import { useCallback, useId, useState } from "react";
 export type NavItem = ({
   id: string;
   label: string;
+  icon?: string;
+  type?: "primary" | "secondary";
 }) & (
   {href: string} |
   {action: () => void}
@@ -27,7 +29,9 @@ export function NavBar({title, subtitle, logo, items, activeId}: NavBarProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const toggleExpanded = useCallback(() => {
     setIsExpanded((prev) => !prev);
-  }, [setIsExpanded])
+  }, [setIsExpanded]);
+  const primaryItems = items.filter(i => !i.type || i.type === "primary")
+  const secondary = items.filter(i => i.type === "secondary")
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary flex-grow-0 flex-shrink-0">
       <div className="container-fluid">
@@ -43,15 +47,32 @@ export function NavBar({title, subtitle, logo, items, activeId}: NavBarProps) {
         </button>
         <div className={`collapse navbar-collapse ${isExpanded ? "show" : ""}`} id={navId}>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            {items.map((item) => {
+            {primaryItems.map((item) => {
               const ariaCurrent = item.id === activeId ? "page" : undefined;
               const linkClass = `nav-link ${item.id === activeId ? "active" : ""}`;
+              const view = <PrimaryNavItem label={item.label} icon={item.icon} />;
               return (
                 <li className="nav-item" key={item.id}>
                   {"href" in item ? (
-                    <Link className={linkClass} aria-current={ariaCurrent} href={item.href}>{item.label}</Link>
+                    <Link className={linkClass} aria-current={ariaCurrent} href={item.href}>{view}</Link>
                   ) : (
-                    <a className={linkClass} onClick={item.action} aria-current={ariaCurrent} role="button">{item.label}</a>
+                    <a className={linkClass} onClick={item.action} aria-current={ariaCurrent} role="button">{view}</a>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            {secondary.map((item) => {
+              const ariaCurrent = item.id === activeId ? "page" : undefined;
+              const linkClass = `nav-link ${item.id === activeId ? "active" : ""}`;
+              const view = <SecondaryNavItem label={item.label} icon={item.icon} />;
+              return (
+                <li className="nav-item" key={item.id}>
+                  {"href" in item ? (
+                    <Link className={linkClass} aria-current={ariaCurrent} href={item.href}>{view}</Link>
+                  ) : (
+                    <a className={linkClass} onClick={item.action} aria-current={ariaCurrent} role="button">{view}</a>
                   )}
                 </li>
               )
@@ -60,5 +81,20 @@ export function NavBar({title, subtitle, logo, items, activeId}: NavBarProps) {
         </div>
       </div>
     </nav>
+  )
+}
+
+function PrimaryNavItem({label, icon, className}: {label: string, icon?: string, className?: string}) {
+  return (
+    <span className={className}>{icon ? <i className={`bi bi-${icon} me-2`}/> : <></>}{label}</span>
+  )
+}
+
+function SecondaryNavItem({label, icon}: {label: string, icon?: string}) {
+  return (
+    <>
+      <span className="btn btn-outline-primary d-none d-lg-inline">{icon ? <i className={`bi bi-${icon} me-2`}/> : <></>}{label}</span>
+      <PrimaryNavItem label={label} icon={icon} className="d-inline d-lg-none"/>
+    </>
   )
 }

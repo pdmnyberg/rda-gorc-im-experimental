@@ -2,7 +2,7 @@
 import { useConfig } from "@/contexts/ConfigContext";
 import { useNodeSelection } from "@/contexts/SelectionContexts";
 import { useDeferredValue, useMemo, useState } from "react";
-import { NavBar } from "./NavBar";
+import { NavBar, NavItem } from "./NavBar";
 import { OffCanvas } from "./OffCanvas";
 import { NodeInfoPanel } from "./NodeInfoPanel";
 import { SettingsPanel } from "./SettingsPanel";
@@ -18,10 +18,10 @@ export function Panels() {
   const settings = useSettings();
   const params = settingsToParams(settings);
   const pathname = usePathname();
-  const navItems = useMemo(() => [
-    {label: "Model", action: () => setActivePanel((current) => current === "settings" ? null : "settings"), id: "settings"},
-    {label: "Viewer", href: `/?${String(params)}`, id: "/"},
-    {label: "About", href: `/about/?${String(params)}`, id: "/about/"}
+  const navItems = useMemo<NavItem[]>(() => [
+    {label: "Model", action: () => setActivePanel((current) => current === "settings" ? null : "settings"), id: "settings", type: "secondary", icon: "gear"},
+    {label: "Viewer", href: `/?${String(params)}`, id: "/", icon: "diagram-3"},
+    {label: "About", href: `/about/?${String(params)}`, id: "/about/", icon: "info-circle"}
   ], [setActivePanel, params])
   return (
     <>
