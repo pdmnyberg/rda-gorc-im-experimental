@@ -2,7 +2,7 @@ import React from "react";
 
 export type SelectItem = {
   id: string;
-  label: string;
+  label: string | React.ReactNode;
   info: string;
   disabled?: boolean;
 };

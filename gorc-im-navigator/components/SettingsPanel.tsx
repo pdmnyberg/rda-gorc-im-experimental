@@ -18,7 +18,7 @@ import { Button } from "./Button";
 function packageToSelectItem(p: Package): SelectItem {
   return {
     id: p.id,
-    label: p.label,
+    label: <>{p.label}<span className="badge bg-info ms-2">{p.version}</span></>,
     info: p.version,
   };
 }
